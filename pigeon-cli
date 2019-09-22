@@ -1,0 +1,63 @@
+#!/usr/bin/env ruby
+
+require_relative File.join("dist", "pigeon")
+
+require "thor"
+
+module Pigeon
+  class Identity < Thor
+    class RoostAlreadyExists < StandardError; end
+
+    desc "new", "Creates a new identiy in `.pigeon` directory if none exists"
+
+    def new
+      # TODO: --force flag
+      # TODO: --seed flag
+      if Dir.exist?(Pigeon::Storage::ROOT_DIR)
+        puts "Pigeon has detected a `.pigeon` directory.
+          Refusing to overwrite existing Pigeon config.
+          Remove roost or switch to a different directory."
+        raise RoostAlreadyExists
+      end
+      kp = Pigeon::KeyPair.new()
+      kp.save!
+      puts kp.public_key
+    end
+
+    desc "show", "Prints a base64 identiy string to STDOUT"
+
+    def show
+      puts Pigeon::Storage.current.get_conf("public_key")
+    end
+  end
+
+  class Blob < Thor
+    desc "set", "Copy arbitrary binary data into the roost"
+
+    def set(data)
+      Pigeon::Storage.current.set_blob(data)
+    end
+
+    desc "get", "Read arbitrary data from the roost"
+
+    def get
+      raise "WIP"
+    end
+  end
+
+  class CLI < Thor
+    desc "status", "Show various information about the `.pigeon` directory"
+
+    def status
+      puts "Version: #{Config::VERSION}"
+    end
+
+    desc "identity SUBCOMMAND ...ARGS", "Manage `.pigeon` identity"
+    subcommand "identity", Identity
+
+    desc "blob SUBCOMMAND ...ARGS", "Manage blob storage"
+    subcommand "blob", Blob
+  end
+end
+
+Pigeon::CLI.start(ARGV)

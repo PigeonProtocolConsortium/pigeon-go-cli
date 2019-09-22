@@ -73,8 +73,12 @@ module Pigeon
       File.join(conf_dir, key.to_s)
     end
 
+    def conf_dir
+      @conf_dir ||= File.join(ROOT_DIR, CONF_DIR)
+    end
+
     def create_conf_dir
-      FileUtils.mkdir_p(File.join(ROOT_DIR, CONF_DIR))
+      FileUtils.mkdir_p(conf_dir)
     end
 
     def create_blob_dir

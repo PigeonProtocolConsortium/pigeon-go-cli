@@ -9,23 +9,6 @@ pigeon status
 # => VERSION: 0.0.1
 # => FOO: BAR
 
-pigeon identity new
-# => @ajgdylxeifojlxpbmen3exlnsbx8buspsjh37b/ipvi=.ed25519
-
-pigeon identity show
-# => @ajgdylxeifojlxpbmen3exlnsbx8buspsjh37b/ipvi=.ed25519
-
-pigeon blob set '"Lol, data"'
-# => &2e7a0bc31f3c4fe6114051c3a56c8ed8a030b3b394df7d29d37648e9b8cbf54b.sha256
-
-# Or use echo for big files:
-echo "Lol, data"' > pigeon blob set
-# => &2e7a0bc31f3c4fe6114051c3a56c8ed8a030b3b394df7d29d37648e9b8cbf54b.sha256
-
-
-pigeon blob get "&2e7a0bc31f3c4fe6114051c3a56c8ed8a030b3b394df7d29d37648e9b8cbf54b.sha256"
-# => "Lol, data"
-
 pigeon message new my_message
 # => "Switched to message `my_message`
 

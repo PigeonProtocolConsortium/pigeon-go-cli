@@ -34,8 +34,9 @@ module Pigeon
   class Blob < Thor
     desc "set", "Copy arbitrary binary data into the roost"
 
-    def set(data)
-      puts Pigeon::Storage.current.set_blob(data)
+    def set(data = "")
+      blob = (data != "") ? data : STDIN.read
+      puts Pigeon::Storage.current.set_blob(blob)
     end
 
     desc "get", "Read arbitrary data from the roost"

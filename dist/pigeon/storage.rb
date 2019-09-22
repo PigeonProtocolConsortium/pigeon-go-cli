@@ -7,6 +7,9 @@ module Pigeon
     CONF_DIR = "conf"
     BLOB_DIR = "blobs"
 
+    BLOB_HEADER = "&"
+    BLOB_FOOTER = ".sha256"
+
     def self.current
       @current ||= self.new
     end
@@ -33,13 +36,14 @@ module Pigeon
       path = blob_path_for(hex_digest)
       File.write(path, data)
 
-      hex_digest
+      [BLOB_HEADER, hex_digest, BLOB_FOOTER].join("")
     end
 
     def get_blob(hex_digest)
+      hd = hex_digest.gsub(BLOB_HEADER, "").gsub(BLOB_FOOTER, "")
       # Allows user to pass first n chars of a
       # hash instead of the whole hash.
-      f = Dir[blob_path_for(hex_digest) + "*"].first
+      f = Dir[blob_path_for(hd) + "*"].first
 
       File.file?(f) ? File.read(f) : nil
     end

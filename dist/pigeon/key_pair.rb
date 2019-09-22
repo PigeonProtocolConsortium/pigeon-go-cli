@@ -36,7 +36,7 @@ module Pigeon
         public_key: public_key,
         private_key: private_key,
       }.map do |k, v|
-        Pigeon::Storage.current.save_conf(k, v)
+        Pigeon::Storage.current.set_conf(k, v)
       end
     end
   end

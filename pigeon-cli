@@ -35,13 +35,13 @@ module Pigeon
     desc "set", "Copy arbitrary binary data into the roost"
 
     def set(data)
-      Pigeon::Storage.current.set_blob(data)
+      puts Pigeon::Storage.current.set_blob(data)
     end
 
     desc "get", "Read arbitrary data from the roost"
 
-    def get
-      raise "WIP"
+    def get(hex_digest)
+      puts Pigeon::Storage.current.get_blob(hex_digest)
     end
   end
 

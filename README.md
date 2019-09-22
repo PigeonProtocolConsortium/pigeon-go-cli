@@ -17,7 +17,7 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] pigeon identity show
 
  - [X] pigeon blob set
- - [ ] pigeon blob get
+ - [X] pigeon blob get
 
  - [ ] pigeon message new
  - [ ] pigeon message current

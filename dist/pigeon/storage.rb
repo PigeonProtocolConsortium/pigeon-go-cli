@@ -19,7 +19,7 @@ module Pigeon
       end
     end
 
-    def save_conf(key, value)
+    def set_conf(key, value)
       path = conf_path_for(key)
       File.write(path, value.to_s)
     end
@@ -29,10 +29,19 @@ module Pigeon
     end
 
     def set_blob(data)
-      hash = Digest::SHA256.hexdigest(data)
-      path = blob_path_for(hash)
-
+      hex_digest = Digest::SHA256.hexdigest(data)
+      path = blob_path_for(hex_digest)
       File.write(path, data)
+
+      hex_digest
+    end
+
+    def get_blob(hex_digest)
+      # Allows user to pass first n chars of a
+      # hash instead of the whole hash.
+      f = Dir[blob_path_for(hex_digest) + "*"].first
+
+      File.file?(f) ? File.read(f) : nil
     end
 
     def initialized?

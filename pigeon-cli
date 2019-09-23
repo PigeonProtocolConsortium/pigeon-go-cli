@@ -6,7 +6,7 @@ require "thor"
 
 module Pigeon
   class Identity < Thor
-    class RoostAlreadyExists < StandardError; end
+    class ConfigAlreadyExists < StandardError; end
 
     desc "new", "Creates a new identiy in `.pigeon` directory if none exists"
 
@@ -16,8 +16,8 @@ module Pigeon
       if Dir.exist?(Pigeon::Storage::ROOT_DIR)
         puts "Pigeon has detected a `.pigeon` directory.
           Refusing to overwrite existing Pigeon config.
-          Remove roost or switch to a different directory."
-        raise RoostAlreadyExists
+          Remove config dir or switch to a different directory."
+        raise ConfigAlreadyExists
       end
       kp = Pigeon::KeyPair.new()
       kp.save!
@@ -32,17 +32,43 @@ module Pigeon
   end
 
   class Blob < Thor
-    desc "set", "Copy arbitrary binary data into the roost"
+    desc "set", "Copy arbitrary binary data into the database"
 
     def set(data = "")
       blob = (data != "") ? data : STDIN.read
       puts Pigeon::Storage.current.set_blob(blob)
     end
 
-    desc "get", "Read arbitrary data from the roost"
+    desc "get", "Read arbitrary data from the database"
 
     def get(hex_digest)
       puts Pigeon::Storage.current.get_blob(hex_digest)
+    end
+  end
+
+  class Peer < Thor
+    desc "add", "Begin following a Pigeon peer"
+
+    def add(identity)
+      Pigeon::Storage.current.add_peer(identity)
+    end
+
+    desc "remove", "Stop following a Pigeon peer"
+
+    def remove(identity)
+      Pigeon::Storage.current.remove_peer(identity)
+    end
+
+    desc "block", "Stop following a Pigeon peer AND refuse to replicate"
+
+    def block(identity)
+      Pigeon::Storage.current.block_peer(identity)
+    end
+
+    desc "all", "List all Pigeon peers"
+
+    def all
+      puts Pigeon::Storage.current.all_peers
     end
   end
 
@@ -58,6 +84,9 @@ module Pigeon
 
     desc "blob SUBCOMMAND ...ARGS", "Manage blob storage"
     subcommand "blob", Blob
+
+    desc "peer SUBCOMMAND ...ARGS", "Manage blob storage"
+    subcommand "peer", Peer
   end
 end
 

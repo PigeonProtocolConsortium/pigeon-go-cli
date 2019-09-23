@@ -32,6 +32,7 @@ module Pigeon
     end
 
     def save!
+      Storage.current.add_peer(public_key)
       {
         public_key: public_key,
         private_key: private_key,

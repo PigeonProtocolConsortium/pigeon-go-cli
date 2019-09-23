@@ -19,6 +19,11 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] pigeon blob set
  - [X] pigeon blob get
 
+ - [X] pigeon peer add
+ - [X] pigeon peer remove
+ - [X] pigeon peer block
+ - [ ] pigeon peer all
+
  - [ ] pigeon message new
  - [ ] pigeon message current
  - [ ] pigeon message append
@@ -26,10 +31,9 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [ ] pigeon message find
  - [ ] pigeon message find-all
 
- - [ ] pigeon peer add
- - [ ] pigeon peer remove
- - [ ] pigeon peer block
- - [ ] pigeon peer all
-
  - [ ] pigeon bundle create
  - [ ] pigeon bundle consume
+
+ - [ ] 100% documentation
+ - [ ] 100% coverage
+ - [ ] add parsers and validators for all CLI inputs

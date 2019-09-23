@@ -6,6 +6,8 @@ module Pigeon
     ROOT_DIR = ".pigeon"
     CONF_DIR = "conf"
     BLOB_DIR = "blobs"
+    PEER_DIR = "peers"
+    BLOCK_DIR = "__blocked__"
 
     BLOB_HEADER = "&"
     BLOB_FOOTER = ".sha256"
@@ -19,6 +21,7 @@ module Pigeon
         create_root_dir
         create_conf_dir
         create_blob_dir
+        create_peer_dir
       end
     end
 
@@ -48,21 +51,67 @@ module Pigeon
       File.file?(f) ? File.read(f) : nil
     end
 
-    def initialized?
-      File.directory?(root_dir)
+    # Base64 is not good for file/dir names.
+    # Imagine: A "/" in a file name. Bad.
+    # We will use base36 for files operations
+    # instead.
+    def to_base36(identity)
+      identity
+        .gsub("@", "")
+        .gsub(".ed25519", "")
+        .each_byte
+        .map { |b| b.to_s(36) }
+        .join
+    end
+
+    def from_base36(identity)
+    end
+
+    def add_peer(identity)
+      path = to_base36(identity)
+      FileUtils.mkdir_p(File.join(peer_dir, path))
+    end
+
+    def remove_peer(identity)
+      path = to_base36(identity)
+      FileUtils.rm_rf(path)
+    end
+
+    def block_peer(identity)
+      remove_peer(identity)
+      path = to_base36(identity)
+      FileUtils.touch(File.join(block_dir, path))
+    end
+
+    def all_peers
+      all = Dir[File.join(peer_dir, "*")]
+        .map { |x| File.split(x).last }
+      puts "Converting base36 to base 64 is hard hmm"
+      binding.pry
     end
 
     private
 
-    def blob_dir
-      @blob_dir ||= File.join(ROOT_DIR, BLOB_DIR, "sha256")
+    def initialized?
+      File.directory?(root_dir)
     end
 
     def root_dir
       @root_dir ||= File.join(ROOT_DIR)
     end
 
-    # WARNING: Side effects. Im in a hurry. -RC
+    def blob_dir
+      @blob_dir ||= File.join(ROOT_DIR, BLOB_DIR, "sha256")
+    end
+
+    def peer_dir
+      @peer_dir ||= File.join(ROOT_DIR, PEER_DIR)
+    end
+
+    def block_dir
+      File.join(peer_dir, BLOCK_DIR)
+    end
+
     def blob_path_for(hex_hash_string)
       first_part = File.join(blob_dir, hex_hash_string[0, 2])
       FileUtils.mkdir_p(first_part)
@@ -87,6 +136,11 @@ module Pigeon
 
     def create_root_dir
       FileUtils.mkdir_p(root_dir)
+    end
+
+    def create_peer_dir
+      FileUtils.mkdir_p(peer_dir)
+      FileUtils.mkdir_p(block_dir)
     end
   end
 end

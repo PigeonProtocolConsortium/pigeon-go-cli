@@ -1,6 +1,3 @@
-require "pry"
-require "digest"
-
 module Pigeon
   class Storage
     ROOT_DIR = ".pigeon"
@@ -65,7 +62,8 @@ module Pigeon
     end
 
     def remove_peer(identity)
-      FileUtils.rm_rf(KeyPair.strip_headers(identity))
+      path = KeyPair.strip_headers(identity)
+      FileUtils.rm_rf(File.join(peer_dir, path))
       identity
     end
 

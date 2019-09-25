@@ -1,7 +1,3 @@
-require "ed25519"
-require "securerandom"
-require "base64"
-
 module Pigeon
   # This is a wrapper around the `ed25519` gem to
   # help us maintain our sanity when the Gem's API

@@ -7,7 +7,7 @@ module Pigeon
     CONF_DIR = "conf"
     BLOB_DIR = "blobs"
     PEER_DIR = "peers"
-    BLOCK_DIR = "__blocked__"
+    BLOCK_DIR = "blocked"
 
     BLOB_HEADER = "&"
     BLOB_FOOTER = ".sha256"
@@ -55,31 +55,28 @@ module Pigeon
     # Imagine: A "/" in a file name. Bad.
     # We will use base36 for files operations
     # instead.
-    def to_base36(identity)
-      identity
+    def urlsafe_base64(identity)
+      Base64.urlsafe_decode64(identity
         .gsub("@", "")
-        .gsub(".ed25519", "")
-        .each_byte
-        .map { |b| b.to_s(36) }
-        .join
+        .gsub(".ed25519", ""))
     end
 
     def from_base36(identity)
     end
 
     def add_peer(identity)
-      path = to_base36(identity)
+      path = urlsafe_base64(identity)
       FileUtils.mkdir_p(File.join(peer_dir, path))
     end
 
     def remove_peer(identity)
-      path = to_base36(identity)
+      path = urlsafe_base64(identity)
       FileUtils.rm_rf(path)
     end
 
     def block_peer(identity)
       remove_peer(identity)
-      path = to_base36(identity)
+      path = urlsafe_base64(identity)
       FileUtils.touch(File.join(block_dir, path))
     end
 
@@ -109,7 +106,7 @@ module Pigeon
     end
 
     def block_dir
-      File.join(peer_dir, BLOCK_DIR)
+      File.join(ROOT_DIR, BLOCK_DIR)
     end
 
     def blob_path_for(hex_hash_string)

@@ -21,12 +21,12 @@ module Pigeon
     end
 
     def private_key
-      @private_key ||= Base64.strict_encode64(@seed)
+      @private_key ||= Base64.urlsafe_encode64(@seed)
     end
 
     def public_key
       bytes = @raw_key.verify_key.to_bytes
-      b64 = Base64.strict_encode64(bytes)
+      b64 = Base64.urlsafe_encode64(bytes)
 
       @public_key ||= [HEADER, b64, FOOTER].join("")
     end

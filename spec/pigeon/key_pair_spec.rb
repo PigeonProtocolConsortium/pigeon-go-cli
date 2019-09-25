@@ -8,9 +8,9 @@ RSpec.describe Pigeon::KeyPair do
   let(:kp) { Pigeon::KeyPair.new(FAKE_SEED) }
 
   it "generates a pair from a seed" do
-    x = "@7n/g0ca9FFWvMkXy2TMwM7bdMn6tNiEHKzrFX+CzAmQ=.ed25519"
+    x = "@7n_g0ca9FFWvMkXy2TMwM7bdMn6tNiEHKzrFX-CzAmQ=.ed25519"
     expect(kp.public_key).to eq(x)
-    y = "FbGoHeEcePDG3Evemrc+hm+S77cXKf8BRQgkYinJggg="
+    y = "FbGoHeEcePDG3Evemrc-hm-S77cXKf8BRQgkYinJggg="
     expect(kp.private_key).to eq(y)
   end
 

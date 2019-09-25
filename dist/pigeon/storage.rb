@@ -54,34 +54,32 @@ module Pigeon
     end
 
     def urlsafe_base64(identity)
-      Base64.urlsafe_decode64(identity
-        .gsub(KeyPair::HEADER, "")
-        .gsub(KeyPair::FOOTER, ""))
-    end
-
-    def from_base36(identity)
+      Base64
+        .urlsafe_decode64(KeyPair.strip_headers(identity))
     end
 
     def add_peer(identity)
-      path = urlsafe_base64(identity)
+      path = KeyPair.strip_headers(identity)
       FileUtils.mkdir_p(File.join(peer_dir, path))
+      identity
     end
 
     def remove_peer(identity)
-      path = urlsafe_base64(identity)
-      FileUtils.rm_rf(path)
+      FileUtils.rm_rf(KeyPair.strip_headers(identity))
+      identity
     end
 
     def block_peer(identity)
       remove_peer(identity)
-      path = urlsafe_base64(identity)
+      path = KeyPair.strip_headers(identity)
       FileUtils.touch(File.join(block_dir, path))
+      identity
     end
 
     def all_peers
-      all = Dir[File.join(peer_dir, "*")]
+      Dir[File.join(peer_dir, "*")]
         .map { |x| File.split(x).last }
-      binding.pry
+        .map { |x| KeyPair.add_headers(x) }
     end
 
     private

@@ -3,12 +3,6 @@ I need to implement these.
 I'm adding them here for quick reference.
 
 ```bash
-pigeon status
-# => BLOBS: 10,234
-# => PEERS: 26
-# => VERSION: 0.0.1
-# => FOO: BAR
-
 pigeon message new my_message
 # => "Switched to message `my_message`
 
@@ -58,15 +52,6 @@ pigeon message find-all --author=@ajgdylxeifojlxpbmen3exlnsbx8buspsjh37b/ipvi=.e
 # => prev: %jvKh9yoiEJaePzoWCF1nnqpIlPgTk9FHEtqczQbvzGM=.sha256
 # =>
 # => &ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb.sha256:&2e7a0bc31f3c4fe6114051c3a56c8ed8a030b3b394df7d29d37648e9b8cbf54b.sha256
-# =>
-
-pigeon peer add @m0LEP+0NrGqu1wT8/4a3nOPuRBM+DrMpUahDZ3/cDi8=.ed25519
-# =>
-
-pigeon peer remove @78daXMc/BOq5F1RWLMN4zgPVBVLqA4ShkLgE6z9OUGQ=.ed25519
-# =>
-
-pigeon peer block @GOl+398b2kWeLi6+DCcU0i3AWD6vWmUtocBVYbpkpNk=.ed25519
 # =>
 
 pigeon peer all

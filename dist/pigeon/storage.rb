@@ -7,6 +7,7 @@ module Pigeon
     CONF_DIR = "conf"
     BLOB_DIR = "blobs"
     PEER_DIR = "peers"
+    USER_DIR = "user"
     BLOCK_DIR = "blocked"
 
     BLOB_HEADER = "&"
@@ -22,6 +23,7 @@ module Pigeon
         create_conf_dir
         create_blob_dir
         create_peer_dir
+        create_user_dir
       end
     end
 
@@ -51,14 +53,10 @@ module Pigeon
       File.file?(f) ? File.read(f) : nil
     end
 
-    # Base64 is not good for file/dir names.
-    # Imagine: A "/" in a file name. Bad.
-    # We will use base36 for files operations
-    # instead.
     def urlsafe_base64(identity)
       Base64.urlsafe_decode64(identity
-        .gsub("@", "")
-        .gsub(".ed25519", ""))
+        .gsub(KeyPair::HEADER, "")
+        .gsub(KeyPair::FOOTER, ""))
     end
 
     def from_base36(identity)
@@ -83,7 +81,6 @@ module Pigeon
     def all_peers
       all = Dir[File.join(peer_dir, "*")]
         .map { |x| File.split(x).last }
-      puts "Converting base36 to base 64 is hard hmm"
       binding.pry
     end
 
@@ -107,6 +104,10 @@ module Pigeon
 
     def block_dir
       File.join(ROOT_DIR, BLOCK_DIR)
+    end
+
+    def user_dir
+      File.join(ROOT_DIR, USER_DIR)
     end
 
     def blob_path_for(hex_hash_string)
@@ -138,6 +139,10 @@ module Pigeon
     def create_peer_dir
       FileUtils.mkdir_p(peer_dir)
       FileUtils.mkdir_p(block_dir)
+    end
+
+    def create_user_dir
+      FileUtils.mkdir_p(user_dir)
     end
   end
 end

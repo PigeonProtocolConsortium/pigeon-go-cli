@@ -76,7 +76,17 @@ module Pigeon
     desc "status", "Show various information about the `.pigeon` directory"
 
     def status
-      puts "Version: #{Config::VERSION}"
+      puts "
+      ,.------------------------------------
+      |    -`.   Pigeon Protocol Ruby Client
+      |  '( @ >    Version: #{Config::VERSION}
+      |   _) (     Peers:   #{Dir[File.join(".pigeon", "peers", "*")].count}
+      |  /    )    Blocked: #{Dir[File.join(".pigeon", "blocked", "*")].count}
+      | /_,'  /
+      |   \  /
+      |===m" "m===
+      '-,___________________________________
+      "
     end
 
     desc "identity SUBCOMMAND ...ARGS", "Manage `.pigeon` identity"

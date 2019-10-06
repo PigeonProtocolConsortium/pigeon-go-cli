@@ -2,9 +2,24 @@ I need to implement these.
 
 I'm adding them here for quick reference.
 
+```
+author @ajgdylxeifojlxpbmen3exlnsbx8buspsjh37b/ipvi=.ed25519
+depth 23
+kind "example"
+prev %85738f8f9a7f1b04b5329c590ebcb9e425925c6d0984089c43a022de4f19c281.sha256
+
+"foo":&3f79bb7b435b05321651daefd374cdc681dc06faa65e374e38337b88ca046dea.sha256
+"baz":"bar"
+"my_friend":@abcdef1234567890.ed25519
+"really_cool_message":%85738f8f9a7f1b04b5329c590ebcb9e425925c6d0984089c43a022de4f19c281.sha256
+"baz":"whatever"
+
+signature "3er8...LOgRdrGnuihBp4QYWYPJ5bS1Gw9weQKj9DQ==.sig.ed25519"
+```
+
 ```bash
 pigeon message new my_message
-# => "Switched to message `my_message`
+# => "Switched to message (kind: `my_message`)
 
 pigeon message current # Show active log entry.
 # => author: @ajgdylxeifojlxpbmen3exlnsbx8buspsjh37b/ipvi=.ed25519

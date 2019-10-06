@@ -21,9 +21,10 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] pigeon peer remove
  - [X] pigeon peer block
  - [X] pigeon peer all
+ - [ ] Update spec to look [like this](https://gist.github.com/RickCarlino/3ff4178db4a75fd135832c403cd313d4)
  - [ ] pigeon message new
- - [ ] pigeon message current
  - [ ] pigeon message append
+ - [ ] pigeon message current
  - [ ] pigeon message save
  - [ ] pigeon message find
  - [ ] pigeon message find-all

@@ -5,10 +5,6 @@ module Pigeon
   class KeyPair
     HEADER, FOOTER = ["@", ".ed25519"]
 
-    def self.current
-      raise "TODO"
-    end
-
     def self.strip_headers(identity)
       identity.sub(HEADER, "").sub(FOOTER, "")
     end
@@ -35,12 +31,15 @@ module Pigeon
       @public_key ||= KeyPair.add_headers(b64)
     end
 
-    def save!
-      Storage.current.add_peer(public_key)
+    def to_h
       {
         public_key: public_key,
         private_key: private_key,
-      }.map do |k, v|
+      }
+    end
+
+    def save!
+      self.to_h.map do |k, v|
         Pigeon::Storage.current.set_conf(k, v)
       end
     end

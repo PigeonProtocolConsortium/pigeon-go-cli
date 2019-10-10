@@ -26,6 +26,7 @@ module Pigeon
 
     def set_conf(key, value)
       path = conf_path_for(key)
+      maybe_touch(path)
       File.write(path, value.to_s)
     end
 
@@ -50,11 +51,6 @@ module Pigeon
       File.file?(f) ? File.read(f) : nil
     end
 
-    def urlsafe_base64(identity)
-      Base64
-        .urlsafe_decode64(KeyPair.strip_headers(identity))
-    end
-
     def add_peer(identity)
       path = KeyPair.strip_headers(identity)
       FileUtils.mkdir_p(File.join(peer_dir, path))
@@ -76,6 +72,12 @@ module Pigeon
 
     def all_peers
       Dir[File.join(peer_dir, "*")]
+        .map { |x| File.split(x).last }
+        .map { |x| KeyPair.add_headers(x) }
+    end
+
+    def all_blocks
+      Dir[File.join(block_dir, "*")]
         .map { |x| File.split(x).last }
         .map { |x| KeyPair.add_headers(x) }
     end
@@ -110,6 +112,10 @@ module Pigeon
       first_part = File.join(blob_dir, hex_hash_string[0, 2])
       FileUtils.mkdir_p(first_part)
       File.join(first_part, hex_hash_string[2..-1])
+    end
+
+    def maybe_touch(path)
+      FileUtils.touch(path) unless File.file?(path)
     end
 
     def conf_path_for(key)

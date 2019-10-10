@@ -1,3 +1,5 @@
+![](logo.png)
+
 # Pigeon Ruby
 
 A WIP pigeon protocol client.

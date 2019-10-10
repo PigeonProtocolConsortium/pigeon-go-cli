@@ -6,7 +6,8 @@ gem "ed25519"
 gem "thor"
 
 group :dev do
-  gem "rspec"
+  gem "fakefs"
   gem "pry"
+  gem "rspec"
   gem "simplecov"
 end

@@ -16,7 +16,7 @@ module Pigeon
 
     def self.current
       storage = Pigeon::Storage.current
-      self.new(storage.get_conf(SEED_CONFIG_KEY))
+      self.new(storage.get_config(SEED_CONFIG_KEY))
     end
 
     # `seed` is a 32-byte seed value from which
@@ -38,7 +38,7 @@ module Pigeon
     end
 
     def save!
-      Pigeon::Storage.current.set_conf(SEED_CONFIG_KEY, @seed)
+      Pigeon::Storage.current.set_config(SEED_CONFIG_KEY, @seed)
     end
   end
 end

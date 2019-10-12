@@ -37,5 +37,8 @@ echo "blocking peers:"
 echo "listing all peers:"
 ./pigeon-cli peer all
 
+echo "Making a new `scratch_pad` log entry"
+./pigeon-cli message create scratch_pad
+
 echo "getting status:"
 ./pigeon-cli status

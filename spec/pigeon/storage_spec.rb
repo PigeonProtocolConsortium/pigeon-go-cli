@@ -14,8 +14,8 @@ RSpec.describe Pigeon::Storage do
 
   it "manages configs" do
     test_fs do |s|
-      s.set_conf("FOO", "BAR")
-      value = s.get_conf("FOO")
+      s.set_config("FOO", "BAR")
+      value = s.get_config("FOO")
       expect(value).to eq("BAR")
     end
   end

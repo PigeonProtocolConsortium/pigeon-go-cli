@@ -30,7 +30,7 @@ RSpec.describe Pigeon::KeyPair do
       FAKE_SEED,
     ]
     FakeFS.with_fresh do
-      lol = receive(:set_conf).with(*argss).and_call_original
+      lol = receive(:set_config).with(*argss).and_call_original
       expect(Pigeon::Storage.current).to lol
       kp.save!
       new_kp = Pigeon::KeyPair.current

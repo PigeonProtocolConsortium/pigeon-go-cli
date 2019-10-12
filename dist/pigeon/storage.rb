@@ -24,14 +24,14 @@ module Pigeon
       end
     end
 
-    def set_conf(key, value)
+    def set_config(key, value)
       path = conf_path_for(key)
       maybe_touch(path)
 
       File.write(path, value.to_s)
     end
 
-    def get_conf(key)
+    def get_config(key)
       File.read(conf_path_for(key))
     end
 

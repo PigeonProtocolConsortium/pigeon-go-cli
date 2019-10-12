@@ -76,11 +76,7 @@ module Pigeon
     desc "create", "Begin a new Pigeon message"
 
     def create(kind)
-      raise "TODO: FIXME"
-      puts Pigeon::Message.create(
-        kind: "???",
-        author: "???",
-      )
+      puts Pigeon::Message.create(kind: kind)
     end
   end
 

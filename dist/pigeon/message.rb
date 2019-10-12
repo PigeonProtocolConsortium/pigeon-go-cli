@@ -10,11 +10,16 @@ module Pigeon
                 :timestamp, # Maybe not?
                 :signature # Maybe not?
 
-    def initialize(author:, kind:, previous: nil, body: [])
+    def initialize(author:,
+                   kind:,
+                   previous: nil,
+                   body: [],
+                   timestamp: Time.now.to_i)
       @author = author
       @kind = kind
       @previous = previous
       @body = body
+      @timestamp = timestamp
     end
 
     def self.create(kind:, previous: nil, body: [])
@@ -24,13 +29,7 @@ module Pigeon
                      previous: previous,
                      body: body)
       # Save to disk as HEAD
-      Pigeon::Storage.set_config(NAME_OF_DRAFT, msg.dump)
-    end
-
-    protected
-
-    def dump
-      string = Marshal.dump(self)
+      Pigeon::Storage.current.set_config(NAME_OF_DRAFT, Marshal.dump(msg))
     end
   end
 end

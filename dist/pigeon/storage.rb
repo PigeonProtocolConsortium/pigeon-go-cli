@@ -27,6 +27,7 @@ module Pigeon
     def set_conf(key, value)
       path = conf_path_for(key)
       maybe_touch(path)
+
       File.write(path, value.to_s)
     end
 

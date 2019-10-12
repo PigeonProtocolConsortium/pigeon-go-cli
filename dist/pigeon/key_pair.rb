@@ -4,6 +4,7 @@ module Pigeon
   # changes.
   class KeyPair
     HEADER, FOOTER = ["@", ".ed25519"]
+    SEED_CONFIG_KEY = "SEED"
 
     def self.strip_headers(identity)
       identity.sub(HEADER, "").sub(FOOTER, "")
@@ -11,6 +12,11 @@ module Pigeon
 
     def self.add_headers(urlsafe_b64_no_headers)
       [HEADER, urlsafe_b64_no_headers, FOOTER].join("")
+    end
+
+    def self.current
+      storage = Pigeon::Storage.current
+      self.new(storage.get_conf(SEED_CONFIG_KEY))
     end
 
     # `seed` is a 32-byte seed value from which
@@ -31,17 +37,8 @@ module Pigeon
       @public_key ||= KeyPair.add_headers(b64)
     end
 
-    def to_h
-      {
-        public_key: public_key,
-        private_key: private_key,
-      }
-    end
-
     def save!
-      self.to_h.map do |k, v|
-        Pigeon::Storage.current.set_conf(k, v)
-      end
+      Pigeon::Storage.current.set_conf(SEED_CONFIG_KEY, @seed)
     end
   end
 end

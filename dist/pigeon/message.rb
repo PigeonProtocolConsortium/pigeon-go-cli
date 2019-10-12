@@ -17,9 +17,9 @@ module Pigeon
       @body = body
     end
 
-    def self.create(author:, kind:, previous: nil, body: [])
+    def self.create(kind:, previous: nil, body: [])
       # instantiate
-      msg = self.new(author: author,
+      msg = self.new(author: KeyPair.current.public_key,
                      kind: kind,
                      previous: previous,
                      body: body)

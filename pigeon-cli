@@ -27,7 +27,7 @@ module Pigeon
     desc "show", "Prints a base64 identiy string to STDOUT"
 
     def show
-      puts Pigeon::Storage.current.get_conf("public_key")
+      puts Pigeon::KeyPair.current.public_key
     end
   end
 

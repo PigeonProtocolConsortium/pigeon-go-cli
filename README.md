@@ -23,8 +23,7 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] pigeon peer remove
  - [X] pigeon peer block
  - [X] pigeon peer all
- - [ ] Update spec to look [like this](https://gist.github.com/RickCarlino/3ff4178db4a75fd135832c403cd313d4)
- - [ ] pigeon message new
+ - [ ] pigeon message create
  - [ ] pigeon message append
  - [ ] pigeon message current
  - [ ] pigeon message save
@@ -37,3 +36,5 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [ ] add parsers and validators for all CLI inputs
  - [ ] Performance benchmarks
  - [ ] Performance tuning (DO THIS LAST!)
+
+ - [ ] Update spec to look [like this](https://gist.github.com/RickCarlino/3ff4178db4a75fd135832c403cd313d4)

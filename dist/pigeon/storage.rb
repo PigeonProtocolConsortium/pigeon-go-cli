@@ -82,7 +82,7 @@ module Pigeon
         .map { |x| KeyPair.add_headers(x) }
     end
 
-    private
+    private # ====================================
 
     def initialized?
       File.directory?(root_dir)

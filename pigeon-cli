@@ -72,6 +72,18 @@ module Pigeon
     end
   end
 
+  class PigeonMessage < Thor
+    desc "create", "Begin a new Pigeon message"
+
+    def create(kind)
+      raise "TODO: FIXME"
+      puts Pigeon::Message.create(
+        kind: "???",
+        author: "???",
+      )
+    end
+  end
+
   class CLI < Thor
     desc "status", "Show various information about the `.pigeon` directory"
 
@@ -97,6 +109,9 @@ module Pigeon
 
     desc "peer SUBCOMMAND ...ARGS", "Manage blob storage"
     subcommand "peer", Peer
+
+    desc "message SUBCOMMAND ...ARGS", "Manage messages"
+    subcommand "message", PigeonMessage
   end
 end
 

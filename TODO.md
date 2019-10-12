@@ -4,9 +4,10 @@ I'm adding them here for quick reference.
 
 ```
 author @ajgdylxeifojlxpbmen3exlnsbx8buspsjh37b/ipvi=.ed25519
-depth 23
+sequence 23
 kind "example"
-prev %85738f8f9a7f1b04b5329c590ebcb9e425925c6d0984089c43a022de4f19c281.sha256
+previous %85738f8f9a7f1b04b5329c590ebcb9e425925c6d0984089c43a022de4f19c281.sha256
+timestamp 23123123123
 
 "foo":&3f79bb7b435b05321651daefd374cdc681dc06faa65e374e38337b88ca046dea.sha256
 "baz":"bar"
@@ -23,11 +24,6 @@ pigeon message new my_message
 
 pigeon message current # Show active log entry.
 # => author: @ajgdylxeifojlxpbmen3exlnsbx8buspsjh37b/ipvi=.ed25519
-# => depth: 1
-# => kind: &82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92.sha256
-# => prev: %jvKh9yoiEJaePzoWCF1nnqpIlPgTk9FHEtqczQbvzGM=.sha256
-# =>
-# =>
 
 pigeon message append --name=2e7a0bc3 --value=2e7a0bc3
 # => \n
@@ -35,7 +31,7 @@ pigeon message append --name=2e7a0bc3 --value=2e7a0bc3
 # => No one likes the way it is right now.
 # => We will come back to this monstrosity later.
 
-pigeon message save
+pigeon message sign
 # => author: @ajgdylxeifojlxpbmen3exlnsbx8buspsjh37b/ipvi=.ed25519
 # => depth: 1
 # => kind: &82244417f956ac7c599f191593f7e441a4fafa20a4158fd52e154f1dc4c8ed92.sha256

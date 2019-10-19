@@ -85,6 +85,16 @@ module Pigeon
       v = (raw_value != "") ? raw_value : STDIN.read
       puts Pigeon::Message.current.append(key, v)
     end
+
+    desc "show", "Print a message to STDOUT. If message_id is missing, current draft will be displayed."
+
+    def show(message_id = "")
+      if message_id == ""
+        puts Pigeon::Message.current.serialize
+      else
+        raise "TODO: Find message by ID?"
+      end
+    end
   end
 
   class CLI < Thor

@@ -23,7 +23,6 @@ module Pigeon
     end
 
     def self.create(kind:, prev: nil, body: {})
-      # instantiate
       self.new(author: KeyPair.current.public_key,
                kind: kind,
                prev: prev,
@@ -31,6 +30,7 @@ module Pigeon
     end
 
     def self.current
+      # TODO: Handle find-or-create logic.
       @current ||= Marshal.load(Pigeon::Storage.current.get_config(NAME_OF_DRAFT))
     end
 

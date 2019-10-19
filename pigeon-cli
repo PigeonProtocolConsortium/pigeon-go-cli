@@ -78,6 +78,13 @@ module Pigeon
     def create(kind)
       puts Pigeon::Message.create(kind: kind).serialize
     end
+
+    desc "append", "Add a key/value pair to the current DRAFT"
+
+    def append(key, raw_value = "")
+      v = (raw_value != "") ? raw_value : STDIN.read
+      puts Pigeon::Message.current.append(key, v)
+    end
   end
 
   class CLI < Thor

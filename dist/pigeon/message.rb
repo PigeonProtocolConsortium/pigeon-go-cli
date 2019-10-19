@@ -24,17 +24,35 @@ module Pigeon
 
     def self.create(kind:, prev: nil, body: {})
       # instantiate
-      msg = self.new(author: KeyPair.current.public_key,
-                     kind: kind,
-                     prev: prev,
-                     body: body)
-      # Save to disk as HEAD
-      Pigeon::Storage.current.set_config(NAME_OF_DRAFT, Marshal.dump(msg))
-      msg
+      self.new(author: KeyPair.current.public_key,
+               kind: kind,
+               prev: prev,
+               body: body).save
+    end
+
+    def self.current
+      @current ||= Marshal.load(Pigeon::Storage.current.get_config(NAME_OF_DRAFT))
+    end
+
+    def save
+      Pigeon::Storage.current.set_config(NAME_OF_DRAFT, Marshal.dump(self))
+      self
     end
 
     def serialize
       Template.new(self).render
+    end
+
+    def append(key, value)
+      # TODO: Sanitize, validate inputs.
+      case value[0]
+      when "%", "@", "&", "\"" # TODO: Use constants, not literals.
+        self.body[key] = value
+      else
+        self.body[key] = value.inspect
+      end
+      self.save
+      return self.body[key]
     end
   end
 end

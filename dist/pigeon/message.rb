@@ -1,35 +1,40 @@
 module Pigeon
   class Message
-    NAME_OF_DRAFT = "HEAD"
+    NAME_OF_DRAFT = "HEAD.draft"
 
     attr_reader :author,
                 :kind,
-                :previous,
+                :prev,
                 :body,
-                :sequence, # Maybe not?
+                :depth,
                 :timestamp, # Maybe not?
                 :signature # Maybe not?
 
     def initialize(author:,
                    kind:,
-                   previous: nil,
+                   prev: nil,
                    body: [],
                    timestamp: Time.now.to_i)
       @author = author
       @kind = kind
-      @previous = previous
+      @prev = prev
       @body = body
       @timestamp = timestamp
     end
 
-    def self.create(kind:, previous: nil, body: [])
+    def self.create(kind:, prev: nil, body: {})
       # instantiate
       msg = self.new(author: KeyPair.current.public_key,
                      kind: kind,
-                     previous: previous,
+                     prev: prev,
                      body: body)
       # Save to disk as HEAD
       Pigeon::Storage.current.set_config(NAME_OF_DRAFT, Marshal.dump(msg))
+      msg
+    end
+
+    def serialize
+      Template.new(self).render
     end
   end
 end

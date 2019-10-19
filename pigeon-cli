@@ -76,7 +76,7 @@ module Pigeon
     desc "create", "Begin a new Pigeon message"
 
     def create(kind)
-      puts Pigeon::Message.create(kind: kind)
+      puts Pigeon::Message.create(kind: kind).serialize
     end
   end
 

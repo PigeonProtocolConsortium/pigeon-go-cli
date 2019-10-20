@@ -60,8 +60,11 @@ echo "...blob"
 echo "...identity"
 ./pigeon-cli message append key6 \@galdahnB3L2DE2cTU0Me54IpIUKVEgKmBwvZVtWJccg=.ed25519
 
-echo "show current message"
+echo "show draft message"
 ./pigeon-cli message show
+
+echo "sign (publish, save, commit, etc) draft message"
+./pigeon-cli message sign
 
 echo "getting status:"
 ./pigeon-cli status

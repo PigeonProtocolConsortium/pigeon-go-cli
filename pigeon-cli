@@ -76,7 +76,7 @@ module Pigeon
     desc "create", "Begin a new Pigeon message"
 
     def create(kind)
-      puts Pigeon::Message.create(kind: kind).serialize
+      puts Pigeon::Message.create(kind: kind).render
     end
 
     desc "append", "Add a key/value pair to the current DRAFT"
@@ -90,10 +90,16 @@ module Pigeon
 
     def show(message_id = "")
       if message_id == ""
-        puts Pigeon::Message.current.serialize
+        puts Pigeon::Message.current.render
       else
         raise "TODO: Find message by ID?"
       end
+    end
+
+    desc "sign", "Commit current DRAFT to local feed."
+
+    def sign
+      puts Pigeon::Message.current.sign.render
     end
   end
 

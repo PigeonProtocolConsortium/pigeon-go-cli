@@ -23,7 +23,6 @@ module Pigeon
     #  the key should be derived
     def initialize(seed = SecureRandom.random_bytes(Ed25519::KEY_SIZE))
       @seed = seed
-      @raw_key = Ed25519::SigningKey.new(seed)
     end
 
     def private_key
@@ -31,14 +30,26 @@ module Pigeon
     end
 
     def public_key
-      bytes = @raw_key.verify_key.to_bytes
+      bytes = raw_key.verify_key.to_bytes
       b64 = Base64.urlsafe_encode64(bytes)
 
       @public_key ||= KeyPair.add_headers(b64)
     end
 
+    def sign(string)
+      hex = raw_key.sign(string)
+      b64 = Base64.urlsafe_encode64(hex)
+      return b64 + ".sig.ed25519"
+    end
+
     def save!
       Pigeon::Storage.current.set_config(SEED_CONFIG_KEY, @seed)
+    end
+
+    private
+
+    def raw_key
+      @raw_key ||= Ed25519::SigningKey.new(@seed)
     end
   end
 end

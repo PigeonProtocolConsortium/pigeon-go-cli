@@ -1,3 +1,5 @@
+require "digest"
+
 module Pigeon
   class Message
     NAME_OF_DRAFT = "HEAD.draft"
@@ -36,27 +38,36 @@ module Pigeon
     end
 
     def calculate_signature
-      puts "========== TODO"
-      "FIX_ASAP_!"
+      string = Template.new(self).render_without_signature
+      KeyPair.current.sign(string)
     end
 
-    def path_to_message_numbe(n)
+    def path_to_message_number(n)
       File.join(".pigeon", "user", "#{n.to_s.rjust(7, "0")}.pigeon")
+    end
+
+    def previous_message
+      raise "Could not load @depth" unless @depth
+      if (@depth == 1)
+        return nil
+      else
+        Marshal.load(File.read(path_to_message_number(@depth - 1)))
+      end
+    end
+
+    def calculate_depth
+      Dir[OUTBOX_PATH].count
     end
 
     def sign
       # Set @depth
-      @depth = (Dir[OUTBOX_PATH].count - 1)
+      @depth = calculate_depth
+      @prev = previous_message ? previous_message.signature : "".inspect
       @signature = calculate_signature
-
-      # Create a file in ".pigeon/user/#{ @depth.rjust(7, "0") }".pigeon
-      file_path = path_to_message_numbe(@depth)
-      binding.pry
-      # calculate prev
-      @prev = "HOW WILL I DO THIS?"
-      # Store to disk
-      self.save
-      # return self
+      file_path = path_to_message_number(@depth)
+      self.freeze
+      File.write(file_path, Marshal.dump(self))
+      self
     end
 
     def save

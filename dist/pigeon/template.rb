@@ -6,9 +6,9 @@ module Pigeon
   class Template
     TPL_DIR = "views"
 
-    HEADER_TPL = File.read(File.join(TPL_DIR, "1_header.erb"))
-    BODY_TPL = File.read(File.join(TPL_DIR, "2_body.erb"))
-    FOOTER_TPL = File.read(File.join(TPL_DIR, "3_footer.erb"))
+    HEADER_TPL = File.read(File.join(TPL_DIR, "1_header.erb")).sub("\n", "")
+    BODY_TPL = File.read(File.join(TPL_DIR, "2_body.erb")).sub("\n", "")
+    FOOTER_TPL = File.read(File.join(TPL_DIR, "3_footer.erb")).sub("\n", "")
 
     COMPLETE_TPL = [HEADER_TPL, BODY_TPL, FOOTER_TPL].join("")
 
@@ -19,6 +19,16 @@ module Pigeon
     end
 
     def render
+      do_render(COMPLETE_TPL)
+    end
+
+    def render_without_signature
+      do_render([HEADER_TPL, BODY_TPL].join(""))
+    end
+
+    private
+
+    def do_render(template)
       author = message.author
       body = message.body
       kind = message.kind

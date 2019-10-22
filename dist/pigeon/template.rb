@@ -32,11 +32,11 @@ module Pigeon
       author = message.author
       body = message.body
       kind = message.kind
-      depth = message.depth || "DRAFT"
-      prev = message.prev || "DRAFT"
-      signature = message.signature || "DRAFT"
+      depth = message.depth || "NONE"
+      prev = message.prev || "NONE"
+      signature = message.signature || "NONE"
 
-      ERB.new(COMPLETE_TPL).result(binding)
+      ERB.new(template).result(binding)
     end
   end
 end

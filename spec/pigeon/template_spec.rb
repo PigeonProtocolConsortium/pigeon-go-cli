@@ -2,22 +2,24 @@ require "spec_helper"
 
 RSpec.describe Pigeon::Template do
   MessageShim = Struct.new(:author, :body, :kind, :depth, :prev, :signature)
-  EXPECTED_DRAFT = [
-    "author FAKE_AUTHOR",
-    "\nkind FAKE_KIND",
-    "\nprev DRAFT",
-    "\ndepth DRAFT",
-    "\n\n\nsignature DRAFT \n",
-  ].join("")
-  it "renders a DRAFT" do
+  TOP_HALF = ["author FAKE_AUTHOR",
+              "\nkind FAKE_KIND",
+              "\nprev NONE",
+              "\ndepth 23",
+              "\n\nfoo:\"bar\"\n\n"].join("")
+  BOTTOM_HALF = "signature XYZ.sig.sha256 \n"
+  EXPECTED_DRAFT = TOP_HALF + BOTTOM_HALF
+
+  it "renders a draft" do
     args = ["FAKE_AUTHOR",
-            nil,
+            { foo: "bar".inspect },
             "FAKE_KIND",
+            23,
             nil,
-            nil,
-            nil]
+            "XYZ.sig.sha256"]
     message = MessageShim.new(*args)
-    result = Pigeon::Template.new(message).render
-    expect(result).to eq(EXPECTED_DRAFT)
+    template = Pigeon::Template.new(message)
+    expect(template.render).to eq(EXPECTED_DRAFT)
+    expect(template.render_without_signature).to eq(TOP_HALF)
   end
 end

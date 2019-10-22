@@ -68,9 +68,11 @@ echo "== sign (publish, save, commit, etc) draft message"
 
 echo "=== add a second message to the db"
 ./pigeon-cli message create second_test
+echo "=== append hello:'world' to message:"
 ./pigeon-cli message append hello "world"
 ./pigeon-cli message sign
+echo "=== Sign message #2"
 ./pigeon-cli message show
 
-echo "getting status:"
+echo "=== getting status:"
 ./pigeon-cli status

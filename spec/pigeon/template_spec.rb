@@ -3,11 +3,11 @@ require "spec_helper"
 RSpec.describe Pigeon::Template do
   MessageShim = Struct.new(:author, :body, :kind, :depth, :prev, :signature)
   EXPECTED_DRAFT = [
-    "\nauthor FAKE_AUTHOR",
+    "author FAKE_AUTHOR",
     "\nkind FAKE_KIND",
     "\nprev DRAFT",
     "\ndepth DRAFT",
-    "\n\n\nsignature DRAFT \n\n",
+    "\n\n\nsignature DRAFT \n",
   ].join("")
   it "renders a DRAFT" do
     args = ["FAKE_AUTHOR",

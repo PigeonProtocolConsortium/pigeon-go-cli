@@ -79,6 +79,11 @@ module Pigeon
       Template.new(self).render
     end
 
+    def message_id # I need this to calculate `prev`.
+      raise "NO!" unless @signature && !@signature.downcase.include?("draft")
+      Digest::SHA256.digest(self.render)
+    end
+
     def append(key, value)
       # TODO: Sanitize, validate inputs.
       case value[0]

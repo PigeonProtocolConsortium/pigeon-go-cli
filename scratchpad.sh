@@ -60,11 +60,17 @@ echo "...blob"
 echo "...identity"
 ./pigeon-cli message append key6 \@galdahnB3L2DE2cTU0Me54IpIUKVEgKmBwvZVtWJccg=.ed25519
 
-echo "show draft message"
+echo "== show draft message"
 ./pigeon-cli message show
 
-echo "sign (publish, save, commit, etc) draft message"
+echo "== sign (publish, save, commit, etc) draft message"
 ./pigeon-cli message sign
+
+echo "=== add a second message to the db"
+./pigeon-cli message create second_test
+./pigeon-cli message append hello "world"
+./pigeon-cli message sign
+./pigeon-cli message show
 
 echo "getting status:"
 ./pigeon-cli status

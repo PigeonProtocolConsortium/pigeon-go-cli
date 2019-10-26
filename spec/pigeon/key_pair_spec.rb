@@ -6,6 +6,15 @@ RSpec.describe Pigeon::KeyPair do
   ")\xFF\x01E\b$b)\xC9\x82\b"
   let(:kp) { Pigeon::KeyPair.new(FAKE_SEED) }
 
+  HELLO_SIGNATURE = [
+    "erGeJdWiWzDJpKJdkLSc5uBc90j5t90aPcbCehLp6Xg",
+    "tF8f_2AYWXl6ou4oquvEOQVMgrTGuN-q6F9tTW-V5Bw",
+    "==.sig.ed25519",
+  ].join("")
+  it "signs arbitrary data" do
+    expect(kp.sign("hello")).to eq(HELLO_SIGNATURE)
+  end
+
   it "generates a pair from a seed" do
     x = "@7n_g0ca9FFWvMkXy2TMwM7bdMn6tNiEHKzrFX-CzAmQ=.ed25519"
     expect(kp.public_key).to eq(x)

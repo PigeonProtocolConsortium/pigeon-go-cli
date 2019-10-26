@@ -12,6 +12,17 @@ RSpec.describe Pigeon::Storage do
     end
   end
 
+  it "deletes a config" do
+    test_fs do |s|
+      s.set_config("FOO", "BAR")
+      value = s.get_config("FOO")
+      expect(value).to eq("BAR")
+      s.delete_config("FOO")
+      value = s.get_config("FOO")
+      expect(value).to eq(nil)
+    end
+  end
+
   it "manages configs" do
     test_fs do |s|
       s.set_config("FOO", "BAR")

@@ -5,13 +5,7 @@ module Pigeon
     NAME_OF_DRAFT = "HEAD.draft"
     OUTBOX_PATH = File.join(".pigeon", "user")
 
-    attr_reader :author,
-                :kind,
-                :prev,
-                :body,
-                :depth,
-                :timestamp, # Maybe not?
-                :signature # Maybe not?
+    attr_reader :author, :kind, :prev, :body, :depth, :signature
 
     def self.create(kind:, prev: nil, body: {})
       self.new(author: KeyPair.current.public_key,
@@ -20,16 +14,13 @@ module Pigeon
                body: body).save
     end
 
-    def initialize(author:,
-                   kind:,
-                   prev: nil,
-                   body: [],
-                   timestamp: Time.now.to_i)
+    def initialize(author:, kind:, prev: nil, body: {})
       @author = author
       @kind = kind
       @prev = prev
       @body = body
-      @timestamp = timestamp
+      @depth = calculate_depth
+      @prev = previous_message ? previous_message.signature : "NONE"
     end
 
     def self.current
@@ -54,13 +45,11 @@ module Pigeon
     end
 
     def sign
-      # Set @depth
-      @depth = calculate_depth
-      @prev = previous_message ? previous_message.signature : "NONE"
       @signature = calculate_signature
       file_path = path_to_message_number(@depth)
       self.freeze
       File.write(file_path, Marshal.dump(self))
+      Pigeon::Storage.current.delete_config(NAME_OF_DRAFT)
       self
     end
 
@@ -72,7 +61,8 @@ module Pigeon
     private
 
     def calculate_signature
-      string = Template.new(self).render_without_signature
+      template = Template.new(self)
+      string = template.render_without_signature
       KeyPair.current.sign(string)
     end
 
@@ -81,15 +71,27 @@ module Pigeon
     end
 
     def previous_message
-      raise "Could not load @depth" unless @depth
-      return @previous_message if @previous_message
-      return @previous_message = nil if @depth == 1
+      if @depth.nil?
+        raise "Could not load @depth"
+      end
+
+      if @previous_message
+        puts "~~ Previous message set to " + @previous_message.inspect
+        return @previous_message
+      end
+
+      if @depth == 1
+        puts "~~ depth is 1!"
+        return @previous_message = nil
+      end
+
+      puts "~~ TADA!"
       path = path_to_message_number(@depth - 1)
-      return @previous_message = Marshal.load(File.read(path))
+      @previous_message = Marshal.load(File.read(path))
     end
 
     def calculate_depth
-      Dir[OUTBOX_PATH].count
+      Dir[OUTBOX_PATH].count.tap { |x| "~~~ x is " + x.to_s }
     end
 
     def message_id # I need this to calculate `prev`.

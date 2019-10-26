@@ -43,6 +43,7 @@ echo "Making a new `scratch_pad` log entry"
 echo "Appending values..."
 
 echo "...string via pipe"
+
 echo "my_value" | ./pigeon-cli message append key1
 
 echo "...string with no quotes"
@@ -68,11 +69,12 @@ echo "== sign (publish, save, commit, etc) draft message"
 
 echo "=== add a second message to the db"
 ./pigeon-cli message create second_test
+
 echo "=== append hello:'world' to message:"
 ./pigeon-cli message append hello "world"
-./pigeon-cli message sign
+
 echo "=== Sign message #2"
-./pigeon-cli message show
+./pigeon-cli message sign
 
 echo "=== getting status:"
 ./pigeon-cli status

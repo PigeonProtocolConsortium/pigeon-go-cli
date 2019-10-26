@@ -31,8 +31,13 @@ module Pigeon
       File.write(path, value.to_s)
     end
 
+    def delete_config(key)
+      File.delete(conf_path_for(key))
+    end
+
     def get_config(key)
-      File.read(conf_path_for(key))
+      f = conf_path_for(key)
+      File.read(f) if File.file?(f)
     end
 
     def set_blob(data)

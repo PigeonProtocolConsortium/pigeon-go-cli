@@ -55,7 +55,7 @@ module Pigeon
       hd = hex_digest.gsub(BLOB_HEADER, "").gsub(BLOB_FOOTER, "")
       store.transaction(true) do
         store[BLOB_NS] ||= {}
-        store[BLOB_NS][hex_digest]
+        store[BLOB_NS][hd]
       end
     end
 

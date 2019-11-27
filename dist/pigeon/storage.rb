@@ -23,16 +23,22 @@ module Pigeon
     end
 
     def set_config(key, value)
-      store.transaction { store[key] = value }
+      store.transaction do
+        store[CONF_NS] ||= {}
+        store[CONF_NS][key] = value
+      end
     end
 
     def delete_config(key)
-      File.delete(key)
+      store.transaction do
+        (store[CONF_NS] || {}).delete(key)
+      end
     end
 
     def get_config(key)
-      f = (key)
-      File.read(f) if File.file?(f)
+      store.transaction(true) do
+        (store[CONF_NS] || {})[key]
+      end
     end
 
     def set_blob(data)
@@ -66,22 +72,22 @@ module Pigeon
       path = KeyPair.strip_headers(identity)
       store.transaction do
         store[PEER_NS] ||= Set.new
-        store[PEER_NS].remove(identity)
+        store[PEER_NS].delete(identity)
       end
       identity
     end
 
     def block_peer(identity)
-      remove_peer(identity)
-      path = KeyPair.strip_headers(identity)
-      FileUtils.touch(File.join(block_dir, path))
-      identity
+      # remove_peer(identity)
+      # path = KeyPair.strip_headers(identity)
+      # FileUtils.touch(File.join(block_dir, path))
+      # identity
     end
 
     def all_peers
-      Dir[File.join(peer_dir, "*")]
-        .map { |x| File.split(x).last }
-        .map { |x| KeyPair.add_headers(x) }
+      store.transaction(true) do
+        (store[PEER_NS] || Set.new).to_a
+      end
     end
 
     def all_blocks

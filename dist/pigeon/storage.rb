@@ -78,10 +78,12 @@ module Pigeon
     end
 
     def block_peer(identity)
-      # remove_peer(identity)
-      # path = KeyPair.strip_headers(identity)
-      # FileUtils.touch(File.join(block_dir, path))
-      # identity
+      remove_peer(identity)
+      store.transaction do
+        store[BLCK_NS] ||= Set.new
+        store[BLCK_NS].add(identity)
+      end
+      identity
     end
 
     def all_peers
@@ -91,9 +93,9 @@ module Pigeon
     end
 
     def all_blocks
-      Dir[File.join(block_dir, "*")]
-        .map { |x| File.split(x).last }
-        .map { |x| KeyPair.add_headers(x) }
+      store.transaction(true) do
+        (store[BLCK_NS] || Set.new).to_a
+      end
     end
 
     private

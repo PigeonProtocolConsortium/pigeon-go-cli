@@ -1,11 +1,15 @@
+require "pstore"
+
 module Pigeon
   class Storage
-    ROOT_DIR = ".pigeon"
-    CONF_DIR = "conf"
-    BLOB_DIR = "blobs"
-    PEER_DIR = "peers"
-    USER_DIR = "user"
-    BLOCK_DIR = "blocked"
+    PIGEON_DB_PATH = File.join("db.pigeon")
+
+    ROOT_NS = ".pigeon"
+    CONF_NS = "conf"
+    BLOB_NS = "blobs"
+    PEER_NS = "peers"
+    USER_NS = "user"
+    BLCK_NS = "blocked"
 
     BLOB_HEADER = "&"
     BLOB_FOOTER = ".sha256"
@@ -15,57 +19,55 @@ module Pigeon
     end
 
     def initialize
-      unless initialized?
-        create_root_dir
-        create_conf_dir
-        create_blob_dir
-        create_peer_dir
-        create_user_dir
-      end
+      create_pstore unless initialized?
     end
 
     def set_config(key, value)
-      path = conf_path_for(key)
-      maybe_touch(path)
-
-      File.write(path, value.to_s)
+      store.transaction { store[key] = value }
     end
 
     def delete_config(key)
-      File.delete(conf_path_for(key))
+      File.delete(key)
     end
 
     def get_config(key)
-      f = conf_path_for(key)
+      f = (key)
       File.read(f) if File.file?(f)
     end
 
     def set_blob(data)
       hex_digest = Digest::SHA256.hexdigest(data)
-      path = blob_path_for(hex_digest)
-      File.write(path, data)
+      store.transaction do
+        store[BLOB_NS] ||= {}
+        store[BLOB_NS][hex_digest] = data
+      end
 
       [BLOB_HEADER, hex_digest, BLOB_FOOTER].join("")
     end
 
     def get_blob(hex_digest)
       hd = hex_digest.gsub(BLOB_HEADER, "").gsub(BLOB_FOOTER, "")
-      # Allows user to pass first n chars of a
-      # hash instead of the whole hash.
-      f = Dir[blob_path_for(hd) + "*"].first
-
-      File.file?(f) ? File.read(f) : nil
+      store.transaction(true) do
+        store[BLOB_NS] ||= {}
+        store[BLOB_NS][hex_digest]
+      end
     end
 
     def add_peer(identity)
       path = KeyPair.strip_headers(identity)
-      FileUtils.mkdir_p(File.join(peer_dir, path))
+      store.transaction do
+        store[PEER_NS] ||= Set.new
+        store[PEER_NS].add(identity)
+      end
       identity
     end
 
     def remove_peer(identity)
       path = KeyPair.strip_headers(identity)
-      FileUtils.rm_rf(File.join(peer_dir, path))
+      store.transaction do
+        store[PEER_NS] ||= Set.new
+        store[PEER_NS].remove(identity)
+      end
       identity
     end
 
@@ -88,69 +90,18 @@ module Pigeon
         .map { |x| KeyPair.add_headers(x) }
     end
 
-    private # ====================================
+    private
 
     def initialized?
-      File.directory?(root_dir)
+      File.file?(PIGEON_DB_PATH)
     end
 
-    def root_dir
-      @root_dir ||= File.join(ROOT_DIR)
+    def create_pstore
+      FileUtils.rm(PIGEON_DB_PATH) if File.file?(PIGEON_DB_PATH)
     end
 
-    def blob_dir
-      @blob_dir ||= File.join(ROOT_DIR, BLOB_DIR, "sha256")
-    end
-
-    def peer_dir
-      @peer_dir ||= File.join(ROOT_DIR, PEER_DIR)
-    end
-
-    def block_dir
-      File.join(ROOT_DIR, BLOCK_DIR)
-    end
-
-    def user_dir
-      File.join(ROOT_DIR, USER_DIR)
-    end
-
-    def blob_path_for(hex_hash_string)
-      first_part = File.join(blob_dir, hex_hash_string[0, 2])
-      FileUtils.mkdir_p(first_part)
-      File.join(first_part, hex_hash_string[2..-1])
-    end
-
-    def maybe_touch(path)
-      FileUtils.touch(path) unless File.file?(path)
-    end
-
-    def conf_path_for(key)
-      File.join(conf_dir, key.to_s)
-    end
-
-    def conf_dir
-      @conf_dir ||= File.join(ROOT_DIR, CONF_DIR)
-    end
-
-    def create_conf_dir
-      FileUtils.mkdir_p(conf_dir)
-    end
-
-    def create_blob_dir
-      FileUtils.mkdir_p(blob_dir)
-    end
-
-    def create_root_dir
-      FileUtils.mkdir_p(root_dir)
-    end
-
-    def create_peer_dir
-      FileUtils.mkdir_p(peer_dir)
-      FileUtils.mkdir_p(block_dir)
-    end
-
-    def create_user_dir
-      FileUtils.mkdir_p(user_dir)
+    def store
+      @store ||= PStore.new(PIGEON_DB_PATH)
     end
   end
 end

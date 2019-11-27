@@ -11,8 +11,6 @@ module Pigeon
     desc "new", "Creates a new identiy in `.pigeon` directory if none exists"
 
     def new
-      # TODO: --force flag
-      # TODO: --seed flag
       if Dir.exist?(Pigeon::Storage::ROOT_DIR)
         puts "Pigeon has detected a `.pigeon` directory.
           Refusing to overwrite existing Pigeon config.

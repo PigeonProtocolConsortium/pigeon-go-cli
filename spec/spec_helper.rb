@@ -1,6 +1,5 @@
 require "pry"
 require "simplecov"
-require "fakefs/spec_helpers"
 
 SimpleCov.start
 require_relative File.join("..", "dist", "pigeon")

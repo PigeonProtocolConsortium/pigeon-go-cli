@@ -38,13 +38,11 @@ RSpec.describe Pigeon::KeyPair do
       Pigeon::KeyPair::SEED_CONFIG_KEY,
       FAKE_SEED,
     ]
-    FakeFS.with_fresh do
-      lol = receive(:set_config).with(*argss).and_call_original
-      expect(Pigeon::Storage.current).to lol
-      kp.save!
-      new_kp = Pigeon::KeyPair.current
-      expect(new_kp.public_key).to eq(kp.public_key)
-      expect(new_kp.private_key).to eq(kp.private_key)
-    end
+    lol = receive(:set_config).with(*argss).and_call_original
+    expect(Pigeon::Storage.current).to lol
+    kp.save!
+    new_kp = Pigeon::KeyPair.current
+    expect(new_kp.public_key).to eq(kp.public_key)
+    expect(new_kp.private_key).to eq(kp.private_key)
   end
 end

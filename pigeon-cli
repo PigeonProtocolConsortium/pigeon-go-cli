@@ -11,8 +11,8 @@ module Pigeon
     desc "new", "Creates a new identiy in `.pigeon` directory if none exists"
 
     def new
-      if Dir.exist?(Pigeon::Storage::ROOT_DIR)
-        puts "Pigeon has detected a `.pigeon` directory.
+      if File.file?(Pigeon::Storage::PIGEON_DB_PATH)
+        puts "Pigeon has detected a `pigeon.db` file.
           Refusing to overwrite existing Pigeon config.
           Remove config dir or switch to a different directory."
         raise ConfigAlreadyExists

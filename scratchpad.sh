@@ -5,7 +5,7 @@
 # for quick QA.
 
 echo "Deleting old pigeon configs"
-rm -rf .pigeon/
+rm -f db.pigeon
 echo "OK"
 
 echo "Creating new config:"

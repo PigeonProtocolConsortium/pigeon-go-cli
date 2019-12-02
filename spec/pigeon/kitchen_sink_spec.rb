@@ -2,9 +2,7 @@ require "spec_helper"
 
 RSpec.describe "Kitch sink spec" do
   it "does everything" do
-    $lol = true
     kp = Pigeon::KeyPair.new()
-    $lol = false
     kp.save!
     Pigeon::KeyPair.current.public_key
     # ./pigeon-cli identity new

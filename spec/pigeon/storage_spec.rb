@@ -4,7 +4,10 @@ RSpec.describe Pigeon::Storage do
   LOGO_BLOB = File.read("./logo.png")
   IDS = %w(@_TlC2z3FT4fimecC4eytrBhOwhLUZsVBZEZriBO9cWs=.ed25519
            @28FyT7evjcYrrwngr8G2V1HZ0ODK0VPsFctDEZwfZJc=.ed25519)
-  let(:s) { Pigeon::Storage.current }
+  let(:s) do
+    FileUtils.rm_r(Pigeon::Storage::PIGEON_DB_PATH)
+    Pigeon::Storage.current
+  end
 
   it "deletes a config" do
     s.set_config("FOO", "BAR")

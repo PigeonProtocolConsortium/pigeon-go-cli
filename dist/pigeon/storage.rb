@@ -18,10 +18,6 @@ module Pigeon
       @current ||= self.new
     end
 
-    def initialize
-      create_pstore unless initialized?
-    end
-
     def set_config(key, value)
       store.transaction do
         store[CONF_NS] ||= {}
@@ -99,14 +95,6 @@ module Pigeon
     end
 
     private
-
-    def initialized?
-      File.file?(PIGEON_DB_PATH)
-    end
-
-    def create_pstore
-      FileUtils.rm(PIGEON_DB_PATH) if File.file?(PIGEON_DB_PATH)
-    end
 
     def store
       @store ||= PStore.new(PIGEON_DB_PATH)

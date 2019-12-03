@@ -76,22 +76,19 @@ module Pigeon
       end
 
       if @previous_message
-        puts "~~ Previous message set to " + @previous_message.inspect
         return @previous_message
       end
 
       if @depth == 1
-        puts "~~ depth is 1!"
         return @previous_message = nil
       end
 
-      puts "~~ TADA!"
       path = path_to_message_number(@depth - 1)
       @previous_message = Marshal.load(File.read(path))
     end
 
     def calculate_depth
-      Dir[OUTBOX_PATH].count.tap { |x| "~~~ x is " + x.to_s }
+      Dir[OUTBOX_PATH].count
     end
 
     def message_id # I need this to calculate `prev`.

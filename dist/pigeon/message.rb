@@ -4,6 +4,7 @@ module Pigeon
   class Message
     NAME_OF_DRAFT = "HEAD.draft"
     OUTBOX_PATH = File.join(".pigeon", "user")
+    EMPTY_MESSAGE = "NONE"
 
     attr_reader :author, :kind, :prev, :body, :depth, :signature
 
@@ -20,7 +21,7 @@ module Pigeon
       @prev = prev
       @body = body
       @depth = calculate_depth
-      @prev = previous_message ? previous_message.signature : "NONE"
+      @prev = previous_message ? previous_message.signature : EMPTY_MESSAGE
     end
 
     def self.current
@@ -61,39 +62,40 @@ module Pigeon
     private
 
     def calculate_signature
-      template = Template.new(self)
-      string = template.render_without_signature
-      KeyPair.current.sign(string)
+      # template = Template.new(self)
+      # string = template.render_without_signature
+      # KeyPair.current.sign(string)
     end
 
     def path_to_message_number(n)
-      File.join(".pigeon", "user", "#{n.to_s.rjust(7, "0")}.pigeon")
+      # File.join(".pigeon", "user", "#{n.to_s.rjust(7, "0")}.pigeon")
     end
 
     def previous_message
-      if @depth.nil?
-        raise "Could not load @depth"
-      end
+      # if @depth.nil?
+      #   raise "Could not load @depth"
+      # end
 
-      if @previous_message
-        return @previous_message
-      end
+      # if @previous_message
+      #   return @previous_message
+      # end
 
-      if @depth == 1
-        return @previous_message = nil
-      end
+      # if @depth == 1
+      #   return @previous_message = nil
+      # end
 
-      path = path_to_message_number(@depth - 1)
-      @previous_message = Marshal.load(File.read(path))
+      # path = path_to_message_number(@depth - 1)
+      # @previous_message = Marshal.load(File.read(path))
     end
 
     def calculate_depth
-      Dir[OUTBOX_PATH].count
+      # Dir[OUTBOX_PATH].count
+      0
     end
 
     def message_id # I need this to calculate `prev`.
-      raise "NO!" unless @signature && !@signature.downcase.include?("draft")
-      Digest::SHA256.digest(self.render)
+      # raise "NO!" unless @signature && !@signature.downcase.include?("draft")
+      # Digest::SHA256.digest(self.render)
     end
   end
 end

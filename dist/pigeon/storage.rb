@@ -2,18 +2,6 @@ require "pstore"
 
 module Pigeon
   class Storage
-    PIGEON_DB_PATH = File.join("db.pigeon")
-
-    ROOT_NS = ".pigeon"
-    CONF_NS = "conf"
-    BLOB_NS = "blobs"
-    PEER_NS = "peers"
-    USER_NS = "user"
-    BLCK_NS = "blocked"
-
-    BLOB_HEADER = "&"
-    BLOB_FOOTER = ".sha256"
-
     def self.current
       @current ||= self.new
     end

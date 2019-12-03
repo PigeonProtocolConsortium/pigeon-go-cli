@@ -3,9 +3,6 @@ module Pigeon
   # help us maintain our sanity when the Gem's API
   # changes.
   class KeyPair
-    HEADER, FOOTER = ["@", ".ed25519"]
-    SEED_CONFIG_KEY = "SEED"
-
     def self.strip_headers(identity)
       identity.sub(HEADER, "").sub(FOOTER, "")
     end
@@ -15,8 +12,8 @@ module Pigeon
     end
 
     def self.current
-      storage = Pigeon::Storage.current
-      self.new(storage.get_config(SEED_CONFIG_KEY))
+      key = Pigeon::Storage.current.get_config(SEED_CONFIG_KEY)
+      key ? self.new(key) : self.new
     end
 
     # `seed` is a 32-byte seed value from which
@@ -44,6 +41,7 @@ module Pigeon
 
     def save!
       Pigeon::Storage.current.set_config(SEED_CONFIG_KEY, @seed)
+      self
     end
 
     private

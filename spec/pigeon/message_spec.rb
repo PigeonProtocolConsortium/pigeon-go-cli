@@ -8,5 +8,7 @@ RSpec.describe Pigeon::Message do
     expect(message.body).to eq({})
     expect(message.depth).to eq(0)
     expect(message.prev).to eq(Pigeon::Message::EMPTY_MESSAGE)
+    expect(Pigeon::Message.current).to eq(message)
+    message.append("foo", "bar")
   end
 end

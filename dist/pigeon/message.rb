@@ -34,6 +34,8 @@ module Pigeon
     end
 
     def append(key, value)
+      puts "TODO: Add #[] / #[]= methods"
+      puts "TODO: Add #readonly? method and disallow edits after save"
       # TODO: Sanitize, validate inputs.
       case value[0]
       when "%", "@", "&", "\"" # TODO: Use constants, not literals.

@@ -25,9 +25,9 @@ RSpec.describe Pigeon::KeyPair do
   it "strips headers" do
     whatever = "af697f3063d46fe9546f651c08c378f8"
     example = [
-      Pigeon::KeyPair::HEADER,
+      Pigeon::HEADER,
       whatever,
-      Pigeon::KeyPair::FOOTER,
+      Pigeon::FOOTER,
     ].join("")
     result = Pigeon::KeyPair.strip_headers(example)
     expect(result).to eq(whatever)
@@ -35,7 +35,7 @@ RSpec.describe Pigeon::KeyPair do
 
   it "saves to disk" do
     argss = [
-      Pigeon::KeyPair::SEED_CONFIG_KEY,
+      Pigeon::SEED_CONFIG_KEY,
       FAKE_SEED,
     ]
     lol = receive(:set_config).with(*argss).and_call_original

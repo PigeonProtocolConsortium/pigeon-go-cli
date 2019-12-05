@@ -38,7 +38,7 @@ module Pigeon
       puts "TODO: Add #readonly? method and disallow edits after save"
       # TODO: Sanitize, validate inputs.
       case value[0]
-      when "%", "@", "&", "\"" # TODO: Use constants, not literals.
+      when BLOB_SIGIL, SIGNATURE_SIGIL, IDENTITY_SIGIL, STRING_SIGIL
         self.body[key] = value
       else
         self.body[key] = value.inspect

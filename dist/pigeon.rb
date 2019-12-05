@@ -29,7 +29,10 @@ module Pigeon
   BLCK_NS = "blocked"
   # ^ Internal namespaces for PStore keys
 
-  BLOB_HEADER = "&"
+  BLOB_SIGIL = "&"
+  SIGNATURE_SIGIL = "%"
+  IDENTITY_SIGIL = "@"
+  STRING_SIGIL = "\""
   BLOB_FOOTER = ".sha256"
 end
 

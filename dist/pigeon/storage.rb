@@ -32,11 +32,11 @@ module Pigeon
         store[BLOB_NS][hex_digest] = data
       end
 
-      [BLOB_HEADER, hex_digest, BLOB_FOOTER].join("")
+      [BLOB_SIGIL, hex_digest, BLOB_FOOTER].join("")
     end
 
     def get_blob(hex_digest)
-      hd = hex_digest.gsub(BLOB_HEADER, "").gsub(BLOB_FOOTER, "")
+      hd = hex_digest.gsub(BLOB_SIGIL, "").gsub(BLOB_FOOTER, "")
       store.transaction(true) do
         store[BLOB_NS] ||= {}
         store[BLOB_NS][hd]

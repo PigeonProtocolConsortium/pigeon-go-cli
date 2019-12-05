@@ -2,6 +2,7 @@ require "spec_helper"
 
 RSpec.describe Pigeon::Message do
   it "creates a new message" do
+    Pigeon::KeyPair.current
     message = Pigeon::Message.create(kind: "unit_test")
     expectations = {
       author: Pigeon::KeyPair.current.public_key,

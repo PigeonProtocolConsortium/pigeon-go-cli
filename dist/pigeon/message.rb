@@ -24,15 +24,6 @@ module Pigeon
       @prev = previous_message ? previous_message.signature : EMPTY_MESSAGE
     end
 
-    def self.current
-      # TODO: Handle find-or-create logic.
-      @current ||= Pigeon::Storage.current.get_config(NAME_OF_DRAFT)
-    end
-
-    def render
-      Template.new(self).render
-    end
-
     def append(key, value)
       puts "TODO: Add #[] / #[]= methods"
       puts "TODO: Add #readonly? method and disallow edits after save"
@@ -47,6 +38,15 @@ module Pigeon
       return self.body[key]
     end
 
+    def self.current
+      @current ||= (Pigeon::Storage.current.get_config(NAME_OF_DRAFT) || new)
+    end
+
+    def save
+      Pigeon::Storage.current.set_config(NAME_OF_DRAFT, self)
+      self
+    end
+
     def sign
       @signature = calculate_signature
       file_path = path_to_message_number(@depth)
@@ -56,9 +56,8 @@ module Pigeon
       self
     end
 
-    def save
-      Pigeon::Storage.current.set_config(NAME_OF_DRAFT, self)
-      self
+    def render
+      Template.new(self).render
     end
 
     private

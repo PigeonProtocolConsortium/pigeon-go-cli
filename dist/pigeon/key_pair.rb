@@ -12,8 +12,12 @@ module Pigeon
     end
 
     def self.current
-      key = Pigeon::Storage.current.get_config(SEED_CONFIG_KEY)
-      key ? self.new(key) : self.new
+      if @current
+        @current
+      else
+        key = Pigeon::Storage.current.get_config(SEED_CONFIG_KEY)
+        @current = (key ? self.new(key) : self.new).save!
+      end
     end
 
     # `seed` is a 32-byte seed value from which

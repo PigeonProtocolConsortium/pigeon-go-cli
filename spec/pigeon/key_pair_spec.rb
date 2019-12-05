@@ -32,17 +32,4 @@ RSpec.describe Pigeon::KeyPair do
     result = Pigeon::KeyPair.strip_headers(example)
     expect(result).to eq(whatever)
   end
-
-  it "saves to disk" do
-    argss = [
-      Pigeon::SEED_CONFIG_KEY,
-      FAKE_SEED,
-    ]
-    lol = receive(:set_config).with(*argss).and_call_original
-    expect(Pigeon::Storage.current).to lol
-    kp.save!
-    new_kp = Pigeon::KeyPair.current
-    expect(new_kp.public_key).to eq(kp.public_key)
-    expect(new_kp.private_key).to eq(kp.private_key)
-  end
 end

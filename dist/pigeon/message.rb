@@ -42,6 +42,10 @@ module Pigeon
       @current ||= (Pigeon::Storage.current.get_config(NAME_OF_DRAFT) || new)
     end
 
+    def self.reset_current
+      @current = nil
+    end
+
     def save
       Pigeon::Storage.current.set_config(NAME_OF_DRAFT, self)
       self
@@ -49,11 +53,10 @@ module Pigeon
 
     def sign
       @signature = calculate_signature
-      file_path = path_to_message_number(@depth)
       self.freeze
-      File.write(file_path, Marshal.dump(self))
-      Pigeon::Storage.current.delete_config(NAME_OF_DRAFT)
-      self
+      Pigeon::Storage.current.save_message(self)
+      Pigeon::Message.reset_current
+      @signature
     end
 
     def render
@@ -63,13 +66,9 @@ module Pigeon
     private
 
     def calculate_signature
-      # template = Template.new(self)
-      # string = template.render_without_signature
-      # KeyPair.current.sign(string)
-    end
-
-    def path_to_message_number(n)
-      # File.join(".pigeon", "user", "#{n.to_s.rjust(7, "0")}.pigeon")
+      template = Template.new(self)
+      string = template.render_without_signature
+      KeyPair.current.sign(string)
     end
 
     def previous_message

@@ -27,6 +27,8 @@ module Pigeon
   PEER_NS = "peers"
   USER_NS = "user"
   BLCK_NS = "blocked"
+  MESG_NS = "messages"
+
   # ^ Internal namespaces for PStore keys
 
   BLOB_SIGIL = "&"

@@ -6,6 +6,13 @@ module Pigeon
       @current ||= self.new
     end
 
+    def save_message(msg)
+      store.transaction do
+        store[MESG_NS] ||= {}
+        store[MESG_NS][msg.signature] = msg
+      end
+    end
+
     def set_config(key, value)
       store.transaction do
         store[CONF_NS] ||= {}

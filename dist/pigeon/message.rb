@@ -26,7 +26,7 @@ module Pigeon
 
     def self.current
       # TODO: Handle find-or-create logic.
-      @current ||= Marshal.load(Pigeon::Storage.current.get_config(NAME_OF_DRAFT))
+      @current ||= Pigeon::Storage.current.get_config(NAME_OF_DRAFT)
     end
 
     def render
@@ -57,7 +57,7 @@ module Pigeon
     end
 
     def save
-      Pigeon::Storage.current.set_config(NAME_OF_DRAFT, Marshal.dump(self))
+      Pigeon::Storage.current.set_config(NAME_OF_DRAFT, self)
       self
     end
 

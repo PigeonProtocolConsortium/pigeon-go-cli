@@ -9,23 +9,29 @@ RSpec.describe Pigeon::Message do
     message.sign
     message
   end
+
   it "signs a message" do
     test_me = message
     raise "need better assertions!"
   end
-  MSG = ["author @CXOkNU2zetuk0g30KqLsWxEMdJC0r_0wVe6syzjYGn0=.ed25519",
-         "kind unit_test",
-         "prev NONE",
-         "depth 0",
-         "\n",
-         "a:\"bar\"",
-         "b:&6462a5f5174b53702fc25afe67a8f9a29f572610a65bafefff627531552f096f.sha256",
-         "\n",
-         "signature ZZesWjxcHY22oi6GCjWSSXs-avks6E3ijHwJJJJd04WkmJIMMIKZamIw85fr4LnWydhfRML_HUW2nQxPDeCEBQ==.sig.ed25519 "].join
+
+  MSG = [
+    "author ___",
+    "kind unit_test",
+    "prev NONE",
+    "depth 0\n",
+    "a:\"bar\"",
+    "b:&6462a5f5174b53702fc25afe67a8f9a29f572610a65bafefff627531552f096f.sha256\n",
+    "signature ",
+  ].join("\n")
 
   it "renders a first message" do
-    expect(message.render).to eq(MSG)
-    raise "Now attach a second message and make sure that it renders correctly"
+    pk = Pigeon::KeyPair.current.public_key
+    actual = message.render
+    expected = MSG.gsub("___", pk)
+    expect(actual).to start_with(expected)
+    puts "TODO: Write a test for deterministic verification of signatures"
+    puts "current tests only test top parts of message, not signature."
   end
 
   it "creates a new message" do

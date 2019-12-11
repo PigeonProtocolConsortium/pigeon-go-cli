@@ -2,7 +2,7 @@ require "digest"
 
 module Pigeon
   class Message
-    attr_reader :author, :kind, :prev, :body, :depth, :signature
+    attr_reader :author, :kind, :prev, :body, :signature
 
     def self.create(kind:, prev: nil, body: {})
       self.new(author: KeyPair.current.public_key,
@@ -16,7 +16,7 @@ module Pigeon
       @kind = kind
       @prev = prev
       @body = body
-      @depth = calculate_depth
+      @depth = nil # Set at save time
       @prev = previous_message ? previous_message.signature : EMPTY_MESSAGE
     end
 
@@ -50,6 +50,7 @@ module Pigeon
 
     def sign
       @signature = calculate_signature
+      @depth = Pigeon::Storage.current.message_count
       self.freeze
       Pigeon::Storage.current.save_message(self)
       Pigeon::Message.reset_current
@@ -58,6 +59,10 @@ module Pigeon
 
     def render
       Template.new(self).render
+    end
+
+    def depth
+      calculate_depth
     end
 
     private
@@ -86,8 +91,7 @@ module Pigeon
     end
 
     def calculate_depth
-      # Dir[OUTBOX_PATH].count
-      0
+      @depth || Pigeon::Storage.current.message_count
     end
 
     def message_id # I need this to calculate `prev`.

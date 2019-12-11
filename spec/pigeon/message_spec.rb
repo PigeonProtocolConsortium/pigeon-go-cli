@@ -11,8 +11,16 @@ RSpec.describe Pigeon::Message do
   end
 
   it "signs a message" do
-    test_me = message
-    raise "need better assertions!"
+    m1 = message
+    message2 = Pigeon::Message.create(kind: "unit_test")
+    message2.append("expected_sequence", "1")
+    message2.sign
+
+    expect(message2.author).to eq(Pigeon::KeyPair.current.public_key)
+    expect(message2.kind).to eq("unit_test")
+    expect(message2.prev).to eq(m1)
+    expect(message2.body).to eq("expected_sequence" => "1")
+    expect(message2.depth).to eq(1)
   end
 
   MSG = [
@@ -30,8 +38,6 @@ RSpec.describe Pigeon::Message do
     actual = message.render
     expected = MSG.gsub("___", pk)
     expect(actual).to start_with(expected)
-    puts "TODO: Write a test for deterministic verification of signatures"
-    puts "current tests only test top parts of message, not signature."
   end
 
   it "creates a new message" do
@@ -45,7 +51,7 @@ RSpec.describe Pigeon::Message do
         "b" => hash,
       },
       depth: 0,
-      prev: Pigeon::Message::EMPTY_MESSAGE,
+      prev: Pigeon::EMPTY_MESSAGE,
     }
     message.append("a", "bar")
     message.append("b", hash)
@@ -53,7 +59,7 @@ RSpec.describe Pigeon::Message do
     expect(message.kind).to eq("unit_test")
     expect(message.body).to eq(expectations.fetch(:body))
     expect(message.depth).to eq(0)
-    expect(message.prev).to eq(Pigeon::Message::EMPTY_MESSAGE)
+    expect(message.prev).to eq(Pigeon::EMPTY_MESSAGE)
     expectations.map do |k, v|
       expect(Pigeon::Message.current.send(k)).to eq(v)
     end

@@ -2,10 +2,6 @@ require "digest"
 
 module Pigeon
   class Message
-    NAME_OF_DRAFT = "HEAD.draft"
-    OUTBOX_PATH = File.join(".pigeon", "user")
-    EMPTY_MESSAGE = "NONE"
-
     attr_reader :author, :kind, :prev, :body, :depth, :signature
 
     def self.create(kind:, prev: nil, body: {})
@@ -39,7 +35,8 @@ module Pigeon
     end
 
     def self.current
-      @current ||= (Pigeon::Storage.current.get_config(NAME_OF_DRAFT) || new)
+      @current ||=
+        (Pigeon::Storage.current.get_config(CURRENT_DRAFT) || new.save)
     end
 
     def self.reset_current
@@ -47,7 +44,7 @@ module Pigeon
     end
 
     def save
-      Pigeon::Storage.current.set_config(NAME_OF_DRAFT, self)
+      Pigeon::Storage.current.set_config(CURRENT_DRAFT, self)
       self
     end
 

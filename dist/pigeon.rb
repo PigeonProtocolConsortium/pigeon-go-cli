@@ -18,6 +18,9 @@ module Pigeon
   BODY_TPL = File.read(File.join(TPL_DIR, "2_body.erb")).sub("\n", "")
   FOOTER_TPL = File.read(File.join(TPL_DIR, "3_footer.erb")).sub("\n", "")
   COMPLETE_TPL = [HEADER_TPL, BODY_TPL, FOOTER_TPL].join("")
+  CURRENT_DRAFT = "HEAD.draft"
+  EMPTY_MESSAGE = "NONE"
+  OUTBOX_PATH = File.join(".pigeon", "user")
   # /MESSAGE TEMPLATE CONSTANTS
 
   # Internal namespaces for PStore keys:

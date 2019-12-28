@@ -2,6 +2,11 @@ require "pstore"
 
 module Pigeon
   class Storage
+    def self.reset
+      @current.implode if @current
+      @current = nil
+    end
+
     def self.current
       @current ||= self.new
     end
@@ -93,6 +98,14 @@ module Pigeon
     def all_blocks
       store.transaction(true) do
         (store[BLCK_NS] || Set.new).to_a
+      end
+    end
+
+    def implode
+      @store.transaction do
+        @store.roots.map do |x|
+          store.delete(x)
+        end
       end
     end
 

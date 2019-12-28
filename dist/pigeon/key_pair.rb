@@ -11,6 +11,10 @@ module Pigeon
       [HEADER, urlsafe_b64_no_headers, FOOTER].join("")
     end
 
+    def self.reset
+      @current = nil
+    end
+
     def self.current
       if @current
         @current

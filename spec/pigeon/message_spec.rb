@@ -11,6 +11,8 @@ RSpec.describe Pigeon::Message do
   end
 
   it "signs a message" do
+    Pigeon::Storage.reset
+    Pigeon::KeyPair.reset
     m1 = message
     message2 = Pigeon::Message.create(kind: "unit_test")
     message2.append("expected_sequence", "1")
@@ -34,6 +36,8 @@ RSpec.describe Pigeon::Message do
   ].join("\n")
 
   it "renders a first message" do
+    Pigeon::Storage.reset
+    Pigeon::KeyPair.reset
     pk = Pigeon::KeyPair.current.public_key
     actual = message.render
     expected = MSG.gsub("___", pk)
@@ -41,6 +45,8 @@ RSpec.describe Pigeon::Message do
   end
 
   it "creates a new message" do
+    Pigeon::Storage.reset
+    Pigeon::KeyPair.reset
     message = Pigeon::Message.create(kind: "unit_test")
     hash = Pigeon::Storage.current.set_blob(File.read("./logo.png"))
     expectations = {

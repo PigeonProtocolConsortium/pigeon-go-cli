@@ -2,22 +2,19 @@ require "digest"
 
 module Pigeon
   class Message
-    attr_reader :author, :kind, :prev, :body, :signature
+    attr_reader :author, :kind, :body, :signature
 
-    def self.create(kind:, prev: nil, body: {})
+    def self.create(kind:, body: {})
       self.new(author: KeyPair.current.public_key,
                kind: kind,
-               prev: prev,
                body: body).save
     end
 
-    def initialize(author:, kind:, prev: nil, body: {})
+    def initialize(author:, kind:, body: {})
       @author = author
       @kind = kind
-      @prev = prev
       @body = body
       @depth = nil # Set at save time
-      @prev = previous_message ? previous_message.signature : EMPTY_MESSAGE
     end
 
     def append(key, value)
@@ -51,6 +48,7 @@ module Pigeon
     def sign
       @signature = calculate_signature
       @depth = Pigeon::Storage.current.message_count
+      @saved = true
       self.freeze
       Pigeon::Storage.current.save_message(self)
       Pigeon::Message.reset_current
@@ -65,6 +63,18 @@ module Pigeon
       calculate_depth
     end
 
+    def prev
+      if @saved
+        previous_message
+      else
+        raise Pigeon::PREV_REQUIRES_SAVE
+      end
+    end
+
+    def saved?
+      @saved == true
+    end
+
     private
 
     def calculate_signature
@@ -74,6 +84,8 @@ module Pigeon
     end
 
     def previous_message
+      raise "TODO - I need to create a `Pigeon::Index` class or something. " \
+            "need a way to index messages by: signature, depth"
       # if @depth.nil?
       #   raise "Could not load @depth"
       # end
@@ -91,6 +103,7 @@ module Pigeon
     end
 
     def calculate_depth
+      raise "Don't do this- read from the index. Also, crash if message is not saved."
       @depth || Pigeon::Storage.current.message_count
     end
 

@@ -20,6 +20,7 @@ RSpec.describe Pigeon::Message do
 
     expect(message2.author).to eq(Pigeon::KeyPair.current.public_key)
     expect(message2.kind).to eq("unit_test")
+    binding.pry
     expect(message2.prev).to eq(m1)
     expect(message2.body).to eq("expected_sequence" => "1")
     expect(message2.depth).to eq(1)
@@ -65,6 +66,8 @@ RSpec.describe Pigeon::Message do
     expect(message.kind).to eq("unit_test")
     expect(message.body).to eq(expectations.fetch(:body))
     expect(message.depth).to eq(0)
+    message.sign
+    binding.pry
     expect(message.prev).to eq(Pigeon::EMPTY_MESSAGE)
     expectations.map do |k, v|
       expect(Pigeon::Message.current.send(k)).to eq(v)

@@ -39,6 +39,9 @@ module Pigeon
   IDENTITY_SIGIL = "@"
   STRING_SIGIL = "\""
   BLOB_FOOTER = ".sha256"
+
+  # Error messages
+  PREV_REQUIRES_SAVE = "Can't fetch `prev` on unsaved messages"
 end
 
 require_relative File.join("pigeon", "key_pair.rb")

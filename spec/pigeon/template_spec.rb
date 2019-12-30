@@ -1,7 +1,8 @@
 require "spec_helper"
 
 RSpec.describe Pigeon::Template do
-  MessageShim = Struct.new(:author, :body, :kind, :depth, :prev, :signature)
+  SHIM_ATTRS = [:author, :body, :kind, :depth, :prev, :signature, :saved?]
+  MessageShim = Struct.new(*SHIM_ATTRS)
   TOP_HALF = ["author FAKE_AUTHOR",
               "\nkind FAKE_KIND",
               "\nprev NONE",
@@ -16,7 +17,8 @@ RSpec.describe Pigeon::Template do
             "FAKE_KIND",
             23,
             nil,
-            "XYZ.sig.sha256"]
+            "XYZ.sig.sha256",
+            false]
     message = MessageShim.new(*args)
     template = Pigeon::Template.new(message)
     expect(template.render).to eq(EXPECTED_DRAFT)

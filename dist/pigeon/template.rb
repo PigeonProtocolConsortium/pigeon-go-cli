@@ -25,7 +25,7 @@ module Pigeon
       body = message.body
       kind = message.kind
       depth = message.depth || "NONE"
-      prev = message.prev || "NONE"
+      prev = message.saved? ? message.prev : "NONE"
       signature = message.signature || "NONE"
 
       ERB.new(template).result(binding)

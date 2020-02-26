@@ -4,6 +4,8 @@ module Pigeon
   class Message
     attr_reader :author, :kind, :body, :signature
 
+    class NotSaved < StandardError; end
+
     def self.create(kind:, body: {})
       self.new(author: KeyPair.current.public_key,
                kind: kind,
@@ -103,8 +105,12 @@ module Pigeon
     end
 
     def calculate_depth
-      raise "Don't do this- read from the index. Also, crash if message is not saved."
-      @depth || Pigeon::Storage.current.message_count
+      if saved?
+        raise NotSaved, "Can't calculate depth of unsaved messages"
+      else
+        # raise "Hmm.... I need to create a message index."
+        @depth || Pigeon::Storage.current.message_count
+      end
     end
 
     def message_id # I need this to calculate `prev`.

@@ -21,6 +21,7 @@ module Pigeon
   CURRENT_DRAFT = "HEAD.draft"
   EMPTY_MESSAGE = "NONE"
   OUTBOX_PATH = File.join(".pigeon", "user")
+  DRAFT_PLACEHOLDER = "DRAFT"
   # /MESSAGE TEMPLATE CONSTANTS
 
   # Internal namespaces for PStore keys:
@@ -46,5 +47,7 @@ end
 
 require_relative File.join("pigeon", "key_pair.rb")
 require_relative File.join("pigeon", "storage.rb")
-require_relative File.join("pigeon", "template.rb")
+require_relative File.join("pigeon", "draft_template.rb")
+require_relative File.join("pigeon", "message_template.rb")
 require_relative File.join("pigeon", "message.rb")
+require_relative File.join("pigeon", "draft.rb")

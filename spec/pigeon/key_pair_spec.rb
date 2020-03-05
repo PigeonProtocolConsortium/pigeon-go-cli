@@ -32,4 +32,9 @@ RSpec.describe Pigeon::KeyPair do
     result = Pigeon::KeyPair.strip_headers(example)
     expect(result).to eq(whatever)
   end
+
+  it "caches KeyPair.current" do
+    first_kp = Pigeon::KeyPair.current
+    expect(first_kp).to be(first_kp) # Need strict equality here!
+  end
 end

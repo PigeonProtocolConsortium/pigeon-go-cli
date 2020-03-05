@@ -74,21 +74,21 @@ module Pigeon
     desc "create", "Begin a new Pigeon message"
 
     def create(kind)
-      puts Pigeon::Message.create(kind: kind).render
+      puts Pigeon::Draft.create(kind: kind).render
     end
 
     desc "append", "Add a key/value pair to the current DRAFT"
 
     def append(key, raw_value = "")
       v = (raw_value != "") ? raw_value : STDIN.read
-      puts Pigeon::Message.current.append(key, v)
+      puts Pigeon::Draft.current[key] = v
     end
 
     desc "show", "Print a message to STDOUT. If message_id is missing, current draft will be displayed."
 
     def show(message_id = "")
       if message_id == ""
-        puts Pigeon::Message.current.render
+        puts Pigeon::Draft.current.render
       else
         raise "TODO: Find message by ID?"
       end
@@ -97,7 +97,7 @@ module Pigeon
     desc "sign", "Commit current DRAFT to local feed."
 
     def sign
-      puts Pigeon::Message.current.sign.render
+      puts Pigeon::Draft.current.sign.render
     end
   end
 
@@ -108,9 +108,9 @@ module Pigeon
       puts "
       ,.------------------------------------
       |    -`.   Pigeon Protocol Ruby Client
-      |  '( @ >    Version: #{Config::VERSION}
-      |   _) (     Peers:   #{Dir[File.join(".pigeon", "peers", "*")].count}
-      |  /    )    Blocked: #{Dir[File.join(".pigeon", "blocked", "*")].count}
+      |  '( @ >    Version: #{Pigeon::VERSION}
+      |   _) (     Peers:   #{Pigeon::Storage.current.all_peers.count}
+      |  /    )    Blocked: #{Pigeon::Storage.current.all_blocks.count}
       | /_,'  /
       |   \  /
       |===m" "m===

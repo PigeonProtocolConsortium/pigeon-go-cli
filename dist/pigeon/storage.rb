@@ -11,19 +11,19 @@ module Pigeon
       @current ||= self.new
     end
 
-    def message_count
-      store.transaction do
-        store[MESG_NS] ||= {}
-        store[MESG_NS].count
-      end
-    end
+    # def message_count
+    #   store.transaction do
+    #     store[MESG_NS] ||= {}
+    #     store[MESG_NS].count
+    #   end
+    # end
 
-    def save_message(msg)
-      store.transaction do
-        store[MESG_NS] ||= {}
-        store[MESG_NS][msg.depth || -100] = msg
-      end
-    end
+    # def save_message(msg)
+    #   store.transaction do
+    #     store[MESG_NS] ||= {}
+    #     store[MESG_NS][msg.depth || -100] = msg
+    #   end
+    # end
 
     def set_config(key, value)
       store.transaction do

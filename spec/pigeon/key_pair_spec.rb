@@ -35,6 +35,6 @@ RSpec.describe Pigeon::KeyPair do
 
   it "caches KeyPair.current" do
     first_kp = Pigeon::KeyPair.current
-    expect(first_kp).to be(first_kp) # Need strict equality here!
+    expect(Pigeon::KeyPair.current).to be(first_kp) # Need strict equality here!
   end
 end

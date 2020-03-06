@@ -44,12 +44,6 @@ module Pigeon
       self
     end
 
-    # Convert a Pigeon::Draft into a Pigeon::Message
-    def sign
-      Draft.reset_current
-      raise "WIP"
-    end
-
     def render
       DraftTemplate.new(self).render
     end

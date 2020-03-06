@@ -32,6 +32,7 @@ module Pigeon
   USER_NS = "user"
   BLCK_NS = "blocked"
   MESG_NS = "messages"
+  DEPTH_INDEX_NS = "messages.by_depth"
 
   # ^ Internal namespaces for PStore keys
 

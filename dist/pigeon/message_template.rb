@@ -21,12 +21,12 @@ module Pigeon
     private
 
     def do_render(template)
-      author = message.author
+      author = message.author.public_key
       body = message.body
+      depth = message.depth
       kind = message.kind
-      depth = message.depth || "NONE"
-      prev = message.saved? ? message.prev : "NONE"
-      signature = message.signature || "NONE"
+      prev = message.prev || "NONE"
+      signature = message.signature
 
       ERB.new(template).result(binding)
     end

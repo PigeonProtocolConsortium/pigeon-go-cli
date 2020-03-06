@@ -36,5 +36,5 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [ ] add parsers and validators for all CLI inputs
  - [ ] Performance benchmarks
  - [ ] Performance tuning (DO THIS LAST!)
-
+ - [ ] Add Lipmaa links like the Bamboo folks do.
  - [ ] Update spec to look [like this](https://gist.github.com/RickCarlino/3ff4178db4a75fd135832c403cd313d4)

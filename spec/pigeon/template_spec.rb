@@ -11,8 +11,14 @@ RSpec.describe Pigeon::Template do
   BOTTOM_HALF = "signature XYZ.sig.sha256 \n"
   EXPECTED_DRAFT = TOP_HALF + BOTTOM_HALF
 
+  class FakeKeypair
+    def self.public_key
+      "FAKE_AUTHOR"
+    end
+  end
+
   it "renders a draft" do
-    args = ["FAKE_AUTHOR",
+    args = [FakeKeypair,
             { foo: "bar".inspect },
             "FAKE_KIND",
             23,

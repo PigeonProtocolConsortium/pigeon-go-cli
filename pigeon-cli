@@ -97,7 +97,7 @@ module Pigeon
     desc "sign", "Commit current DRAFT to local feed."
 
     def sign
-      puts Pigeon::Draft.current.sign.render
+      raise "Work in progress! under_construction.gif"
     end
   end
 

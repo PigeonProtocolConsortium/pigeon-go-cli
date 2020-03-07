@@ -14,6 +14,12 @@ RSpec.describe Pigeon::Message do
     draft
   end
 
+  it "discards a draft after signing" do
+    expect(draft.internal_id).to eq(Pigeon::Draft.current.internal_id)
+    Pigeon::Message.from_draft(draft)
+    expect(Pigeon::Draft.current).to be nil
+  end
+
   it "creates a single message" do
     message = Pigeon::Message.from_draft(draft)
     expect(message.author).to eq(Pigeon::KeyPair.current)

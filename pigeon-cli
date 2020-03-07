@@ -97,7 +97,9 @@ module Pigeon
     desc "sign", "Commit current DRAFT to local feed."
 
     def sign
-      raise "Work in progress! under_construction.gif"
+      draft = Pigeon::Draft.current
+      message = Pigeon::Message.from_draft(draft)
+      puts message.render
     end
   end
 
@@ -106,15 +108,13 @@ module Pigeon
 
     def status
       puts "
-      ,.------------------------------------
-      |    -`.   Pigeon Protocol Ruby Client
-      |  '( @ >    Version: #{Pigeon::VERSION}
-      |   _) (     Peers:   #{Pigeon::Storage.current.all_peers.count}
-      |  /    )    Blocked: #{Pigeon::Storage.current.all_blocks.count}
-      | /_,'  /
-      |   \  /
-      |===m" "m===
-      '-,___________________________________
+          -`.   Pigeon Protocol Ruby Client
+        '( @ >  Version: #{Pigeon::VERSION}
+         _) (   Peers:   #{Pigeon::Storage.current.all_peers.count}
+        /    )  Blocked: #{Pigeon::Storage.current.all_blocks.count}
+       /_,'  /  Logs:    #{Pigeon::Storage.current.message_count}
+         \  /
+      ===m" "m===
       "
     end
 

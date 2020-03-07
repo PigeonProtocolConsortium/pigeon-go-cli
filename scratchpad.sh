@@ -73,8 +73,8 @@ echo "=== add a second message to the db"
 echo "=== append hello:'world' to message:"
 ./pigeon-cli message append hello "world"
 
-# echo "=== Sign message #2"
-# ./pigeon-cli message sign
+echo "=== Sign message #2"
+./pigeon-cli message sign
 
 echo "=== getting status:"
 ./pigeon-cli status

@@ -1,6 +1,6 @@
 require "spec_helper"
 
-RSpec.describe Pigeon::Template do
+RSpec.describe Pigeon::Serializer do
   SHIM_ATTRS = [:author, :body, :kind, :depth, :prev, :signature, :saved?]
   MessageShim = Struct.new(*SHIM_ATTRS)
   TOP_HALF = ["author FAKE_AUTHOR",
@@ -26,7 +26,7 @@ RSpec.describe Pigeon::Template do
             "XYZ.sig.sha256",
             false]
     message = MessageShim.new(*args)
-    template = Pigeon::Template.new(message)
+    template = Pigeon::Serializer.new(message)
     expect(template.render).to eq(EXPECTED_DRAFT)
     expect(template.render_without_signature).to eq(TOP_HALF)
   end

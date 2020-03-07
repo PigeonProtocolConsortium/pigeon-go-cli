@@ -48,7 +48,7 @@ end
 
 require_relative File.join("pigeon", "key_pair.rb")
 require_relative File.join("pigeon", "storage.rb")
-require_relative File.join("pigeon", "draft_template.rb")
-require_relative File.join("pigeon", "message_template.rb")
+require_relative File.join("pigeon", "draft_serializer.rb")
+require_relative File.join("pigeon", "message_serializer.rb")
 require_relative File.join("pigeon", "message.rb")
 require_relative File.join("pigeon", "draft.rb")

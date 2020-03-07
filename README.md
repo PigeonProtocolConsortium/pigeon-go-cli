@@ -23,16 +23,18 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] pigeon peer remove
  - [X] pigeon peer block
  - [X] pigeon peer all
- - [ ] pigeon message create
- - [ ] pigeon message append
- - [ ] pigeon message current
- - [ ] pigeon message save
- - [ ] pigeon message find
- - [ ] pigeon message find-all
+ - [X] 100% coverage
+ - [ ] Rename numerous "pigeon message ..." commands to "pigeon draft ..."
  - [ ] pigeon bundle create
  - [ ] pigeon bundle consume
+ - [ ] pigeon draft create
+ - [ ] pigeon draft append
+ - [ ] pigeon draft current
+ - [ ] pigeon draft save
+ - [ ] pigeon message find
+ - [ ] pigeon message find-all
+ - [ ] Map/reduce plugin support for custom indices?
  - [ ] 100% documentation
- - [ ] 100% coverage
  - [ ] add parsers and validators for all CLI inputs
  - [ ] Performance benchmarks
  - [ ] Performance tuning (DO THIS LAST!)

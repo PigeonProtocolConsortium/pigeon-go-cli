@@ -30,7 +30,7 @@ module Pigeon
       store = Pigeon::Storage.current
       @signature = calculate_signature
       @depth = store.message_count
-      @prev = store.get_message_by_depth(@depth - 1)
+      @prev = store.get_message_by_depth(@author, @depth - 1)
       self.freeze
       store.save_message(self)
     end

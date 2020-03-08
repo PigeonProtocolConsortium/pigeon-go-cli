@@ -49,7 +49,6 @@ RSpec.describe Pigeon::Message do
   it "creates a chain of messages" do
     all = []
     1.upto(5) do |n|
-      print "Begin message chain #{n} / 3"
       expected_depth = n - 1
       draft1 = Pigeon::Draft.create(kind: "unit_test")
       draft1["description"] = "Message number #{n}"
@@ -62,5 +61,6 @@ RSpec.describe Pigeon::Message do
         expect(message.prev).to be nil
       end
     end
+    binding.pry
   end
 end

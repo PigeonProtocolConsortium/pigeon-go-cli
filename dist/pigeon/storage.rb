@@ -11,10 +11,10 @@ module Pigeon
       @current ||= self.new
     end
 
-    def get_message_by_depth(depth)
+    def get_message_by_depth(author, depth)
       store.transaction do
-        # Map<Integer, Signature>
-        store[DEPTH_INDEX_NS][depth]
+        # Map<[author(str), depth(int)], Signature>
+        store[DEPTH_INDEX_NS][[author.public_key, depth]]
       end
     end
 
@@ -27,6 +27,7 @@ module Pigeon
     def save_message(msg)
       store.transaction do
         store[MESG_NS][msg.signature] = msg
+        update_indices(msg)
       end
     end
 
@@ -123,7 +124,10 @@ module Pigeon
     end
 
     def update_indices(message)
-      puts "TODO: Finish this!!"
+      # SECURITY AUDIT: How can we be certain the message is
+      # not lying about its depth?
+      key = [message.author.public_key, message.depth]
+      store[DEPTH_INDEX_NS][key] = message.signature
     end
   end
 end

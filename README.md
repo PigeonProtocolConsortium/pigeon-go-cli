@@ -33,10 +33,14 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [ ] pigeon draft save
  - [ ] pigeon message find
  - [ ] pigeon message find-all
- - [ ] Map/reduce plugin support for custom indices?
  - [ ] 100% documentation
  - [ ] add parsers and validators for all CLI inputs
  - [ ] Performance benchmarks
  - [ ] Performance tuning (DO THIS LAST!)
- - [ ] Add Lipmaa links like the Bamboo folks do.
  - [ ] Update spec to look [like this](https://gist.github.com/RickCarlino/3ff4178db4a75fd135832c403cd313d4)
+ - [ ] Publish a RubyGem
+
+# Idea Bin
+ - [ ] Map/reduce plugin support for custom indices?
+ - [ ] Add Lipmaa links like the Bamboo folks do.
+ - [ ] Ability to add a blob in one swoop using File objects and `Message#[]=`, maybe?

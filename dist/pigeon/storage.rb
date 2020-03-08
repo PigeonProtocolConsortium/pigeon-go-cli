@@ -3,7 +3,7 @@ require "pstore"
 module Pigeon
   class Storage
     def self.reset
-      @current.implode if @current
+      @current.reset_defaults if @current
       @current = nil
     end
 
@@ -14,48 +14,43 @@ module Pigeon
     def get_message_by_depth(depth)
       store.transaction do
         # Map<Integer, Signature>
-        index = store[DEPTH_INDEX_NS] ||= {}
-        index[depth]
+        store[DEPTH_INDEX_NS][depth]
       end
     end
 
     def message_count
       store.transaction do
-        index = store[MESG_NS] ||= {}
-        index.count
+        store[MESG_NS].count
       end
     end
 
     def save_message(msg)
       store.transaction do
-        store[MESG_NS] ||= {}
         store[MESG_NS][msg.signature] = msg
       end
     end
 
     def set_config(key, value)
       store.transaction do
-        store[CONF_NS] ||= {}
         store[CONF_NS][key] = value
       end
     end
 
     def delete_config(key)
       store.transaction do
-        (store[CONF_NS] || {}).delete(key)
+        store[CONF_NS].delete(key)
       end
     end
 
     def get_config(key)
       store.transaction(true) do
-        (store[CONF_NS] || {})[key]
+        store[CONF_NS][key]
       end
     end
 
     def set_blob(data)
       hex_digest = Digest::SHA256.hexdigest(data)
       store.transaction do
-        store[BLOB_NS] ||= {}
         store[BLOB_NS][hex_digest] = data
       end
 
@@ -65,7 +60,6 @@ module Pigeon
     def get_blob(hex_digest)
       hd = hex_digest.gsub(BLOB_SIGIL, "").gsub(BLOB_FOOTER, "")
       store.transaction(true) do
-        store[BLOB_NS] ||= {}
         store[BLOB_NS][hd]
       end
     end
@@ -73,7 +67,6 @@ module Pigeon
     def add_peer(identity)
       path = KeyPair.strip_headers(identity)
       store.transaction do
-        store[PEER_NS] ||= Set.new
         store[PEER_NS].add(identity)
       end
       identity
@@ -82,7 +75,6 @@ module Pigeon
     def remove_peer(identity)
       path = KeyPair.strip_headers(identity)
       store.transaction do
-        store[PEER_NS] ||= Set.new
         store[PEER_NS].delete(identity)
       end
       identity
@@ -91,7 +83,6 @@ module Pigeon
     def block_peer(identity)
       remove_peer(identity)
       store.transaction do
-        store[BLCK_NS] ||= Set.new
         store[BLCK_NS].add(identity)
       end
       identity
@@ -99,28 +90,40 @@ module Pigeon
 
     def all_peers
       store.transaction(true) do
-        (store[PEER_NS] || Set.new).to_a
+        store[PEER_NS].to_a
       end
     end
 
     def all_blocks
       store.transaction(true) do
-        (store[BLCK_NS] || Set.new).to_a
+        store[BLCK_NS].to_a
       end
     end
 
-    def implode
+    def reset_defaults
       @store.transaction do
-        @store.roots.map do |x|
-          store.delete(x)
-        end
+        @store[DEPTH_INDEX_NS] = {}
+        @store[BLOB_NS] = {}
+        @store[CONF_NS] = {}
+        @store[MESG_NS] = {}
+        @store[BLCK_NS] = Set.new
+        @store[PEER_NS] = Set.new
       end
+      @store
     end
 
     private
 
     def store
-      @store ||= PStore.new(PIGEON_DB_PATH)
+      unless @store
+        @store = PStore.new(PIGEON_DB_PATH)
+        reset_defaults
+      end
+      return @store
+    end
+
+    def update_indices(message)
+      puts "TODO: Finish this!!"
     end
   end
 end

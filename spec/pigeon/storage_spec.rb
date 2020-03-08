@@ -5,7 +5,8 @@ RSpec.describe Pigeon::Storage do
   IDS = %w(@_TlC2z3FT4fimecC4eytrBhOwhLUZsVBZEZriBO9cWs=.ed25519
            @28FyT7evjcYrrwngr8G2V1HZ0ODK0VPsFctDEZwfZJc=.ed25519)
   let(:s) do
-    FileUtils.rm_r(Pigeon::PIGEON_DB_PATH)
+    # FileUtils.rm_r(Pigeon::PIGEON_DB_PATH)
+    Pigeon::Storage.reset
     Pigeon::Storage.current
   end
 

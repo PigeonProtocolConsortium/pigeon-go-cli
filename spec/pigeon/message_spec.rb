@@ -61,6 +61,7 @@ RSpec.describe Pigeon::Message do
         expect(message.prev).to be nil
       end
     end
-    binding.pry
   end
+
+  it "verifies accuracy of signature chain"
 end

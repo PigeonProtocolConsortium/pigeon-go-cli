@@ -54,7 +54,7 @@ module Pigeon
       store.transaction do
         store[BLOB_NS][hex_digest] = data
       end
-
+      puts "TODO: Maybe this needs to be URLsafe base 64: "
       [BLOB_SIGIL, hex_digest, BLOB_FOOTER].join("")
     end
 

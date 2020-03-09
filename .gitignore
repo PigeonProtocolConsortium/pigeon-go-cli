@@ -2,4 +2,4 @@ coverage/
 .pigeon/
 *.pigeon
 doc/
-scratchpad*
+*scratchpad*

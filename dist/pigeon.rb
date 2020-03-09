@@ -37,7 +37,7 @@ module Pigeon
   # ^ Internal namespaces for PStore keys
 
   BLOB_SIGIL = "&"
-  SIGNATURE_SIGIL = "%"
+  MESSAGE_SIGIL = "%"
   IDENTITY_SIGIL = "@"
   STRING_SIGIL = "\""
   BLOB_FOOTER = ".sha256"

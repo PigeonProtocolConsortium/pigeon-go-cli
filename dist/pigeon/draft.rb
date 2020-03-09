@@ -34,7 +34,7 @@ module Pigeon
 
     def []=(key, value)
       case value[0]
-      when BLOB_SIGIL, SIGNATURE_SIGIL, IDENTITY_SIGIL, STRING_SIGIL
+      when BLOB_SIGIL, MESSAGE_SIGIL, IDENTITY_SIGIL, STRING_SIGIL
         self.body[key] = value
       else
         self.body[key] = value.inspect

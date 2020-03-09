@@ -39,7 +39,7 @@ RSpec.describe Pigeon::Message do
       "a:\"bar\"",
       "b:&6462a5f5174b53702fc25afe67a8f9a29f572610a65bafefff627531552f096f.sha256",
       "",
-      "signature __SIGNATURE__ \n",
+      "signature __SIGNATURE__",
     ].join("\n")
       .gsub("__AUTHOR__", message.author.public_key)
       .gsub("__SIGNATURE__", message.signature)

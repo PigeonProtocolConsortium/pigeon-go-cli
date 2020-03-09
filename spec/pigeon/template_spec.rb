@@ -8,7 +8,7 @@ RSpec.describe Pigeon::Serializer do
               "\nprev NONE",
               "\ndepth 23",
               "\n\nfoo:\"bar\"\n\n"].join("")
-  BOTTOM_HALF = "signature XYZ.sig.sha256 \n"
+  BOTTOM_HALF = "signature XYZ.sig.sha256"
   EXPECTED_DRAFT = TOP_HALF + BOTTOM_HALF
 
   class FakeKeypair

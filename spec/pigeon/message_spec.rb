@@ -6,12 +6,21 @@ RSpec.describe Pigeon::Message do
     Pigeon::KeyPair.reset
   end
 
-  let(:draft) do
+  def create_draft(params)
     draft = Pigeon::Draft.create(kind: "unit_test")
-    hash = Pigeon::Storage.current.set_blob(File.read("./logo.png"))
-    draft["a"] = "bar"
-    draft["b"] = hash
+    params.each { |(k, v)| draft[k] = v }
     draft
+  end
+
+  def create_message(params)
+    draft = create_draft(params)
+    Pigeon::Message.from_draft(draft)
+  end
+
+  let(:draft) do
+    hash = Pigeon::Storage.current.set_blob(File.read("./logo.png"))
+    create_draft({ "a" => "bar",
+                   "b" => hash })
   end
 
   it "discards a draft after signing" do
@@ -56,12 +65,37 @@ RSpec.describe Pigeon::Message do
       all.push(message)
       expect(message.depth).to eq(expected_depth)
       if n > 1
-        expect(message.prev).to eq(all[n - 2].signature)
+        expect(message.prev).to eq(all[n - 2].multihash)
       else
         expect(message.prev).to be nil
       end
     end
   end
 
-  it "verifies accuracy of signature chain"
+  it "verifies accuracy of hash chain" do
+    m1 = create_message({ "a" => "b" })
+    m2 = create_message({ "c" => "d" })
+    m3 = create_message({ "e" => "f" })
+    m4 = create_message({ "g" => "h" })
+    expect(m1.prev).to eq(nil)
+    expect(m2.prev).to be
+    expect(m2.prev).to eq(m1.multihash)
+    expect(m3.prev).to eq(m2.multihash)
+    expect(m3.prev).to be
+    expect(m4.prev).to eq(m3.multihash)
+    expect(m4.prev).to be
+  end
+
+  it "verifies accuracy of signatures" do
+    m1 = create_message({ "a" => "b" })
+    template = Pigeon::Serializer.new(m1)
+    string = template.render_without_signature
+    secret = Pigeon::Storage.current.get_config(Pigeon::SEED_CONFIG_KEY)
+    expect(secret.length).to eq(32)
+    signing_key = Ed25519::SigningKey.new(secret)
+    raw_signature = signing_key.sign(string)
+    b64_signature = Base64.urlsafe_encode64(raw_signature)
+    signature = b64_signature + ".sig.ed25519"
+    expect(m1.signature).to eq(signature)
+  end
 end

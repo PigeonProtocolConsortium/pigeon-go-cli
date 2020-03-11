@@ -16,7 +16,7 @@ module Pigeon
     end
 
     def render
-      Serializer.new(self).render
+      Serializer.new(self).render.chomp
     end
 
     def multihash

@@ -3,14 +3,6 @@ module Pigeon
   # help us maintain our sanity when the Gem's API
   # changes.
   class KeyPair
-    def self.strip_headers(identity)
-      identity.sub(HEADER, "").sub(FOOTER, "")
-    end
-
-    def self.add_headers(urlsafe_b64_no_headers)
-      [HEADER, urlsafe_b64_no_headers, FOOTER].join("")
-    end
-
     def self.reset
       @current = nil
     end
@@ -53,6 +45,14 @@ module Pigeon
     end
 
     private
+
+    def self.strip_headers(identity)
+      identity.sub(HEADER, "").sub(FOOTER, "")
+    end
+
+    def self.add_headers(urlsafe_b64_no_headers)
+      [HEADER, urlsafe_b64_no_headers, FOOTER].join("")
+    end
 
     def raw_key
       @raw_key ||= Ed25519::SigningKey.new(@seed)

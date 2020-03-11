@@ -26,8 +26,7 @@ module Pigeon
 
     def save_message(msg)
       store.transaction do
-        store[MESG_NS][msg.signature] = msg
-        update_indices(msg)
+        insert_and_update_index(msg)
       end
     end
 
@@ -123,11 +122,17 @@ module Pigeon
       return @store
     end
 
-    def update_indices(message)
+    def insert_and_update_index(message)
+      # STEP 1: Update MESG_NS, the main storage spot.
+      store[MESG_NS][message.multihash] = message
+
+      # STEP 2: Update the "message by author and depth" index
+      #         this index is used to find a person's nth
+      #         message
       # SECURITY AUDIT: How can we be certain the message is
       # not lying about its depth?
       key = [message.author.public_key, message.depth]
-      store[DEPTH_INDEX_NS][key] = message.signature
+      store[DEPTH_INDEX_NS][key] = message.multihash
     end
   end
 end

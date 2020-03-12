@@ -96,14 +96,21 @@ RSpec.describe Pigeon::Message do
     secret = Pigeon::Storage.current.get_config(Pigeon::SEED_CONFIG_KEY)
     real_signing_key = Pigeon::KeyPair.current.instance_variable_get(:@signing_key)
     signing_key = Ed25519::SigningKey.new(secret)
-    unsigned_message_string = template.render_without_signature.chomp
-
+    plaintext = template.render_without_signature
+    duplicate_plaintext =
+      Pigeon::MessageSerializer.new(template.message).render_without_signature
     # Sanity checks
     expect(secret.length).to eq(32)
+    expect(plaintext).to eq(duplicate_plaintext)
     expect(real_signing_key.to_bytes).to eq(signing_key.to_bytes)
+    random_string = SecureRandom.uuid
+    random_sig1 = Base64.urlsafe_encode64(signing_key.sign(random_string))
+    random_sig2 =
+      Pigeon::KeyPair.current.sign(random_string).gsub(".sig.ed25519", "")
+    expect(random_sig1).to eq(random_sig2)
 
     duplicate_signature =
-      Base64.urlsafe_encode64(signing_key.sign(unsigned_message_string))
+      Base64.urlsafe_encode64(signing_key.sign(plaintext))
     real_sinature = template.message.signature.gsub(".sig.ed25519", "")
 
     binding.pry

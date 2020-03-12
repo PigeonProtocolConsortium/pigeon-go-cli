@@ -24,6 +24,7 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] pigeon peer block
  - [X] pigeon peer all
  - [X] 100% coverage
+ - [ ] Remove all `.current` "singletons" / hacks
  - [ ] Rename numerous "pigeon message ..." commands to "pigeon draft ..."
  - [ ] pigeon bundle create
  - [ ] pigeon bundle consume
@@ -35,6 +36,7 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [ ] pigeon message find-all
  - [ ] 100% documentation
  - [ ] add parsers and validators for all CLI inputs
+ - [ ] Validate inputs for `Draft#[]=`.
  - [ ] Performance benchmarks
  - [ ] Performance tuning (DO THIS LAST!)
  - [ ] Update spec to look [like this](https://gist.github.com/RickCarlino/3ff4178db4a75fd135832c403cd313d4)

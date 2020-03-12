@@ -23,6 +23,10 @@ RSpec.describe Pigeon::Message do
                    "b" => hash })
   end
 
+  let (:template) do
+    Pigeon::MessageSerializer.new(create_message({ "a" => "b" }))
+  end
+
   it "discards a draft after signing" do
     expect(draft.internal_id).to eq(Pigeon::Draft.current.internal_id)
     Pigeon::Message.from_draft(draft)
@@ -87,15 +91,22 @@ RSpec.describe Pigeon::Message do
   end
 
   it "verifies accuracy of signatures" do
-    m1 = create_message({ "a" => "b" })
-    template = Pigeon::Serializer.new(m1)
-    string = template.render_without_signature
+    # Initial setup
+    Pigeon::KeyPair.current
     secret = Pigeon::Storage.current.get_config(Pigeon::SEED_CONFIG_KEY)
-    expect(secret.length).to eq(32)
+    real_signing_key = Pigeon::KeyPair.current.instance_variable_get(:@signing_key)
     signing_key = Ed25519::SigningKey.new(secret)
-    raw_signature = signing_key.sign(string)
-    b64_signature = Base64.urlsafe_encode64(raw_signature)
-    signature = b64_signature + ".sig.ed25519"
-    expect(m1.signature).to eq(signature)
+    unsigned_message_string = template.render_without_signature.chomp
+
+    # Sanity checks
+    expect(secret.length).to eq(32)
+    expect(real_signing_key.to_bytes).to eq(signing_key.to_bytes)
+
+    duplicate_signature =
+      Base64.urlsafe_encode64(signing_key.sign(unsigned_message_string))
+    real_sinature = template.message.signature.gsub(".sig.ed25519", "")
+
+    binding.pry
+    expect(real_sinature).to eq(duplicate_signature)
   end
 end

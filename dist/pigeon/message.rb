@@ -16,7 +16,7 @@ module Pigeon
     end
 
     def render
-      Serializer.new(self).render.chomp
+      MessageSerializer.new(self).render.chomp
     end
 
     def multihash
@@ -41,7 +41,7 @@ module Pigeon
     end
 
     def calculate_signature
-      template = Serializer.new(self)
+      template = MessageSerializer.new(self)
       string = template.render_without_signature
       KeyPair.current.sign(string)
     end

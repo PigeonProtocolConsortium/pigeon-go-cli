@@ -3,7 +3,7 @@ require "erb"
 module Pigeon
   # Wrapper around a message to perform string templating.
   # Renders a string that is a Pigeon-compliant message.
-  class Serializer
+  class MessageSerializer
     attr_reader :message
 
     def initialize(message)

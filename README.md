@@ -39,6 +39,7 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [ ] 100% documentation
  - [ ] add parsers and validators for all CLI inputs
  - [ ] Validate inputs for `Draft#[]=`.
+ - [ ] Perform message verrification at time of disk write?
  - [ ] Performance benchmarks
  - [ ] Performance tuning (DO THIS LAST!)
  - [ ] Update spec to look [like this](https://gist.github.com/RickCarlino/3ff4178db4a75fd135832c403cd313d4)

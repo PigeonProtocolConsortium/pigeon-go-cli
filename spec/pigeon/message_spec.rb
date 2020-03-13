@@ -14,7 +14,7 @@ RSpec.describe Pigeon::Message do
 
   def create_message(params)
     draft = create_draft(params)
-    Pigeon::Message.from_draft(draft)
+    Pigeon::Message.publish(draft)
   end
 
   let(:draft) do
@@ -29,12 +29,12 @@ RSpec.describe Pigeon::Message do
 
   it "discards a draft after signing" do
     expect(draft.internal_id).to eq(Pigeon::Draft.current.internal_id)
-    Pigeon::Message.from_draft(draft)
+    Pigeon::Message.publish(draft)
     expect(Pigeon::Draft.current).to be nil
   end
 
   it "creates a single message" do
-    message = Pigeon::Message.from_draft(draft)
+    message = Pigeon::Message.publish(draft)
     expect(message.author).to eq(Pigeon::KeyPair.current)
     expect(message.body).to eq(draft.body)
     expect(message.depth).to eq(0)
@@ -65,7 +65,7 @@ RSpec.describe Pigeon::Message do
       expected_depth = n - 1
       draft1 = Pigeon::Draft.create(kind: "unit_test")
       draft1["description"] = "Message number #{n}"
-      message = Pigeon::Message.from_draft(draft1)
+      message = Pigeon::Message.publish(draft1)
       all.push(message)
       expect(message.depth).to eq(expected_depth)
       if n > 1

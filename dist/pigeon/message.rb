@@ -4,7 +4,7 @@ module Pigeon
   class Message
     attr_reader :author, :kind, :body, :signature, :depth, :prev
 
-    def self.from_draft(draft, author: KeyPair.current)
+    def self.publish(draft, author: KeyPair.current)
       msg = self.new(author: KeyPair.current,
                      kind: draft.kind,
                      body: draft.body)
@@ -35,6 +35,7 @@ module Pigeon
     end
 
     def keypair
+      puts "I should be using @author here!"
       @keypair ||= KeyPair.current
     end
 

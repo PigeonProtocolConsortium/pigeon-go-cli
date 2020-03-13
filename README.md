@@ -24,6 +24,8 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] pigeon peer block
  - [X] pigeon peer all
  - [X] 100% coverage
+ - [ ] Convert `".sig.ed25519"` literals to constants
+ - [ ] Reduce whole darn repo into single module to aide portability
  - [ ] Remove all `.current` "singletons" / hacks
  - [ ] Rename numerous "pigeon message ..." commands to "pigeon draft ..."
  - [ ] pigeon bundle create

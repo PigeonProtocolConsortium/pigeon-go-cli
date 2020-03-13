@@ -90,30 +90,31 @@ RSpec.describe Pigeon::Message do
     expect(m4.prev).to be
   end
 
+  # Init keypair
+  # Get secret
+  # Create signing key
+
   it "verifies accuracy of signatures" do
-    # Initial setup
+    # === Initial setup
     Pigeon::KeyPair.current
     secret = Pigeon::Storage.current.get_config(Pigeon::SEED_CONFIG_KEY)
-    real_signing_key = Pigeon::KeyPair.current.instance_variable_get(:@signing_key)
-    signing_key = Ed25519::SigningKey.new(secret)
+    message = template.message
     plaintext = template.render_without_signature
-    duplicate_plaintext =
-      Pigeon::MessageSerializer.new(template.message).render_without_signature
-    # Sanity checks
-    expect(secret.length).to eq(32)
-    expect(plaintext).to eq(duplicate_plaintext)
-    expect(real_signing_key.to_bytes).to eq(signing_key.to_bytes)
-    random_string = SecureRandom.uuid
-    random_sig1 = Base64.urlsafe_encode64(signing_key.sign(random_string))
-    random_sig2 =
-      Pigeon::KeyPair.current.sign(random_string).gsub(".sig.ed25519", "")
-    expect(random_sig1).to eq(random_sig2)
 
-    duplicate_signature =
-      Base64.urlsafe_encode64(signing_key.sign(plaintext))
-    real_sinature = template.message.signature.gsub(".sig.ed25519", "")
+    # Make fake pairs of data for cross-checking
+    key1 = Pigeon::KeyPair.current.instance_variable_get(:@signing_key)
+    key2 = Ed25519::SigningKey.new(secret)
 
-    binding.pry
-    expect(real_sinature).to eq(duplicate_signature)
+    sig1 = key1.sign(plaintext)
+    sig2 = key2.sign(plaintext)
+
+    expect(key1.seed).to eq(key2.seed)
+    expect(sig1).to eq(sig2)
+
+    sig1_b64 = Base64.urlsafe_encode64(sig1) + ".sig.ed25519"
+    sig2_b64 = Base64.urlsafe_encode64(sig2) + ".sig.ed25519"
+
+    expect(message.signature).to eq(sig1_b64)
+    expect(message.signature).to eq(sig2_b64)
   end
 end

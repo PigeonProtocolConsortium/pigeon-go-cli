@@ -26,6 +26,18 @@ module Pigeon
 
     private
 
+    def template
+      @template ||= MessageSerializer.new(self)
+    end
+
+    def template_string
+      @template_string ||= template.render_without_signature
+    end
+
+    def keypair
+      @keypair ||= KeyPair.current
+    end
+
     def initialize(author:, kind:, body:)
       raise "BODY CANT BE EMPTY" if body.empty?
       @author = author
@@ -33,17 +45,15 @@ module Pigeon
       @body = body
       # Side effects in a constructor? Hmm...
       store = Pigeon::Storage.current
-      @signature = calculate_signature
       @depth = store.message_count
+      @signature = calculate_signature
       @prev = store.get_message_by_depth(@author, @depth - 1)
       self.freeze
       store.save_message(self)
     end
 
     def calculate_signature
-      template = MessageSerializer.new(self)
-      string = template.render_without_signature
-      KeyPair.current.sign(string)
+      keypair.sign(template_string)
     end
   end
 end

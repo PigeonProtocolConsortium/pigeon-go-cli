@@ -26,16 +26,16 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] 100% coverage
  - [X] Convert `".sig.ed25519"` literals to constants
  - [X] Rename numerous "pigeon message ..." commands to "pigeon draft ..."
- - [ ] pigeon draft create
- - [ ] pigeon draft append
- - [ ] pigeon draft current
- - [ ] pigeon draft save
- - [ ] Perform message verification at time of disk write
- - [ ] Remove all `.current` "singletons" / hacks
- - [ ] pigeon message find
- - [ ] pigeon message find-all
+ - [X] pigeon draft create
+ - [X] pigeon draft append
+ - [X] pigeon draft current
+ - [X] pigeon draft save
  - [ ] pigeon bundle create
  - [ ] pigeon bundle consume
+ - [ ] pigeon message find
+ - [ ] pigeon message find-all
+ - [ ] Perform message verification at time of disk write
+ - [ ] Remove all `.current` "singletons" / hacks
  - [ ] 100% documentation
  - [ ] add parsers and validators for all CLI inputs
  - [ ] Validate inputs for `Draft#[]=`.

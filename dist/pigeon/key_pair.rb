@@ -37,7 +37,7 @@ module Pigeon
     def sign(string)
       hex = @signing_key.sign(string)
       b64 = Base64.urlsafe_encode64(hex)
-      return b64 + ".sig.ed25519"
+      return b64 + SIG_FOOTER
     end
 
     def verify(signature, string)

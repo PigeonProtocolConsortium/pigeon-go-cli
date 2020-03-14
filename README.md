@@ -24,28 +24,28 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] pigeon peer block
  - [X] pigeon peer all
  - [X] 100% coverage
- - [ ] Convert `".sig.ed25519"` literals to constants
- - [ ] Reduce whole darn repo into single module to aide portability
- - [ ] Remove all `.current` "singletons" / hacks
+ - [X] Convert `".sig.ed25519"` literals to constants
  - [ ] Rename numerous "pigeon message ..." commands to "pigeon draft ..."
- - [ ] pigeon bundle create
- - [ ] pigeon bundle consume
  - [ ] pigeon draft create
  - [ ] pigeon draft append
  - [ ] pigeon draft current
  - [ ] pigeon draft save
+ - [ ] Perform message verification at time of disk write
+ - [ ] Remove all `.current` "singletons" / hacks
  - [ ] pigeon message find
  - [ ] pigeon message find-all
+ - [ ] pigeon bundle create
+ - [ ] pigeon bundle consume
  - [ ] 100% documentation
  - [ ] add parsers and validators for all CLI inputs
  - [ ] Validate inputs for `Draft#[]=`.
- - [ ] Perform message verrification at time of disk write?
+ - [ ] Update spec to look [like this](https://gist.github.com/RickCarlino/3ff4178db4a75fd135832c403cd313d4)
+ - [ ] Reduce whole darn repo into single module to aide portability
+ - [ ] Add Lipmaa links like the Bamboo folks do.
+ - [ ] Publish a RubyGem
  - [ ] Performance benchmarks
  - [ ] Performance tuning (DO THIS LAST!)
- - [ ] Update spec to look [like this](https://gist.github.com/RickCarlino/3ff4178db4a75fd135832c403cd313d4)
- - [ ] Publish a RubyGem
 
 # Idea Bin
  - [ ] Map/reduce plugin support for custom indices?
- - [ ] Add Lipmaa links like the Bamboo folks do.
  - [ ] Ability to add a blob in one swoop using File objects and `Message#[]=`, maybe?

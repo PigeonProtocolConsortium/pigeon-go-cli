@@ -40,7 +40,7 @@ RSpec.describe Pigeon::Message do
     expect(message.depth).to eq(0)
     expect(message.kind).to eq("unit_test")
     expect(message.prev).to eq(nil)
-    expect(message.signature.include?(".sig.ed25519")).to eq(true)
+    expect(message.signature.include?(Pigeon::SIG_FOOTER)).to eq(true)
     expect(message.signature.length).to be > 99
     actual = message.render
     expected = [
@@ -111,8 +111,8 @@ RSpec.describe Pigeon::Message do
     expect(key1.seed).to eq(key2.seed)
     expect(sig1).to eq(sig2)
 
-    sig1_b64 = Base64.urlsafe_encode64(sig1) + ".sig.ed25519"
-    sig2_b64 = Base64.urlsafe_encode64(sig2) + ".sig.ed25519"
+    sig1_b64 = Base64.urlsafe_encode64(sig1) + Pigeon::SIG_FOOTER
+    sig2_b64 = Base64.urlsafe_encode64(sig2) + Pigeon::SIG_FOOTER
 
     expect(message.signature).to eq(sig1_b64)
     expect(message.signature).to eq(sig2_b64)

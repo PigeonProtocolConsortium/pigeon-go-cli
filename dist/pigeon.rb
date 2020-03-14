@@ -41,6 +41,7 @@ module Pigeon
   IDENTITY_SIGIL = "@"
   STRING_SIGIL = "\""
   BLOB_FOOTER = ".sha256"
+  SIG_FOOTER = ".sig.ed25519"
 
   # Error messages
   PREV_REQUIRES_SAVE = "Can't fetch `prev` on unsaved messages"

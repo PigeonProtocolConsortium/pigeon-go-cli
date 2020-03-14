@@ -75,7 +75,7 @@ module Pigeon
     end
   end
 
-  class PigeonMessage < Thor
+  class PigeonDraft < Thor
     desc "create", "Begin a new Pigeon message"
 
     def create(kind)
@@ -138,7 +138,7 @@ module Pigeon
     subcommand "peer", Peer
 
     desc "message SUBCOMMAND ...ARGS", "Manage messages"
-    subcommand "message", PigeonMessage
+    subcommand "draft", PigeonDraft
   end
 end
 

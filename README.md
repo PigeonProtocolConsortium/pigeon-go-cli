@@ -25,7 +25,7 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] pigeon peer all
  - [X] 100% coverage
  - [X] Convert `".sig.ed25519"` literals to constants
- - [ ] Rename numerous "pigeon message ..." commands to "pigeon draft ..."
+ - [X] Rename numerous "pigeon message ..." commands to "pigeon draft ..."
  - [ ] pigeon draft create
  - [ ] pigeon draft append
  - [ ] pigeon draft current

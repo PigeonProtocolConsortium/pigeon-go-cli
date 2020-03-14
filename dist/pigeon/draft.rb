@@ -9,7 +9,7 @@ module Pigeon
     end
 
     def self.current
-      Pigeon::Storage.current.get_config(CURRENT_DRAFT)
+      Pigeon::Storage.current.get_config(CURRENT_DRAFT) or raise "NO DRAFT FOUND"
     end
 
     def self.reset_current

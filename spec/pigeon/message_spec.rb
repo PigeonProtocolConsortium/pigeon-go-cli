@@ -30,7 +30,7 @@ RSpec.describe Pigeon::Message do
   it "discards a draft after signing" do
     expect(draft.internal_id).to eq(Pigeon::Draft.current.internal_id)
     Pigeon::Message.publish(draft)
-    expect(Pigeon::Draft.current).to be nil
+    expect { Pigeon::Draft.current }.to raise_error("NO DRAFT FOUND")
   end
 
   it "creates a single message" do
@@ -50,7 +50,7 @@ RSpec.describe Pigeon::Message do
       "depth 0",
       "",
       "a:\"bar\"",
-      "b:&6462a5f5174b53702fc25afe67a8f9a29f572610a65bafefff627531552f096f.sha256",
+      "b:&NjQ2MmE1ZjUxNzRiNTM3MDJmYzI1YWZlNjdhOGY5YTI5ZjU3MjYxMGE2NWJhZmVmZmY2Mjc1MzE1NTJmMDk2Zg==.sha256",
       "",
       "signature __SIGNATURE__",
     ].join("\n")

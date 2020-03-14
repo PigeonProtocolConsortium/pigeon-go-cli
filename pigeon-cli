@@ -4,6 +4,11 @@ require_relative File.join("dist", "pigeon")
 
 require "thor"
 
+def bail(msg)
+  $stderr.puts msg
+  exit 1
+end
+
 module Pigeon
   class Identity < Thor
     class ConfigAlreadyExists < StandardError; end
@@ -81,7 +86,12 @@ module Pigeon
 
     def append(key, raw_value = "")
       v = (raw_value != "") ? raw_value : STDIN.read
-      puts Pigeon::Draft.current[key] = v
+      draft = Pigeon::Draft.current
+      if draft
+        puts draft[key] = v
+      else
+        bail("You must create a draft first")
+      end
     end
 
     desc "show", "Print a message to STDOUT. If message_id is missing, current draft will be displayed."
@@ -90,7 +100,7 @@ module Pigeon
       if message_id == ""
         puts Pigeon::Draft.current.render
       else
-        raise "TODO: Find message by ID?"
+        bail("You must create a draft first")
       end
     end
 
@@ -98,7 +108,7 @@ module Pigeon
 
     def sign
       draft = Pigeon::Draft.current
-      message = Pigeon::Message.from_draft(draft)
+      message = Pigeon::Message.publish(draft)
       puts message.render
     end
   end

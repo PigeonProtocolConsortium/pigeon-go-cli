@@ -27,6 +27,7 @@ module Pigeon
     def save_message(msg)
       store.transaction do
         insert_and_update_index(msg)
+        msg
       end
     end
 
@@ -49,18 +50,20 @@ module Pigeon
     end
 
     def set_blob(data)
-      hex_digest = Digest::SHA256.hexdigest(data)
+      raw_digest = Digest::SHA256.hexdigest(data)
+      b64_digest = Base64.urlsafe_encode64(raw_digest)
+      multihash = [BLOB_SIGIL, b64_digest, BLOB_FOOTER].join("")
+
       store.transaction do
-        store[BLOB_NS][hex_digest] = data
+        store[BLOB_NS][multihash] = data
       end
-      puts "TODO: Maybe this needs to be URLsafe base 64: "
-      [BLOB_SIGIL, hex_digest, BLOB_FOOTER].join("")
+
+      multihash
     end
 
-    def get_blob(hex_digest)
-      hd = hex_digest.gsub(BLOB_SIGIL, "").gsub(BLOB_FOOTER, "")
+    def get_blob(blob_multihash)
       store.transaction(true) do
-        store[BLOB_NS][hd]
+        store[BLOB_NS][blob_multihash]
       end
     end
 
@@ -101,25 +104,26 @@ module Pigeon
     end
 
     def reset_defaults
-      @store.transaction do
-        @store[DEPTH_INDEX_NS] = {}
-        @store[BLOB_NS] = {}
-        @store[CONF_NS] = {}
-        @store[MESG_NS] = {}
-        @store[BLCK_NS] = Set.new
-        @store[PEER_NS] = Set.new
+      store.transaction do
+        store[DEPTH_INDEX_NS] = {}
+        store[BLOB_NS] = {}
+        store[CONF_NS] = {}
+        store[MESG_NS] = {}
+        store[BLCK_NS] = Set.new
+        store[PEER_NS] = Set.new
       end
-      @store
+      store
     end
 
     private
 
     def store
-      unless @store
+      if @store
+        return @store
+      else
         @store = PStore.new(PIGEON_DB_PATH)
         reset_defaults
       end
-      return @store
     end
 
     def insert_and_update_index(message)

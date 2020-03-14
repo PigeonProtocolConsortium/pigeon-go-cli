@@ -20,15 +20,14 @@ RSpec.describe Pigeon::Draft do
     "prev DRAFT",
     "depth DRAFT",
     "\na:\"bar\"",
-    "b:&6462a5f5174b53702fc25afe67a8f9a29f572610a65bafefff627531552f096f.sha256",
-    "\n"
+    "b:&NjQ2MmE1ZjUxNzRiNTM3MDJmYzI1YWZlNjdhOGY5YTI5ZjU3MjYxMGE2NWJhZmVmZmY2Mjc1MzE1NTJmMDk2Zg==.sha256",
+    "\n",
   ].join("\n")
 
   it "renders a message" do
     pk = Pigeon::KeyPair.current.public_key
     actual = message.render
     expected = MSG.gsub("___", pk)
-
     expect(actual).to start_with(expected)
   end
 
@@ -40,7 +39,7 @@ RSpec.describe Pigeon::Draft do
       body: {
         "a" => "bar".to_json,
         "b" => hash,
-      }
+      },
     }
     message["a"] = "bar"
     message["b"] = hash

@@ -46,35 +46,35 @@ echo "...string via pipe"
 
 echo "my_value" | ./pigeon-cli draft append key1
 
-# echo "...string with no quotes"
-# ./pigeon-cli draft append key2 my_value2
+echo "...string with no quotes"
+./pigeon-cli draft append key2 my_value2
 
-# echo "...string with quotes"
-# ./pigeon-cli draft append key3 "my_value3"
+echo "...string with quotes"
+./pigeon-cli draft append key3 "my_value3"
 
-# echo "...draft ID"
-# ./pigeon-cli draft append key4 \%jvKh9yoiEJaePzoWCF1nnqpIlPgTk9FHEtqczQbvzGM=.sha256
+echo "...draft ID"
+./pigeon-cli draft append key4 \%jvKh9yoiEJaePzoWCF1nnqpIlPgTk9FHEtqczQbvzGM=.sha256
 
-# echo "...blob"
-# ./pigeon-cli draft append key5 \&29f3933302c49c60841d7620886ce54afc68630242aee6ff683926d2465e6ca3.sha256
+echo "...blob"
+./pigeon-cli draft append key5 \&29f3933302c49c60841d7620886ce54afc68630242aee6ff683926d2465e6ca3.sha256
 
-# echo "...identity"
-# ./pigeon-cli draft append key6 \@galdahnB3L2DE2cTU0Me54IpIUKVEgKmBwvZVtWJccg=.ed25519
+echo "...identity"
+./pigeon-cli draft append key6 \@galdahnB3L2DE2cTU0Me54IpIUKVEgKmBwvZVtWJccg=.ed25519
 
-# echo "== show draft"
-# ./pigeon-cli draft show
+echo "== show draft"
+./pigeon-cli draft show
 
-# echo "== sign (publish, save, commit, etc) draft"
-# ./pigeon-cli draft sign
+echo "== sign (publish, save, commit, etc) draft"
+./pigeon-cli draft sign
 
-# echo "=== add a second draft to the db"
-# ./pigeon-cli draft create second_test
+echo "=== add a second draft to the db"
+./pigeon-cli draft create second_test
 
-# echo "=== append hello:'world' to draft:"
-# ./pigeon-cli draft append hello "world"
+echo "=== append hello:'world' to draft:"
+./pigeon-cli draft append hello "world"
 
-# echo "=== Sign draft #2"
-# ./pigeon-cli draft sign
+echo "=== Sign draft #2"
+./pigeon-cli draft sign
 
-# echo "=== getting status:"
-# ./pigeon-cli status
+echo "=== getting status:"
+./pigeon-cli status

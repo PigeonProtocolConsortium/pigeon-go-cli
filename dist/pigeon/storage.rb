@@ -3,7 +3,7 @@ require "pstore"
 module Pigeon
   class Storage
     def self.reset
-      @current.reset_defaults if @current
+      @current.bootstrap if @current
       @current = nil
     end
 
@@ -103,14 +103,14 @@ module Pigeon
       end
     end
 
-    def reset_defaults
+    def bootstrap
       store.transaction do
-        store[DEPTH_INDEX_NS] = {}
-        store[BLOB_NS] = {}
-        store[CONF_NS] = {}
-        store[MESG_NS] = {}
-        store[BLCK_NS] = Set.new
-        store[PEER_NS] = Set.new
+        store[DEPTH_INDEX_NS] ||= {}
+        store[BLOB_NS] ||= {}
+        store[CONF_NS] ||= {}
+        store[MESG_NS] ||= {}
+        store[BLCK_NS] ||= Set.new
+        store[PEER_NS] ||= Set.new
       end
       store
     end
@@ -122,7 +122,7 @@ module Pigeon
         return @store
       else
         @store = PStore.new(PIGEON_DB_PATH)
-        reset_defaults
+        bootstrap
       end
     end
 

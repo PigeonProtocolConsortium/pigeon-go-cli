@@ -31,7 +31,7 @@ module Pigeon
       bytes = @signing_key.verify_key.to_bytes
       b64 = Base64.urlsafe_encode64(bytes)
 
-      @public_key ||= KeyPair.add_headers(b64)
+      @public_key ||= [HEADER, b64, FOOTER].join("")
     end
 
     def sign(string)
@@ -53,10 +53,6 @@ module Pigeon
 
     def self.strip_headers(identity)
       identity.sub(HEADER, "").sub(FOOTER, "")
-    end
-
-    def self.add_headers(urlsafe_b64_no_headers)
-      [HEADER, urlsafe_b64_no_headers, FOOTER].join("")
     end
   end
 end

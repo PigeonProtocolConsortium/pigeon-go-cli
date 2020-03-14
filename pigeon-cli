@@ -123,7 +123,7 @@ module Pigeon
          _) (   Peers:   #{Pigeon::Storage.current.all_peers.count}
         /    )  Blocked: #{Pigeon::Storage.current.all_blocks.count}
        /_,'  /  Logs:    #{Pigeon::Storage.current.message_count}
-         \  /
+         \\  /   Ident:   #{Pigeon::KeyPair.current.public_key}
       ===m" "m===
       "
     end

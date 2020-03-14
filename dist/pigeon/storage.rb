@@ -3,7 +3,7 @@ require "pstore"
 module Pigeon
   class Storage
     def self.reset
-      @current.bootstrap if @current
+      File.delete(PIGEON_DB_PATH) if @current
       @current = nil
     end
 

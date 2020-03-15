@@ -3,7 +3,7 @@ require "pstore"
 module Pigeon
   class Storage
     def self.reset
-      File.delete(PIGEON_DB_PATH) if @current
+      File.delete(PIGEON_DB_PATH) if File.file?(PIGEON_DB_PATH)
       @current = nil
     end
 
@@ -28,6 +28,12 @@ module Pigeon
       store.transaction do
         insert_and_update_index(msg)
         msg
+      end
+    end
+
+    def find_message(multihash)
+      store.transaction(true) do
+        store[MESG_NS].fetch(multihash)
       end
     end
 

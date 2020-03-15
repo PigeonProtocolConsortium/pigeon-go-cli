@@ -113,7 +113,6 @@ RSpec.describe Pigeon::Message do
 
     sig1_b64 = Base64.urlsafe_encode64(sig1) + Pigeon::SIG_FOOTER
     sig2_b64 = Base64.urlsafe_encode64(sig2) + Pigeon::SIG_FOOTER
-
     expect(message.signature).to eq(sig1_b64)
     expect(message.signature).to eq(sig2_b64)
   end

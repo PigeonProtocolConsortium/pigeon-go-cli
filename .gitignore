@@ -3,3 +3,4 @@ coverage/
 *.pigeon
 doc/
 *scratchpad*
+pigeon.bundle

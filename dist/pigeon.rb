@@ -13,6 +13,8 @@ module Pigeon
   TPL_DIR = "views"
 
   PIGEON_DB_PATH = File.join("db.pigeon")
+  DEFAULT_BUNDLE_PATH = "./pigeon.bundle"
+
   # MESSAGE TEMPLATE CONSTANTS:
   HEADER_TPL = File.read(File.join(TPL_DIR, "1_header.erb")).sub("\n", "")
   BODY_TPL = File.read(File.join(TPL_DIR, "2_body.erb")).sub("\n", "")
@@ -22,6 +24,7 @@ module Pigeon
   EMPTY_MESSAGE = "NONE"
   OUTBOX_PATH = File.join(".pigeon", "user")
   DRAFT_PLACEHOLDER = "DRAFT"
+  BUNDLE_MESSAGE_SEPARATOR = "\n\n"
   # /MESSAGE TEMPLATE CONSTANTS
 
   # Internal namespaces for PStore keys:
@@ -53,3 +56,4 @@ require_relative File.join("pigeon", "draft_serializer.rb")
 require_relative File.join("pigeon", "message_serializer.rb")
 require_relative File.join("pigeon", "message.rb")
 require_relative File.join("pigeon", "draft.rb")
+require_relative File.join("pigeon", "bundle.rb")

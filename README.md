@@ -33,8 +33,10 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] pigeon bundle create
  - [X] Use JSON.stringify() for string keys (instead of `inspect`)
  - [X] Move literals into `Pigeon` module as constants, again.
- - [ ] pigeon message find
- - [ ] pigeon message find-all (then refactor ::Bundle.create to use it!)
+ - [X] pigeon message find
+ - [X] pigeon message find-all for local feed.
+ - [ ] pigeon message find-all for peer feed. I will need to add index for `author => message_count`
+ - [ ] refactor `Bundle.create` to use `message find-all`.
  - [ ] pigeon bundle consume
  - [ ] add parsers and validators for all CLI inputs
  - [ ] Ensure all disks writes perform verification!

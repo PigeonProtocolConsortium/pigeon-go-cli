@@ -129,6 +129,30 @@ module Pigeon
     end
   end
 
+  class PigeonMessage < ThorBase
+    desc "find", "Find a pigeon message in the local DB"
+
+    def find(multihash)
+      puts Pigeon::Storage.current.find_message(multihash).render
+    end
+
+    desc "find-all", "Find a pigeon message in the local DB"
+
+    def find_all()
+      # TODO: Ability to find-all messages by author ID
+      puts Pigeon::Storage.current.find_all.join(Pigeon::CR) + Pigeon::CR
+    end
+
+    desc "last", "Grab your last message. INTERNAL USE ONLY"
+
+    def last
+      me = Pigeon::KeyPair.current
+      store = Pigeon::Storage.current
+      multihash = store.get_message_by_depth(me, store.message_count - 1)
+      puts multihash
+    end
+  end
+
   class CLI < ThorBase
     desc "status", "Show various information about the `.pigeon` directory"
 
@@ -155,6 +179,9 @@ module Pigeon
 
     desc "identity SUBCOMMAND ...ARGS", "Manage `.pigeon` identity"
     subcommand "identity", Identity
+
+    desc "message SUBCOMMAND ...ARGS", "Manage blob storage"
+    subcommand "message", PigeonMessage
 
     desc "peer SUBCOMMAND ...ARGS", "Manage blob storage"
     subcommand "peer", Peer

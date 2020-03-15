@@ -80,7 +80,13 @@ echo "=== Sign draft #2"
 echo "=== Dump the bundle"
 ./pigeon-cli bundle create
 cat pigeon.bundle
-echo "=== ^ Dump the bundle"
+echo "=== end bundle dump"
+
+echo "=== find a message"
+./pigeon-cli message find (./pigeon-cli message last)
+
+echo "== find all messages"
+./pigeon-cli message find-all
 
 echo "=== getting status:"
 ./pigeon-cli status

@@ -37,6 +37,20 @@ module Pigeon
       end
     end
 
+    def find_all
+      # TODO: Ability to pass an author ID to `find-all`
+      author = Pigeon::KeyPair.current
+      store = Pigeon::Storage.current
+      all = []
+      depth = -1
+      last = ""
+      until (last == nil) || (depth > 999999)
+        last = store.get_message_by_depth(author, depth += 1)
+        all.push(last) if last
+      end
+      return all
+    end
+
     def set_config(key, value)
       store.transaction do
         store[CONF_NS][key] = value

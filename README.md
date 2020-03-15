@@ -33,16 +33,16 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] pigeon bundle create
  - [X] Use JSON.stringify() for string keys (instead of `inspect`)
  - [X] Move literals into `Pigeon` module as constants, again.
- - [ ] pigeon bundle consume
  - [ ] pigeon message find
- - [ ] pigeon message find-all
- - [ ] Perform message verification at time of disk write
+ - [ ] pigeon message find-all (then refactor ::Bundle.create to use it!)
+ - [ ] pigeon bundle consume
+ - [ ] add parsers and validators for all CLI inputs
+ - [ ] Ensure all disks writes perform verification!
  - [ ] Remove all `.current` "singletons" / hacks
  - [ ] 100% documentation
- - [ ] add parsers and validators for all CLI inputs
  - [ ] Validate inputs for `Draft#[]=`.
  - [ ] Update spec to look [like this](https://gist.github.com/RickCarlino/3ff4178db4a75fd135832c403cd313d4)
- - [ ] Reduce whole darn repo into single module to aide portability
+ - [ ] Reduce whole darn repo into single module to aide portability. Maybe a second `::Support` module is OK.
  - [ ] Add Lipmaa links like the Bamboo folks do.
  - [ ] Publish a RubyGem
  - [ ] Performance benchmarks

@@ -144,20 +144,20 @@ module Pigeon
       "
     end
 
-    desc "identity SUBCOMMAND ...ARGS", "Manage `.pigeon` identity"
-    subcommand "identity", Identity
-
     desc "blob SUBCOMMAND ...ARGS", "Manage blob storage"
     subcommand "blob", Blob
 
-    desc "peer SUBCOMMAND ...ARGS", "Manage blob storage"
-    subcommand "peer", Peer
-
-    desc "message SUBCOMMAND ...ARGS", "Manage messages"
-    subcommand "draft", PigeonDraft
-
     desc "bundle SUBCOMMAND ...ARGS", "Consume and create bundle files"
     subcommand "bundle", PigeonBundle
+
+    desc "draft SUBCOMMAND ...ARGS", "Manage drafts"
+    subcommand "draft", PigeonDraft
+
+    desc "identity SUBCOMMAND ...ARGS", "Manage `.pigeon` identity"
+    subcommand "identity", Identity
+
+    desc "peer SUBCOMMAND ...ARGS", "Manage blob storage"
+    subcommand "peer", Peer
   end
 end
 

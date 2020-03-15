@@ -31,7 +31,7 @@ module Pigeon
     end
 
     def initialize(author:, kind:, body:, signature: nil)
-      raise "BODY CANT BE EMPTY" if body.empty?
+      raise MISSING_BODY if body.empty?
       @author = author
       @kind = kind
       @body = body

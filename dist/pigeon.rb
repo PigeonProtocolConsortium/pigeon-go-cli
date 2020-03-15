@@ -24,7 +24,8 @@ module Pigeon
   EMPTY_MESSAGE = "NONE"
   OUTBOX_PATH = File.join(".pigeon", "user")
   DRAFT_PLACEHOLDER = "DRAFT"
-  BUNDLE_MESSAGE_SEPARATOR = "\n\n"
+  CR = "\n"
+  BUNDLE_MESSAGE_SEPARATOR = CR * 2
   # /MESSAGE TEMPLATE CONSTANTS
 
   # Internal namespaces for PStore keys:
@@ -48,6 +49,9 @@ module Pigeon
 
   # Error messages
   PREV_REQUIRES_SAVE = "Can't fetch `prev` on unsaved messages"
+  NO_DRAFT_FOUND = "NO DRAFT FOUND"
+  STRING_KEYS_ONLY = "String keys only"
+  MISSING_BODY = "BODY CANT BE EMPTY"
 end
 
 require_relative File.join("pigeon", "key_pair.rb")

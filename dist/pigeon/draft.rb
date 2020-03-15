@@ -9,7 +9,7 @@ module Pigeon
     end
 
     def self.current
-      Pigeon::Storage.current.get_config(CURRENT_DRAFT) or raise "NO DRAFT FOUND"
+      Pigeon::Storage.current.get_config(CURRENT_DRAFT) or raise NO_DRAFT_FOUND
     end
 
     def self.reset_current
@@ -33,7 +33,7 @@ module Pigeon
     end
 
     def []=(key, value)
-      raise "String keys only" unless key.is_a?(String)
+      raise STRING_KEYS_ONLY unless key.is_a?(String)
 
       case value[0]
       when BLOB_SIGIL, MESSAGE_SIGIL, IDENTITY_SIGIL, STRING_SIGIL

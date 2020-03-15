@@ -33,11 +33,20 @@ module Pigeon
     end
 
     def []=(key, value)
+      raise "String keys only" unless key.is_a?(String)
+
       case value[0]
       when BLOB_SIGIL, MESSAGE_SIGIL, IDENTITY_SIGIL, STRING_SIGIL
         self.body[key] = value
       else
-        self.body[key] = value.inspect
+        # JSON.stringify calls were done in the name of time
+        # and as a convinience for values like
+        # bools and ints
+        if value.is_a?(String)
+          self.body[key] = value.inspect
+        else
+          self.body[key] = value.to_json
+        end
       end
       self.save
       return self.body[key]

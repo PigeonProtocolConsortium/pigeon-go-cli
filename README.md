@@ -32,6 +32,7 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] pigeon draft save
  - [X] pigeon bundle create
  - [ ] Use JSON.stringify() for string keys (instead of `inspect`)
+ - [ ] Move literals into `Pigeon` module as constants, again.
  - [ ] pigeon bundle consume
  - [ ] pigeon message find
  - [ ] pigeon message find-all

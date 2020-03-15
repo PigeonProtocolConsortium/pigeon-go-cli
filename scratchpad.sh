@@ -6,6 +6,7 @@
 
 echo "Deleting old pigeon configs"
 rm -f db.pigeon
+rm -f pigeon.bundle
 echo "OK"
 
 echo "Creating new config:"
@@ -75,6 +76,11 @@ echo "=== append hello:'world' to draft:"
 
 echo "=== Sign draft #2"
 ./pigeon-cli draft sign
+
+echo "=== Dump the bundle"
+./pigeon-cli bundle create
+cat pigeon.bundle
+echo "=== ^ Dump the bundle"
 
 echo "=== getting status:"
 ./pigeon-cli status

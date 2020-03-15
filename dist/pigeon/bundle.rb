@@ -10,7 +10,7 @@ module Pigeon
         .map { |multihash| s.find_message(multihash) }
         .map { |message| message.render }
         .join(BUNDLE_MESSAGE_SEPARATOR)
-      File.write(file_path, content)
+      File.write(file_path, content + "\n")
     end
 
     def self.ingest(file_path)

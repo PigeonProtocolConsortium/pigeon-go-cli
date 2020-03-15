@@ -10,7 +10,15 @@ def bail(msg)
 end
 
 module Pigeon
-  class Identity < Thor
+  class ThorBase < Thor
+    no_commands do
+      def exit_on_failure?
+        true
+      end
+    end
+  end
+
+  class Identity < ThorBase
     class ConfigAlreadyExists < StandardError; end
 
     desc "new", "Creates a new identiy in `.pigeon` directory if none exists"
@@ -34,7 +42,7 @@ module Pigeon
     end
   end
 
-  class Blob < Thor
+  class Blob < ThorBase
     desc "set", "Copy arbitrary binary data into the database"
 
     def set(data = "")
@@ -49,7 +57,7 @@ module Pigeon
     end
   end
 
-  class Peer < Thor
+  class Peer < ThorBase
     desc "add", "Begin following a Pigeon peer"
 
     def add(identity)
@@ -75,7 +83,7 @@ module Pigeon
     end
   end
 
-  class PigeonDraft < Thor
+  class PigeonDraft < ThorBase
     desc "create", "Begin a new Pigeon message"
 
     def create(kind)
@@ -113,7 +121,15 @@ module Pigeon
     end
   end
 
-  class CLI < Thor
+  class PigeonBundle < ThorBase
+    desc "create", "Create a pigeon bundle file"
+
+    def create(file_path = Pigeon::DEFAULT_BUNDLE_PATH)
+      Pigeon::Bundle.create(file_path)
+    end
+  end
+
+  class CLI < ThorBase
     desc "status", "Show various information about the `.pigeon` directory"
 
     def status
@@ -139,6 +155,9 @@ module Pigeon
 
     desc "message SUBCOMMAND ...ARGS", "Manage messages"
     subcommand "draft", PigeonDraft
+
+    desc "bundle SUBCOMMAND ...ARGS", "Consume and create bundle files"
+    subcommand "bundle", PigeonBundle
   end
 end
 

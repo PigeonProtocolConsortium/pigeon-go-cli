@@ -35,9 +35,11 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] Move literals into `Pigeon` module as constants, again.
  - [X] pigeon message find
  - [X] pigeon message find-all for local feed.
+ - [ ] pigeon bundle consume
+ - [ ] Change all the `{40,90}` values in ::Lexer to real length values
+ - [ ] Create regexes in ::Lexer using strings and Regexp.new() for cleaner regexes.
  - [ ] pigeon message find-all for peer feed. I will need to add index for `author => message_count`
  - [ ] refactor `Bundle.create` to use `message find-all`.
- - [ ] pigeon bundle consume
  - [ ] add parsers and validators for all CLI inputs
  - [ ] Ensure all disks writes perform verification!
  - [ ] Remove all `.current` "singletons" / hacks

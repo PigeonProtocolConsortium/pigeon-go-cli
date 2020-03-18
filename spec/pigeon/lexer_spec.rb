@@ -1,7 +1,7 @@
 require "spec_helper"
 
-RSpec.describe Pigeon::Bundle::Lexer do
+RSpec.describe Pigeon::Lexer do
   it "tokenizes the bundle" do
-    Pigeon::Bundle::Lexer.tokenize(File.read("./example.bundle"))
+    Pigeon::Lexer.tokenize(File.read("./example.bundle"))
   end
 end

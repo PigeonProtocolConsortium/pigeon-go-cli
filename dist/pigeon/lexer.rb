@@ -37,13 +37,14 @@ module Pigeon
 
     def tokenize
       until scanner.eos?
-        puts scanner.matched || "No match"
         case @state
         when HEADER then do_header
         when BODY then do_body
         when FOOTER then do_footer
         end
       end
+      maybe_end_message!
+      return tokens
     end
 
     private
@@ -59,8 +60,9 @@ module Pigeon
       raise "Syntax error at #{scanner.pos}"
     end
 
-    def add_terminator!
-      @tokens << [:TERMINATOR]
+    # This might be a mistake or uneccessary. NN 20 MAR 2020
+    def maybe_end_message!
+      @tokens << [:MESSAGE_END] unless tokens.last.last == :MESSAGE_END
     end
 
     def do_header
@@ -90,7 +92,7 @@ module Pigeon
 
       if scanner.scan(SEPERATOR)
         @state = BODY
-        add_terminator!
+        @tokens << [:HEADER_END]
         return
       end
       flunk!
@@ -105,7 +107,7 @@ module Pigeon
 
       if scanner.scan(SEPERATOR)
         @state = FOOTER
-        add_terminator!
+        @tokens << [:BODY_END]
         return
       end
 
@@ -124,10 +126,11 @@ module Pigeon
 
       if scanner.scan(SEPERATOR)
         @state = HEADER
-        add_terminator!
-      else
-        raise "Parse error at #{scanner.pos}. Did you add two carriage returns?"
+        maybe_end_message!
+        return
       end
+
+      raise "Parse error at #{scanner.pos}. Double carriage return not found."
     end
   end
 end

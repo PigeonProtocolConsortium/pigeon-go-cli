@@ -26,7 +26,7 @@ module Pigeon
     KIND = /kind #{ALPHANUMERICISH}\n/
     BODY_ENTRY = /#{ALPHANUMERICISH}:#{ANY_VALUE}\n/
 
-    FOOTER_ENTRY = /signature .*{40,90}\.sig\.ed25519/
+    FOOTER_ENTRY = /signature .*{40,90}\.sig\.ed25519\n/
 
     LEXER_STATES = [HEADER = :header, BODY = :body, FOOTER = :footer]
 
@@ -35,11 +35,32 @@ module Pigeon
       new(bundle_string).tokenize
     end
 
+    def tokenize
+      until scanner.eos?
+        puts scanner.matched || "No match"
+        case @state
+        when HEADER then do_header
+        when BODY then do_body
+        when FOOTER then do_footer
+        end
+      end
+    end
+
+    private
+
     def initialize(bundle_string)
       @bundle_string = bundle_string
       @scanner = StringScanner.new(bundle_string)
       @tokens = []
       @state = HEADER
+    end
+
+    def flunk!
+      raise "Syntax error at #{scanner.pos}"
+    end
+
+    def add_terminator!
+      @tokens << [:TERMINATOR]
     end
 
     def do_header
@@ -69,11 +90,10 @@ module Pigeon
 
       if scanner.scan(SEPERATOR)
         @state = BODY
-        @tokens << [:TERMINATOR]
+        add_terminator!
         return
       end
-
-      raise "Malformed header at line #{scanner.pos}"
+      flunk!
     end
 
     def do_body
@@ -85,28 +105,28 @@ module Pigeon
 
       if scanner.scan(SEPERATOR)
         @state = FOOTER
-        @tokens << [:TERMINATOR]
+        add_terminator!
         return
       end
 
-      raise "Malformed body entry at position #{scanner.pos}"
+      flunk!
     end
 
     def do_footer
-      puts @tokens.inspect
-      raise "This is the last thing I need to do."
-    end
+      # Reset the lexer to ingest the next entry.
+      # If scanner.eos? == true, it will just terminate.
 
-    def tokenize
-      puts bundle_string
-      until scanner.eos?
-        case @state
-        when HEADER then do_header
-        when BODY then do_body
-        when FOOTER then do_footer
-        else
-          raise "Lexing failed at #{scanner.pos}"
-        end
+      if scanner.scan(FOOTER_ENTRY)
+        sig = scanner.matched.strip.gsub("signature ", "")
+        @tokens << [:SIGNATURE, sig]
+        return
+      end
+
+      if scanner.scan(SEPERATOR)
+        @state = HEADER
+        add_terminator!
+      else
+        raise "Parse error at #{scanner.pos}. Did you add two carriage returns?"
       end
     end
   end

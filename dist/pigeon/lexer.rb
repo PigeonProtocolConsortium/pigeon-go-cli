@@ -30,6 +30,8 @@ module Pigeon
 
     LEXER_STATES = [HEADER = :header, BODY = :body, FOOTER = :footer]
 
+    class LexError < StandardError; end
+
     def self.tokenize(bundle_string)
       # TODO: Maybe move #tokeinze into constructor.
       new(bundle_string).tokenize
@@ -57,7 +59,7 @@ module Pigeon
     end
 
     def flunk!
-      raise "Syntax error at #{scanner.pos}"
+      raise LexError, "Syntax error at #{scanner.pos}"
     end
 
     # This might be a mistake or uneccessary. NN 20 MAR 2020
@@ -133,7 +135,7 @@ module Pigeon
         return
       end
 
-      raise "Parse error at #{scanner.pos}. Double carriage return not found."
+      raise LexError, "Parse error at #{scanner.pos}. Double carriage return not found."
     end
   end
 end

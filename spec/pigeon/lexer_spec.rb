@@ -27,11 +27,20 @@ RSpec.describe Pigeon::Lexer do
     [:MESSAGE_END],
   ]
 
+  MESSAGE_LINES = [
+    "author @WEf06RUKouNcEVURslzHvepOiK4WbQAgRc_9aiUy7rE=.ed25519",
+    "kind unit_test",
+    "prev NONE",
+    "depth 0",
+    "",
+    "foo:\"bar\"",
+    "",
+    "signature hHvhdvUcrabhFPz52GSGa9_iuudOsGEEE7S0o0WJLqjQyhLfgUy72yppHXsG6T4E21p6EEI6B3yRcjfurxegCA==.sig.ed25519",
+  ].freeze
+
   let(:message) do
     draft = Pigeon::Draft.create(kind: "unit_test")
-    hash = Pigeon::Storage.current.set_blob(File.read("./logo.png"))
-    draft["a"] = "bar"
-    draft["b"] = hash
+    draft["foo"] = "bar"
     Pigeon::Message.publish(draft)
   end
 
@@ -69,5 +78,16 @@ RSpec.describe Pigeon::Lexer do
     expect(hash[:KIND]).to eq(message.kind)
     expect(hash[:PREV]).to eq Pigeon::EMPTY_MESSAGE
     expect(hash[:SIGNATURE]).to eq(message.signature)
+  end
+
+  it "catches syntax errors" do
+    e = Pigeon::Lexer::LexError
+    [
+      MESSAGE_LINES.dup.insert(3, "@@@").join("\n"),
+      MESSAGE_LINES.dup.insert(5, "@@@").join("\n"),
+      MESSAGE_LINES.dup.insert(7, "@@@").join("\n"),
+    ].map do |bundle|
+      expect { Pigeon::Lexer.tokenize(bundle) }.to raise_error(e)
+    end
   end
 end

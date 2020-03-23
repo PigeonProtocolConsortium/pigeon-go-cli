@@ -26,7 +26,7 @@ module Pigeon
     KIND = /kind #{ALPHANUMERICISH}\n/
     BODY_ENTRY = /#{ALPHANUMERICISH}:#{ANY_VALUE}\n/
 
-    FOOTER_ENTRY = /signature .*{40,90}\.sig\.ed25519\n/
+    FOOTER_ENTRY = /signature .*{87,88}\.sig\.ed25519\n?/
 
     LEXER_STATES = [HEADER = :header, BODY = :body, FOOTER = :footer]
 
@@ -118,6 +118,7 @@ module Pigeon
       # Reset the lexer to ingest the next entry.
       # If scanner.eos? == true, it will just terminate.
 
+      # This freezes everything:
       if scanner.scan(FOOTER_ENTRY)
         sig = scanner.matched.strip.gsub("signature ", "")
         @tokens << [:SIGNATURE, sig]

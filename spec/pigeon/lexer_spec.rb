@@ -43,10 +43,8 @@ RSpec.describe Pigeon::Lexer do
   end
 
   it "tokenizes a single message" do
-    fail([
-      "This currently freezes the lexer.",
-      "Maybe I need to add a scanner.peek call or sth?",
-    ].join(" "))
-    tokens = Pigeon::Lexer.tokenize(message.render)
+    string = message.render
+    tokens = Pigeon::Lexer.tokenize(string)
+    binding.pry
   end
 end

@@ -1,7 +1,7 @@
 require "spec_helper"
 
 RSpec.describe Pigeon::Lexer do
-  EXPECTED_TOKENS = [
+  EXPECTED_TOKENS1 = [
     [:AUTHOR, "@DYdgK1KUInVtG3lS45hA1HZ-jTuvfLKsxDpXPFCve04=.ed25519"],
     [:KIND, "scratch_pad"],
     [:PREV, "NONE"],
@@ -26,6 +26,7 @@ RSpec.describe Pigeon::Lexer do
     [:SIGNATURE, "AerpDKbKRrcaM9wihwFsPC4YRAfYWie5XFEKAdnxQom7MTvsXd9W39AvHfljJnEePZpsQVdfq2TtBPoQHc-MCw==.sig.ed25519"],
     [:MESSAGE_END],
   ]
+
   let(:message) do
     draft = Pigeon::Draft.create(kind: "unit_test")
     hash = Pigeon::Storage.current.set_blob(File.read("./logo.png"))
@@ -34,17 +35,39 @@ RSpec.describe Pigeon::Lexer do
     Pigeon::Message.publish(draft)
   end
 
+  before(:each) do
+    Pigeon::Storage.reset
+    Pigeon::KeyPair.reset
+  end
+
   it "tokenizes a bundle" do
     bundle = File.read("./example.bundle")
     tokens = Pigeon::Lexer.tokenize(bundle)
-    EXPECTED_TOKENS.each_with_index do |item, i|
-      expect(tokens[i]).to eq(EXPECTED_TOKENS[i])
+    EXPECTED_TOKENS1.each_with_index do |item, i|
+      expect(tokens[i]).to eq(EXPECTED_TOKENS1[i])
     end
   end
 
   it "tokenizes a single message" do
     string = message.render
     tokens = Pigeon::Lexer.tokenize(string)
-    binding.pry
+    hash = tokens.reduce({ BODY: {} }) do |h, token|
+      case token.first
+      when :HEADER_END, :BODY_END, :MESSAGE_END
+        h
+      when :BODY_ENTRY
+        h[:BODY][token[1]] = token[2]
+      else
+        h[token.first] = token.last
+      end
+      h
+    end
+
+    expect(hash[:AUTHOR]).to eq(message.author.public_key)
+    expect(hash[:BODY]).to eq(message.body)
+    expect(hash[:DEPTH]).to eq(message.depth)
+    expect(hash[:KIND]).to eq(message.kind)
+    expect(hash[:PREV]).to eq Pigeon::EMPTY_MESSAGE
+    expect(hash[:SIGNATURE]).to eq(message.signature)
   end
 end

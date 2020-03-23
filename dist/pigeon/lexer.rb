@@ -62,7 +62,9 @@ module Pigeon
 
     # This might be a mistake or uneccessary. NN 20 MAR 2020
     def maybe_end_message!
-      @tokens << [:MESSAGE_END] unless tokens.last.last == :MESSAGE_END
+      unless tokens.last.last == :MESSAGE_END
+        @tokens << [:MESSAGE_END]
+      end
     end
 
     def do_header

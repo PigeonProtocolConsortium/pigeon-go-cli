@@ -35,7 +35,7 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] Move literals into `Pigeon` module as constants, again.
  - [X] pigeon message find
  - [X] pigeon message find-all for local feed.
- - [ ] pigeon bundle consume
+ - [ ] pigeon bundle consume (We are minimally feature complete at this point)
  - [ ] Change all the `{40,90}` values in ::Lexer to real length values
  - [ ] Rename `message find` to `message read`, since other finders return a multihash.
  - [ ] Don't allow carriage return in `kind`. Write a test for this.

@@ -3,7 +3,7 @@ require "spec_helper"
 RSpec.describe Pigeon::Message do
   before(:each) do
     Pigeon::Storage.reset
-    Pigeon::KeyPair.reset
+    Pigeon::LocalIdentity.reset
   end
 
   def create_draft(params)
@@ -35,7 +35,7 @@ RSpec.describe Pigeon::Message do
 
   it "creates a single message" do
     message = Pigeon::Message.publish(draft)
-    expect(message.author).to eq(Pigeon::KeyPair.current)
+    expect(message.author).to eq(Pigeon::LocalIdentity.current)
     expect(message.body).to eq(draft.body)
     expect(message.depth).to eq(0)
     expect(message.kind).to eq("unit_test")
@@ -90,19 +90,19 @@ RSpec.describe Pigeon::Message do
     expect(m4.prev).to be
   end
 
-  # Init keypair
+  # Init LocalIdentity
   # Get secret
   # Create signing key
 
   it "verifies accuracy of signatures" do
     # === Initial setup
-    Pigeon::KeyPair.current
+    Pigeon::LocalIdentity.current
     secret = Pigeon::Storage.current.get_config(Pigeon::SEED_CONFIG_KEY)
     message = template.message
     plaintext = template.render_without_signature
 
     # Make fake pairs of data for cross-checking
-    key1 = Pigeon::KeyPair.current.instance_variable_get(:@signing_key)
+    key1 = Pigeon::LocalIdentity.current.instance_variable_get(:@signing_key)
     key2 = Ed25519::SigningKey.new(secret)
 
     sig1 = key1.sign(plaintext)

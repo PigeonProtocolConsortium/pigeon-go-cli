@@ -30,7 +30,7 @@ module Pigeon
           Remove config dir or switch to a different directory."
         raise ConfigAlreadyExists
       end
-      kp = Pigeon::KeyPair.new()
+      kp = Pigeon::LocalIdentity.new()
       kp.save!
       puts kp.public_key
     end
@@ -38,7 +38,7 @@ module Pigeon
     desc "show", "Prints a base64 identiy string to STDOUT"
 
     def show
-      puts Pigeon::KeyPair.current.public_key
+      puts Pigeon::LocalIdentity.current.public_key
     end
   end
 
@@ -146,7 +146,7 @@ module Pigeon
     desc "last", "Grab your last message. INTERNAL USE ONLY"
 
     def last
-      me = Pigeon::KeyPair.current
+      me = Pigeon::LocalIdentity.current
       store = Pigeon::Storage.current
       multihash = store.get_message_by_depth(me, store.message_count - 1)
       puts multihash
@@ -163,7 +163,7 @@ module Pigeon
          _) (   Peers:   #{Pigeon::Storage.current.all_peers.count}
         /    )  Blocked: #{Pigeon::Storage.current.all_blocks.count}
        /_,'  /  Logs:    #{Pigeon::Storage.current.message_count}
-         \\  /   Ident:   #{Pigeon::KeyPair.current.public_key}
+         \\  /   Ident:   #{Pigeon::LocalIdentity.current.public_key}
       ===m" "m===
       "
     end

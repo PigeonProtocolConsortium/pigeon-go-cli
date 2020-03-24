@@ -39,7 +39,7 @@ module Pigeon
 
     def find_all
       # TODO: Ability to pass an author ID to `find-all`
-      author = Pigeon::KeyPair.current
+      author = Pigeon::LocalIdentity.current
       store = Pigeon::Storage.current
       all = []
       depth = -1
@@ -88,7 +88,7 @@ module Pigeon
     end
 
     def add_peer(identity)
-      path = KeyPair.strip_headers(identity)
+      path = LocalIdentity.strip_headers(identity)
       store.transaction do
         store[PEER_NS].add(identity)
       end
@@ -96,7 +96,7 @@ module Pigeon
     end
 
     def remove_peer(identity)
-      path = KeyPair.strip_headers(identity)
+      path = LocalIdentity.strip_headers(identity)
       store.transaction do
         store[PEER_NS].delete(identity)
       end

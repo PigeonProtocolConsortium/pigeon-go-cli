@@ -3,7 +3,7 @@ require "spec_helper"
 RSpec.describe Pigeon::Message do
   before(:each) do
     Pigeon::Storage.reset
-    Pigeon::KeyPair.reset
+    Pigeon::LocalIdentity.reset
   end
 
   def create_message(params)

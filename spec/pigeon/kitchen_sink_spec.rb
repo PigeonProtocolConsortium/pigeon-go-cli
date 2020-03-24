@@ -2,9 +2,9 @@ require "spec_helper"
 
 RSpec.describe "Kitch sink spec" do
   it "does everything" do
-    kp = Pigeon::KeyPair.new()
+    kp = Pigeon::LocalIdentity.new()
     kp.save!
-    Pigeon::KeyPair.current.public_key
+    Pigeon::LocalIdentity.current.public_key
     # ./pigeon-cli identity new
     # ./pigeon-cli identity show
     # cat scratchpad.jpg | ./pigeon-cli blob set

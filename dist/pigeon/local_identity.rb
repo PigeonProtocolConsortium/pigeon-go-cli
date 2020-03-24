@@ -1,8 +1,11 @@
 module Pigeon
-  # This is a wrapper around the `ed25519` gem to
+  # A public and private key pair that represents the local
+  # user who "owns" the database.
+  #
+  # Provides a wrapper around the `ed25519` gem to
   # help us maintain our sanity when the Gem's API
   # changes.
-  class KeyPair
+  class LocalIdentity
     def self.reset
       @current = nil
     end

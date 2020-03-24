@@ -46,7 +46,7 @@ RSpec.describe Pigeon::Lexer do
 
   before(:each) do
     Pigeon::Storage.reset
-    Pigeon::KeyPair.reset
+    Pigeon::LocalIdentity.reset
   end
 
   it "tokenizes a bundle" do

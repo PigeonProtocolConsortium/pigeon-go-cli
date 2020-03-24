@@ -3,7 +3,7 @@ module Pigeon
     def self.create(file_path = DEFAULT_BUNDLE_PATH)
       s = Pigeon::Storage.current
       last = s.message_count
-      author = Pigeon::KeyPair.current
+      author = Pigeon::LocalIdentity.current
       range = (0...last).to_a
       content = range
         .map { |depth| s.get_message_by_depth(author, depth) }

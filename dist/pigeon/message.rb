@@ -4,13 +4,13 @@ module Pigeon
   class Message
     attr_reader :author, :kind, :body, :signature, :depth, :prev
 
-    def self.publish(draft, author: KeyPair.current)
-      msg = self.new(author: KeyPair.current,
+    def self.publish(draft, author: LocalIdentity.current)
+      msg = self.new(author: LocalIdentity.current,
                      kind: draft.kind,
                      body: draft.body)
       # We might need to add conditional logic here
       # Currently YAGNI since all Drafts we handle today
-      # are authored by KeyPair.current
+      # are authored by LocalIdentity.current
       draft.discard
       msg
     end

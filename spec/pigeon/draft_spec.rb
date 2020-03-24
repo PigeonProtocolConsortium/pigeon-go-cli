@@ -11,7 +11,7 @@ RSpec.describe Pigeon::Draft do
 
   before(:each) do
     Pigeon::Storage.reset
-    Pigeon::KeyPair.reset
+    Pigeon::LocalIdentity.reset
   end
 
   MSG = [
@@ -25,7 +25,7 @@ RSpec.describe Pigeon::Draft do
   ].join("\n")
 
   it "renders a message" do
-    pk = Pigeon::KeyPair.current.public_key
+    pk = Pigeon::LocalIdentity.current.public_key
     actual = message.render
     expected = MSG.gsub("___", pk)
     expect(actual).to start_with(expected)

@@ -11,14 +11,14 @@ RSpec.describe Pigeon::MessageSerializer do
   BOTTOM_HALF = "signature XYZ.sig.sha256"
   EXPECTED_DRAFT = TOP_HALF + BOTTOM_HALF
 
-  class FakeKeypair
+  class FakeLocalIdentity
     def self.public_key
       "FAKE_AUTHOR"
     end
   end
 
   it "renders a draft" do
-    args = [FakeKeypair,
+    args = [FakeLocalIdentity,
             { foo: "bar".inspect },
             "FAKE_KIND",
             23,

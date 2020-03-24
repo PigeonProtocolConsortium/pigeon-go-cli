@@ -11,14 +11,39 @@ module Pigeon
     end
 
     def parse()
+      @tokens.each_with_index do |token, i|
+        case token.first
+        when :AUTHOR then set(:author, token.last)
+        when :KIND then set(:kind, token.last)
+        when :DEPTH then set(:depth, token.last)
+        when :PREV then set(:prev, token.last)
+        when :HEADER_END then set(:body, {})
+        when :BODY_ENTRY then set(token[1], token[2], @scratchpad[:body])
+        when :BODY_END then nil
+        when :SIGNATURE then set(:signature, token.last)
+        when :MESSAGE_END then finish_this_message!
+        end
+      end
+      @results
     end
 
     private
 
-    def collect_tokens
+    def finish_this_message!
+      # Step 1: Create a message
+      # Step 2: Verify message
+      # Step 3: Push current scratchpad onto `results` array
+      # Step 4: Reset @scratchpad to empty hash.
+      @scratchpad = {}
+      raise "See steps above."
     end
 
-    def validate_message
+    def set(key, value, hash = @scratchpad)
+      if hash[key]
+        raise "Double entry detected: #{key}"
+      else
+        hash[key] = value
+      end
     end
   end
 end

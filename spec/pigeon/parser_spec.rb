@@ -10,7 +10,9 @@ RSpec.describe Pigeon::Lexer do
 
   it "parses tokens" do
     results = Pigeon::Parser.parse(tokens)
-    expect(results.length).to e(2)
+    expect(results.length).to eq(2)
+    expect(results.first).to be_kind_of(Pigeon::Message)
+    expect(results.last).to be_kind_of(Pigeon::Message)
   end
 
   it "crashes on forged messages"

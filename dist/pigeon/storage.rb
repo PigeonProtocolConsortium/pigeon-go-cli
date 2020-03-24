@@ -12,9 +12,10 @@ module Pigeon
     end
 
     def get_message_by_depth(author, depth)
+      raise "Expected string, got #{author.class}" unless author.is_a?(String) # Delete later
       store.transaction do
         # Map<[author(str), depth(int)], Signature>
-        store[DEPTH_INDEX_NS][[author.public_key, depth]]
+        store[DEPTH_INDEX_NS][[author, depth]]
       end
     end
 

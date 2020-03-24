@@ -30,12 +30,9 @@ module Pigeon
     private
 
     def finish_this_message!
-      # Step 1: Create a message
-      # Step 2: Verify message
-      # Step 3: Push current scratchpad onto `results` array
-      # Step 4: Reset @scratchpad to empty hash.
+      @scratchpad.freeze
+      @results.push(Message.ingest(**@scratchpad))
       @scratchpad = {}
-      raise "See steps above."
     end
 
     def set(key, value, hash = @scratchpad)

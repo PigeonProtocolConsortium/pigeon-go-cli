@@ -4,6 +4,7 @@ module Pigeon
   class Message
     attr_reader :author, :kind, :body, :signature, :depth, :prev
 
+    # Author a new message.
     def self.publish(draft, author: LocalIdentity.current)
       msg = self.new(author: LocalIdentity.current,
                      kind: draft.kind,
@@ -15,6 +16,17 @@ module Pigeon
       msg
     end
 
+    # Store a message that someone (not the LocalIdentity)
+    # has authored.
+    def self.ingest(author:, body:, depth:, kind:, prev:, signature:)
+      message = new(author: author,
+                    kind: kind,
+                    body: body,
+                    signature: signature)
+      message.verify!
+      message.save
+    end
+
     def render
       template.render.chomp
     end
@@ -24,11 +36,17 @@ module Pigeon
       "#{MESSAGE_SIGIL}#{sha256}#{BLOB_FOOTER}"
     end
 
+    def verify!
+      verify_depth
+      verify_prev
+      verify_signature
+    end
+
     private
 
-    def template
-      @template ||= MessageSerializer.new(self)
-    end
+    def verify_depth; raise "WIP"; end
+    def verify_prev; raise "WIP"; end
+    def verify_signature; raise "WIP"; end
 
     def initialize(author:, kind:, body:, signature: nil)
       raise MISSING_BODY if body.empty?
@@ -42,6 +60,10 @@ module Pigeon
       @prev = store.get_message_by_depth(@author, @depth - 1)
       self.freeze
       store.save_message(self)
+    end
+
+    def template
+      @template ||= MessageSerializer.new(self)
     end
 
     def calculate_signature

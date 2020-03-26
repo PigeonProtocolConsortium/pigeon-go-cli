@@ -6,7 +6,7 @@ module Pigeon
       author = Pigeon::LocalIdentity.current
       range = (0...last).to_a
       content = range
-        .map { |depth| s.get_message_by_depth(author, depth) }
+        .map { |depth| s.get_message_by_depth(author.public_key, depth) }
         .map { |multihash| s.find_message(multihash) }
         .map { |message| message.render }
         .join(BUNDLE_MESSAGE_SEPARATOR)

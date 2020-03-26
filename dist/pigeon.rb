@@ -55,6 +55,7 @@ module Pigeon
 end
 
 require_relative File.join("pigeon", "local_identity.rb")
+require_relative File.join("pigeon", "remote_identity.rb")
 require_relative File.join("pigeon", "storage.rb")
 require_relative File.join("pigeon", "draft_serializer.rb")
 require_relative File.join("pigeon", "message_serializer.rb")

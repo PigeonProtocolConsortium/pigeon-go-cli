@@ -19,7 +19,7 @@ module Pigeon
     # Store a message that someone (not the LocalIdentity)
     # has authored.
     def self.ingest(author:, body:, depth:, kind:, prev:, signature:)
-      message = new(author: author,
+      message = new(author: RemoteIdentity.new(author),
                     kind: kind,
                     body: body,
                     signature: signature)
@@ -57,13 +57,13 @@ module Pigeon
       store = Pigeon::Storage.current
       @depth = store.message_count
       @signature = signature || calculate_signature
-      @prev = store.get_message_by_depth(@author, @depth - 1)
+      @prev = store.get_message_by_depth(@author.public_key, @depth - 1)
       self.freeze
       store.save_message(self)
     end
 
     def template
-      @template ||= MessageSerializer.new(self)
+      MessageSerializer.new(self)
     end
 
     def calculate_signature

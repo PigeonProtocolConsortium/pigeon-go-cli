@@ -11,11 +11,11 @@ module Pigeon
       @current ||= self.new
     end
 
-    def get_message_by_depth(author, depth)
-      raise "Expected string, got #{author.class}" unless author.is_a?(String) # Delete later
+    def get_message_by_depth(multihash, depth)
+      raise "Expected string, got #{multihash.class}" unless multihash.is_a?(String) # Delete later
       store.transaction do
-        # Map<[author(str), depth(int)], Signature>
-        store[DEPTH_INDEX_NS][[author, depth]]
+        # Map<[multihash(str), depth(int)], Signature>
+        store[DEPTH_INDEX_NS][[multihash, depth]]
       end
     end
 

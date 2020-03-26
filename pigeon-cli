@@ -148,7 +148,7 @@ module Pigeon
     def last
       me = Pigeon::LocalIdentity.current
       store = Pigeon::Storage.current
-      multihash = store.get_message_by_depth(me, store.message_count - 1)
+      multihash = store.get_message_by_depth(me.public_key, store.message_count - 1)
       puts multihash
     end
   end

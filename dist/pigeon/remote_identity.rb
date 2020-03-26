@@ -9,8 +9,12 @@ module Pigeon
     attr_reader :public_key
     def initialize(multihash)
       b64 = Base64.urlsafe_encode64(multihash)
-
       @public_key = [HEADER, b64, FOOTER].join("")
+    end
+
+    def verify(signature, string)
+      binding.pry
+      raise "TODO"
     end
   end
 end

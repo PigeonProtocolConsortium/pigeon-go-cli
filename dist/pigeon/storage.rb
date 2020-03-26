@@ -19,6 +19,10 @@ module Pigeon
       end
     end
 
+    def get_message_count_for(author_multihash)
+      store.transaction(true) { store[COUNT_INDEX_NS][author_multihash] || 0 }
+    end
+
     def message_count
       store.transaction do
         store[MESG_NS].count
@@ -130,6 +134,7 @@ module Pigeon
         store[BLOB_NS] ||= {}
         store[CONF_NS] ||= {}
         store[MESG_NS] ||= {}
+        store[COUNT_INDEX_NS] ||= {}
         store[BLCK_NS] ||= Set.new
         store[PEER_NS] ||= Set.new
       end
@@ -158,6 +163,8 @@ module Pigeon
       # not lying about its depth?
       key = [message.author.public_key, message.depth]
       store[DEPTH_INDEX_NS][key] = message.multihash
+      store[COUNT_INDEX_NS][message.author] ||= 0
+      store[COUNT_INDEX_NS][message.author] += 1
     end
   end
 end

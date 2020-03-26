@@ -3,7 +3,8 @@ require "digest"
 module Pigeon
   class Message
     attr_reader :author, :kind, :body, :signature, :depth, :prev
-
+    class VerificationError < StandardError; end
+    VERFIY_ERROR = "Expected field %s to equal %s. Got: %s"
     # Author a new message.
     def self.publish(draft, author: LocalIdentity.current)
       msg = self.new(author: LocalIdentity.current,
@@ -37,16 +38,36 @@ module Pigeon
     end
 
     def verify!
-      verify_depth
-      verify_prev
+      verify_depth_prev_and_depth
       verify_signature
     end
 
     private
 
-    def verify_depth; raise "WIP"; end
-    def verify_prev; raise "WIP"; end
-    def verify_signature; raise "WIP"; end
+    def assert(field, actual, expected)
+      unless actual == expected
+        message = VERFIY_ERROR % [field, actual, expected]
+        raise VerificationError, message
+      end
+    end
+
+    def verify_depth_prev_and_depth
+      store = Pigeon::Storage.current
+      count = store.get_message_count_for(self.author)
+      if count == 0
+        assert("depth", self.depth, 0)
+        assert("prev", self.prev, nil)
+      else
+        # Make sure the `depth` prop is equal to count + 1
+        # Make sure the `prev` prop is equal to
+        #   message_by_depth(author, (depth - 1))
+        binding.pry
+      end
+    end
+
+    def verify_signature
+      author.verify(signature, template.render_without_signature)
+    end
 
     def initialize(author:, kind:, body:, signature: nil)
       raise MISSING_BODY if body.empty?

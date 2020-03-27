@@ -3,7 +3,9 @@ require "digest"
 module Pigeon
   class Message
     attr_reader :author, :kind, :body, :signature, :depth, :prev
+
     class VerificationError < StandardError; end
+
     VERFIY_ERROR = "Expected field %s to equal %s. Got: %s"
     # Author a new message.
     def self.publish(draft, author: LocalIdentity.current)
@@ -66,7 +68,8 @@ module Pigeon
     end
 
     def verify_signature
-      author.verify(signature, template.render_without_signature)
+      tpl = template.render_without_signature
+      Helpers.verify_string(author, signature, tpl)
     end
 
     def initialize(author:, kind:, body:, signature: nil)

@@ -43,10 +43,6 @@ module Pigeon
       return b64 + SIG_FOOTER
     end
 
-    def verify(signature, string)
-      raise "TODO"
-    end
-
     def save!
       Pigeon::Storage.current.set_config(SEED_CONFIG_KEY, @seed)
       self

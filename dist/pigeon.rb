@@ -60,15 +60,17 @@ module Pigeon
   # /Constants for internal use only
 
   class Helpers
+    def self.verify_string(identity, signature, string)
+      key = Ed25519::VerifyKey.new(decode_multihash(identity.public_key))
+      raw_sig = decode_multihash(signature)
+      key.verify(raw_sig, string)
+    end
+
     def self.decode_multihash(string)
-      case string[0]
-      when BLOB_SIGIL, MESSAGE_SIGIL, IDENTITY_SIGIL
-        inner = string[1..-1].gsub(FOOTERS_REGEX, "")
-        Base64.urlsafe_decode64(inner)
+      if string[SIG_RANGE] == SIG_FOOTER
+        return Base64.urlsafe_decode64(string.gsub(SIG_FOOTER, ""))
       else
-        if signature[SIG_RANGE] == SIG_FOOTER
-          Base64.urlsafe_decode64(signature.gsub(SIG_FOOTER, ""))
-        end
+        return Base64.urlsafe_decode64(string[1..].gsub(FOOTERS_REGEX, ""))
       end
     end
   end

@@ -9,13 +9,7 @@ module Pigeon
     attr_reader :public_key
 
     def initialize(multihash)
-      b64 = Base64.urlsafe_encode64(multihash)
-      @public_key = [IDENTITY_SIGIL, b64, IDENTITY_FOOTER].join("")
-    end
-
-    def verify(signature, string)
-      binding.pry
-      raise "TODO"
+      @public_key = multihash
     end
   end
 end

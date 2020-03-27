@@ -34,7 +34,7 @@ module Pigeon
       bytes = @signing_key.verify_key.to_bytes
       b64 = Base64.urlsafe_encode64(bytes)
 
-      @public_key ||= [HEADER, b64, FOOTER].join("")
+      @public_key ||= [IDENTITY_SIGIL, b64, IDENTITY_FOOTER].join("")
     end
 
     def sign(string)
@@ -50,12 +50,6 @@ module Pigeon
     def save!
       Pigeon::Storage.current.set_config(SEED_CONFIG_KEY, @seed)
       self
-    end
-
-    private
-
-    def self.strip_headers(identity)
-      identity.sub(HEADER, "").sub(FOOTER, "")
     end
   end
 end

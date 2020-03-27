@@ -36,7 +36,11 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] pigeon message find
  - [X] pigeon message find-all for local feed.
  - [ ] pigeon bundle consume (We are minimally feature complete at this point)
+ - [ ] Fix the diagram in the spec document
+ - [ ] Put all the [HEADER, string, FOOTER].join("") nonsense into Pigeon::Helpers
  - [ ] Change all the `{40,90}` values in ::Lexer to real length values
+ - [ ] Update the bundles.md document once `bundle consume` works.
+ - [ ] Add `.pigeon` file extensions
  - [ ] Rename `message find` to `message read`, since other finders return a multihash.
  - [ ] Don't allow carriage return in `kind`. Write a test for this.
  - [ ] Create regexes in ::Lexer using strings and Regexp.new() for cleaner regexes.

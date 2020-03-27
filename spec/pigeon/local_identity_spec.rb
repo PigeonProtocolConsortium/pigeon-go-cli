@@ -25,12 +25,12 @@ RSpec.describe Pigeon::LocalIdentity do
   it "strips headers" do
     whatever = "af697f3063d46fe9546f651c08c378f8"
     example = [
-      Pigeon::HEADER,
+      Pigeon::IDENTITY_SIGIL,
       whatever,
-      Pigeon::FOOTER,
+      Pigeon::IDENTITY_FOOTER,
     ].join("")
-    result = Pigeon::LocalIdentity.strip_headers(example)
-    expect(result).to eq(whatever)
+    result = Pigeon::Helpers.decode_multihash(example)
+    expect(result).to eq(Base64.urlsafe_decode64(whatever))
   end
 
   it "caches LocalIdentity.current" do

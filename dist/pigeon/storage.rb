@@ -93,7 +93,7 @@ module Pigeon
     end
 
     def add_peer(identity)
-      path = LocalIdentity.strip_headers(identity)
+      path = Helpers.decode_multihash(identity)
       store.transaction do
         store[PEER_NS].add(identity)
       end
@@ -101,7 +101,7 @@ module Pigeon
     end
 
     def remove_peer(identity)
-      path = LocalIdentity.strip_headers(identity)
+      path = Helpers.decode_multihash(identity)
       store.transaction do
         store[PEER_NS].delete(identity)
       end

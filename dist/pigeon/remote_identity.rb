@@ -7,9 +7,10 @@ module Pigeon
   # changes.
   class RemoteIdentity
     attr_reader :public_key
+
     def initialize(multihash)
       b64 = Base64.urlsafe_encode64(multihash)
-      @public_key = [HEADER, b64, FOOTER].join("")
+      @public_key = [IDENTITY_SIGIL, b64, IDENTITY_FOOTER].join("")
     end
 
     def verify(signature, string)

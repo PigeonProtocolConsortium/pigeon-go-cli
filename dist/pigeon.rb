@@ -7,7 +7,6 @@ require "securerandom"
 require "pry"
 
 module Pigeon
-  HEADER, FOOTER = ["@", ".ed25519"]
   SEED_CONFIG_KEY = "SEED"
   VERSION = "0.0.1"
   TPL_DIR = "views"
@@ -45,6 +44,7 @@ module Pigeon
   MESSAGE_SIGIL = "%"
   IDENTITY_SIGIL = "@"
   STRING_SIGIL = "\""
+  IDENTITY_FOOTER = ".ed25519"
   BLOB_FOOTER = ".sha256"
   SIG_FOOTER = ".sig.ed25519"
 
@@ -53,6 +53,25 @@ module Pigeon
   NO_DRAFT_FOUND = "NO DRAFT FOUND"
   STRING_KEYS_ONLY = "String keys only"
   MISSING_BODY = "BODY CANT BE EMPTY"
+
+  # Constants for internal use only:
+  FOOTERS_REGEX = Regexp.new("#{SIG_FOOTER}|#{IDENTITY_FOOTER}")
+  SIG_RANGE = (SIG_FOOTER.length * -1)..-1
+  # /Constants for internal use only
+
+  class Helpers
+    def self.decode_multihash(string)
+      case string[0]
+      when BLOB_SIGIL, MESSAGE_SIGIL, IDENTITY_SIGIL
+        inner = string[1..-1].gsub(FOOTERS_REGEX, "")
+        Base64.urlsafe_decode64(inner)
+      else
+        if signature[SIG_RANGE] == SIG_FOOTER
+          Base64.urlsafe_decode64(signature.gsub(SIG_FOOTER, ""))
+        end
+      end
+    end
+  end
 end
 
 require_relative File.join("pigeon", "local_identity.rb")

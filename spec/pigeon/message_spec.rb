@@ -61,17 +61,16 @@ RSpec.describe Pigeon::Message do
 
   it "creates a chain of messages" do
     all = []
-    1.upto(5) do |n|
-      expected_depth = n - 1
+    0.upto(4) do |expected_depth|
       draft1 = Pigeon::Draft.create(kind: "unit_test")
-      draft1["description"] = "Message number #{n}"
+      draft1["description"] = "Message number #{expected_depth}"
       message = Pigeon::Message.publish(draft1)
       all.push(message)
       expect(message.depth).to eq(expected_depth)
-      if n > 1
-        expect(message.prev).to eq(all[n - 2].multihash)
-      else
+      if expected_depth == 0
         expect(message.prev).to be nil
+      else
+        expect(message.prev).to eq(all[expected_depth - 1].multihash)
       end
     end
   end

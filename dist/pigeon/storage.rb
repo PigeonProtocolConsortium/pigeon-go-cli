@@ -13,39 +13,31 @@ module Pigeon
 
     def get_message_by_depth(multihash, depth)
       raise "Expected string, got #{multihash.class}" unless multihash.is_a?(String) # Delete later
-      store.transaction do
-        # Map<[multihash(str), depth(int)], Signature>
-        # Wait what? Why is there a depth and count
-        # index??
-        store[MESSAGE_BY_DEPTH_NS][[multihash, depth]]
-      end
+      # Map<[multihash(str), depth(int)], Signature>
+      key = [multihash, depth].join(".")
+      read { store[MESSAGE_BY_DEPTH_NS][key] }
     end
 
     # `nil` means "none"
     #
-    def get_message_count_for(author_multihash)
-      store.transaction(true) do
-        count = store[COUNT_INDEX_NS][author_multihash] || 0
-      end
+    def get_message_count_for(mhash)
+      raise "Expected string, got #{mhash.class}" unless mhash.is_a?(String) # Delete later
+      read { store[COUNT_INDEX_NS][mhash] || 0 }
     end
 
     def message_count
-      store.transaction do
-        store[MESG_NS].count
-      end
+      read { store[MESG_NS].count }
     end
 
     def save_message(msg)
-      store.transaction do
+      write do
         insert_and_update_index(msg)
         msg
       end
     end
 
     def find_message(multihash)
-      store.transaction(true) do
-        store[MESG_NS].fetch(multihash)
-      end
+      read { store[MESG_NS].fetch(multihash) }
     end
 
     def find_all
@@ -63,21 +55,15 @@ module Pigeon
     end
 
     def set_config(key, value)
-      store.transaction do
-        store[CONF_NS][key] = value
-      end
+      write { store[CONF_NS][key] = value }
     end
 
     def delete_config(key)
-      store.transaction do
-        store[CONF_NS].delete(key)
-      end
+      write { store[CONF_NS].delete(key) }
     end
 
     def get_config(key)
-      store.transaction(true) do
-        store[CONF_NS][key]
-      end
+      read { store[CONF_NS][key] }
     end
 
     def set_blob(data)
@@ -85,64 +71,50 @@ module Pigeon
       b64_digest = Base64.urlsafe_encode64(raw_digest)
       multihash = [BLOB_SIGIL, b64_digest, BLOB_FOOTER].join("")
 
-      store.transaction do
-        store[BLOB_NS][multihash] = data
-      end
+      write { store[BLOB_NS][multihash] = data }
 
       multihash
     end
 
     def get_blob(blob_multihash)
-      store.transaction(true) do
-        store[BLOB_NS][blob_multihash]
-      end
+      read { store[BLOB_NS][blob_multihash] }
     end
 
     def add_peer(identity)
       path = Helpers.decode_multihash(identity)
-      store.transaction do
-        store[PEER_NS].add(identity)
-      end
+      write { store[PEER_NS].add(identity) }
       identity
     end
 
     def remove_peer(identity)
       path = Helpers.decode_multihash(identity)
-      store.transaction do
-        store[PEER_NS].delete(identity)
-      end
+      write { store[PEER_NS].delete(identity) }
       identity
     end
 
     def block_peer(identity)
       remove_peer(identity)
-      store.transaction do
-        store[BLCK_NS].add(identity)
-      end
+      write { store[BLCK_NS].add(identity) }
       identity
     end
 
     def all_peers
-      store.transaction(true) do
-        store[PEER_NS].to_a
-      end
+      read { store[PEER_NS].to_a }
     end
 
     def all_blocks
-      store.transaction(true) do
-        store[BLCK_NS].to_a
-      end
+      read { store[BLCK_NS].to_a }
     end
 
     def bootstrap
-      store.transaction do
+      write do
         # Wait what? Why is there a depth and count
         # index??
         store[MESSAGE_BY_DEPTH_NS] ||= {}
+        store[COUNT_INDEX_NS] ||= {}
         store[BLOB_NS] ||= {}
         store[CONF_NS] ||= {}
         store[MESG_NS] ||= {}
-        store[COUNT_INDEX_NS] ||= {}
         store[BLCK_NS] ||= Set.new
         store[PEER_NS] ||= Set.new
       end
@@ -170,11 +142,17 @@ module Pigeon
       #         message
       # SECURITY AUDIT: How can we be certain the message is
       # not lying about its depth?
-      key = [pub_key, message.depth]
+      key = [pub_key, message.depth].join(".")
       store[MESSAGE_BY_DEPTH_NS][key] = message.multihash
       store[COUNT_INDEX_NS][pub_key] ||= 0
       store[COUNT_INDEX_NS][pub_key] += 1
-      puts store[COUNT_INDEX_NS].to_json
     end
+
+    def transaction(is_read_only)
+      store.transaction(is_read_only) { yield }
+    end
+
+    def write(&blk); transaction(false, &blk); end
+    def read(&blk); transaction(true, &blk); end
   end
 end

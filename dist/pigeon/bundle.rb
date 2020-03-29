@@ -14,6 +14,7 @@ module Pigeon
     end
 
     def self.ingest(file_path)
+      raise "???"
     end
 
     private

@@ -15,12 +15,18 @@ module Pigeon
       raise "Expected string, got #{multihash.class}" unless multihash.is_a?(String) # Delete later
       store.transaction do
         # Map<[multihash(str), depth(int)], Signature>
-        store[DEPTH_INDEX_NS][[multihash, depth]]
+        # Wait what? Why is there a depth and count
+        # index??
+        store[MESSAGE_BY_DEPTH_NS][[multihash, depth]]
       end
     end
 
+    # `nil` means "none"
+    #
     def get_message_count_for(author_multihash)
-      store.transaction(true) { store[COUNT_INDEX_NS][author_multihash] || 0 }
+      store.transaction(true) do
+        count = store[COUNT_INDEX_NS][author_multihash] || 0
+      end
     end
 
     def message_count
@@ -130,7 +136,9 @@ module Pigeon
 
     def bootstrap
       store.transaction do
-        store[DEPTH_INDEX_NS] ||= {}
+        # Wait what? Why is there a depth and count
+        # index??
+        store[MESSAGE_BY_DEPTH_NS] ||= {}
         store[BLOB_NS] ||= {}
         store[CONF_NS] ||= {}
         store[MESG_NS] ||= {}
@@ -153,6 +161,7 @@ module Pigeon
     end
 
     def insert_and_update_index(message)
+      pub_key = message.author.public_key
       # STEP 1: Update MESG_NS, the main storage spot.
       store[MESG_NS][message.multihash] = message
 
@@ -161,10 +170,11 @@ module Pigeon
       #         message
       # SECURITY AUDIT: How can we be certain the message is
       # not lying about its depth?
-      key = [message.author.public_key, message.depth]
-      store[DEPTH_INDEX_NS][key] = message.multihash
-      store[COUNT_INDEX_NS][message.author] ||= 0
-      store[COUNT_INDEX_NS][message.author] += 1
+      key = [pub_key, message.depth]
+      store[MESSAGE_BY_DEPTH_NS][key] = message.multihash
+      store[COUNT_INDEX_NS][pub_key] ||= 0
+      store[COUNT_INDEX_NS][pub_key] += 1
+      puts store[COUNT_INDEX_NS].to_json
     end
   end
 end

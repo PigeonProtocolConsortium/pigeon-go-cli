@@ -13,6 +13,8 @@ RSpec.describe Pigeon::Message do
   end
 
   it "creates a bundle" do
+    p = Pigeon::DEFAULT_BUNDLE_PATH
+    File.delete(p) if File.file?(p)
     expected_bundle = (1..10)
       .to_a
       .map do |n| { "foo" => ["bar", 123, SecureRandom.uuid].sample } end

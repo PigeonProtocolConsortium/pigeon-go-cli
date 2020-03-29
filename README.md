@@ -35,6 +35,7 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] Move literals into `Pigeon` module as constants, again.
  - [X] pigeon message find
  - [X] pigeon message find-all for local feed.
+ - [ ] Use URNs instead of multihash?
  - [ ] pigeon bundle consume (We are minimally feature complete at this point)
  - [ ] Fix the diagram in the spec document
  - [ ] Put all the [HEADER, string, FOOTER].join("") nonsense into Pigeon::Helpers

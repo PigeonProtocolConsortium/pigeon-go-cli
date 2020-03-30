@@ -39,7 +39,7 @@ RSpec.describe Pigeon::Message do
     expect(message.body).to eq(draft.body)
     expect(message.depth).to eq(0)
     expect(message.kind).to eq("unit_test")
-    expect(message.prev).to eq(nil)
+    expect(message.prev).to eq(Pigeon::EMPTY_MESSAGE)
     expect(message.signature.include?(Pigeon::SIG_FOOTER)).to eq(true)
     expect(message.signature.length).to be > 99
     actual = message.render
@@ -68,7 +68,7 @@ RSpec.describe Pigeon::Message do
       all.push(message)
       expect(message.depth).to eq(expected_depth)
       if expected_depth == 0
-        expect(message.prev).to be nil
+        expect(message.prev).to eq(Pigeon::EMPTY_MESSAGE)
       else
         expect(message.prev).to eq(all[expected_depth - 1].multihash)
       end
@@ -78,6 +78,11 @@ RSpec.describe Pigeon::Message do
   it "verifies accuracy of hash chain" do
     m1 = create_message({ "a" => "b" })
     m2 = create_message({ "c" => "d" })
+    # ./dist/pigeon.rb:66:in `verify_string'
+    # ./dist/pigeon/message.rb:70:in `verify_signature'
+    # ./dist/pigeon/message.rb:47:in `verify!'
+    # ./dist/pigeon/message.rb:82:in `initialize'
+
     m3 = create_message({ "e" => "f" })
     m4 = create_message({ "g" => "h" })
     expect(m1.prev).to eq(nil)
@@ -109,6 +114,8 @@ RSpec.describe Pigeon::Message do
 
     expect(key1.seed).to eq(key2.seed)
     expect(sig1).to eq(sig2)
+    combinations = [[key1, sig1], [key1, sig2], [key2, sig1], [key2, sig2]]
+    combinations.map { |(key, sig)| key.verify_key.verify(sig, plaintext) }
 
     sig1_b64 = Base64.urlsafe_encode64(sig1) + Pigeon::SIG_FOOTER
     sig2_b64 = Base64.urlsafe_encode64(sig2) + Pigeon::SIG_FOOTER

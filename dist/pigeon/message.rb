@@ -9,13 +9,16 @@ module Pigeon
     VERFIY_ERROR = "Expected field `%s` to equal %s, got: %s"
     # Author a new message.
     def self.publish(draft)
+      author = LocalIdentity.current
       depth = Pigeon::Storage
         .current
-        .get_message_count_for(LocalIdentity.current.public_key)
-      msg = self.new(author: LocalIdentity.current,
+        .get_message_count_for(author.public_key)
+      count = store.get_message_count_for(author.public_key)
+      msg = self.new(author: author,
                      kind: draft.kind,
                      body: draft.body,
-                     depth: depth)
+                     depth: depth,
+                     prev: store.get_message_by_depth(author.public_key, count - 1))
       # We might need to add conditional logic here
       # Currently YAGNI since all Drafts we handle today
       # are authored by LocalIdentity.current
@@ -29,6 +32,7 @@ module Pigeon
       new(author: RemoteIdentity.new(author),
           kind: kind,
           body: body,
+          prev: prev,
           signature: signature,
           depth: depth)
     end
@@ -59,7 +63,7 @@ module Pigeon
 
     def verify_depth_prev_and_depth
       count = store.get_message_count_for(author.public_key)
-      expected_prev = store.get_message_by_depth(author.public_key, count - 1)
+      expected_prev = store.get_message_by_depth(author.public_key, count - 1) || Pigeon::EMPTY_MESSAGE
 
       assert("depth", depth, count)
       assert("prev", prev, expected_prev)
@@ -70,15 +74,14 @@ module Pigeon
       Helpers.verify_string(author, signature, tpl)
     end
 
-    def initialize(author:, kind:, body:, signature: nil, depth:)
+    def initialize(author:, kind:, body:, signature: nil, depth:, prev:)
       raise MISSING_BODY if body.empty?
       @author = author
       @kind = kind
       @body = body
-      # Side effects in a constructor? Hmm...
       @depth = depth
       @signature = author.is_a?(LocalIdentity) ? calculate_signature : signature
-      @prev = store.get_message_by_depth(@author.public_key, @depth - 1)
+      @prev = prev || Pigeon::EMPTY_MESSAGE
       verify!
       store.save_message(self)
     end
@@ -91,8 +94,12 @@ module Pigeon
       @author.sign(template.render_without_signature)
     end
 
-    def store
+    def self.store
       Pigeon::Storage.current
+    end
+
+    def store
+      self.class.store
     end
   end
 end

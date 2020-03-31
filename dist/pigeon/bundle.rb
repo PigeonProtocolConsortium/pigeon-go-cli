@@ -14,7 +14,9 @@ module Pigeon
     end
 
     def self.ingest(file_path)
-      raise "???"
+      bundle = File.read(file_path)
+      tokens = Pigeon::Lexer.tokenize(bundle)
+      Pigeon::Parser.parse(tokens)
     end
 
     private

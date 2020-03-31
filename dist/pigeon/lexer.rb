@@ -33,7 +33,6 @@ module Pigeon
     class LexError < StandardError; end
 
     def self.tokenize(bundle_string)
-      # TODO: Maybe move #tokeinze into constructor.
       new(bundle_string).tokenize
     end
 
@@ -122,7 +121,6 @@ module Pigeon
       # Reset the lexer to ingest the next entry.
       # If scanner.eos? == true, it will just terminate.
 
-      # This freezes everything:
       if scanner.scan(FOOTER_ENTRY)
         sig = scanner.matched.strip.gsub("signature ", "")
         @tokens << [:SIGNATURE, sig]

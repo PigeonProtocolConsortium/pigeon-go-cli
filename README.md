@@ -35,10 +35,11 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] Move literals into `Pigeon` module as constants, again.
  - [X] pigeon message find
  - [X] pigeon message find-all for local feed.
- - [ ] Fork detection?
+ - [X] pigeon bundle consume (We are minimally feature complete at this point)
+ - [X] Fix the diagram in the spec document
+ - [ ] 100% test coverage
  - [ ] Use URNs instead of multihash?
- - [ ] pigeon bundle consume (We are minimally feature complete at this point)
- - [ ] Fix the diagram in the spec document
+ - [ ] Fork detection?
  - [ ] Put all the [HEADER, string, FOOTER].join("") nonsense into Pigeon::Helpers
  - [ ] Change all the `{40,90}` values in ::Lexer to real length values
  - [ ] Update the bundles.md document once `bundle consume` works.

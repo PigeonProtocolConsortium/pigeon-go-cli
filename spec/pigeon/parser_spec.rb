@@ -6,7 +6,8 @@ RSpec.describe Pigeon::Lexer do
     Pigeon::LocalIdentity.reset
   end
 
-  let(:tokens) { Pigeon::Lexer.tokenize(File.read("./example.bundle")) }
+  let(:example_bundle) { File.read("./example.bundle") }
+  let(:tokens) { Pigeon::Lexer.tokenize(example_bundle) }
 
   it "parses tokens" do
     results = Pigeon::Parser.parse(tokens)
@@ -15,5 +16,11 @@ RSpec.describe Pigeon::Lexer do
     expect(results.last).to be_kind_of(Pigeon::Message)
   end
 
-  it "crashes on forged messages"
+  it "ingests and reconstructs a bundle" do
+    messages = Pigeon::Bundle.ingest("./example.bundle")
+    expect(messages.length).to eq(2)
+    expect(messages.map(&:class).uniq).to eq([Pigeon::Message])
+    re_bundled = messages.map(&:render).join("\n\n") + "\n"
+    expect(re_bundled).to eq(example_bundle)
+  end
 end

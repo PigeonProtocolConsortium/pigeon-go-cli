@@ -2,13 +2,13 @@ require "pstore"
 
 module Pigeon
   class Storage
+    def self.current
+      @current ||= self.new
+    end
+
     def self.reset
       File.delete(PIGEON_DB_PATH) if File.file?(PIGEON_DB_PATH)
       @current = nil
-    end
-
-    def self.current
-      @current ||= self.new
     end
 
     def get_message_by_depth(multihash, depth)
@@ -40,9 +40,8 @@ module Pigeon
       read { store[MESG_NS].fetch(multihash) }
     end
 
-    def find_all
+    def find_all(author = Pigeon::LocalIdentity.current)
       # TODO: Ability to pass an author ID to `find-all`
-      author = Pigeon::LocalIdentity.current
       store = Pigeon::Storage.current
       all = []
       depth = -1

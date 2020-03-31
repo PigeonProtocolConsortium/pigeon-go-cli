@@ -20,7 +20,7 @@ module Pigeon
                      body: draft.body,
                      depth: depth,
                      prev: prev)
-      msg.sign!
+      msg.save!
       draft.discard
       msg
     end
@@ -45,15 +45,11 @@ module Pigeon
       "#{MESSAGE_SIGIL}#{sha256}#{BLOB_FOOTER}"
     end
 
-    def verify!
+    def save!
+      calculate_signature
       verify_depth_prev_and_depth
       verify_signature
       self.freeze
-    end
-
-    def sign!
-      calculate_signature
-      verify!
       store.save_message(self)
       self
     end

@@ -45,4 +45,12 @@ RSpec.describe Pigeon::Storage do
     expect(s.all_blocks).to include(IDS[1])
     expect(s.all_blocks.count).to eq(1)
   end
+
+  it "finds all authored by a particular feed" do
+    ingested_messages = Pigeon::Bundle.ingest("./example.bundle")
+    author = ingested_messages.first.author.public_key
+    actual_messages = Pigeon::Storage.current.find_all(author)
+    search_results = Pigeon::Storage.current.find_all(author)
+    binding.pry
+  end
 end

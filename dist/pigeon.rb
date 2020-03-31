@@ -67,21 +67,7 @@ module Pigeon
       binary_key = decode_multihash(string_key)
       verify_key = Ed25519::VerifyKey.new(binary_key)
 
-      # puts "=" * 200
-      # puts string
-      # puts "=" * 200
-      # puts "binary_key: #{binary_key.inspect[0..150]}"
-      # puts "binary_signature: #{binary_signature.inspect[0..150]}"
-      # puts "identity: #{identity.inspect[0..150]}"
-      # puts "string_key: #{string_key.inspect[0..150]}"
-      # puts "string_signature: #{string_signature.inspect[0..150]}"
-      # puts "string: #{string.inspect[0..150]}"
-      # puts "verify_key: #{verify_key.inspect[0..150]}"
-
       verify_key.verify(binary_signature, string)
-      # rescue => e
-      #   key1 = identity.instance_variable_get(:@signing_key).verify_key
-      #   binding.pry
     end
 
     def self.decode_multihash(string)

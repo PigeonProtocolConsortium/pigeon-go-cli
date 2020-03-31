@@ -14,16 +14,13 @@ module Pigeon
         .current
         .get_message_count_for(author.public_key)
       count = store.get_message_count_for(author.public_key)
-      raise "TODO: Render a signature here"
+      prev = store.get_message_by_depth(author.public_key, count - 1)
       msg = self.new(author: author,
                      kind: draft.kind,
                      body: draft.body,
                      depth: depth,
-                     prev: store.get_message_by_depth(author.public_key, count - 1),
-                     signature: signature)
-      # We might need to add conditional logic here
-      # Currently YAGNI since all Drafts we handle today
-      # are authored by LocalIdentity.current
+                     prev: prev)
+      msg.sign!
       draft.discard
       msg
     end
@@ -54,6 +51,13 @@ module Pigeon
       self.freeze
     end
 
+    def sign!
+      calculate_signature
+      verify!
+      store.save_message(self)
+      self
+    end
+
     private
 
     def assert(field, actual, expected)
@@ -76,24 +80,23 @@ module Pigeon
       Helpers.verify_string(author, signature, tpl)
     end
 
-    def initialize(author:, kind:, body:, signature:, depth:, prev:)
+    def initialize(author:, kind:, body:, depth:, prev:, signature: nil)
       raise MISSING_BODY if body.empty?
       @author = author
-      @kind = kind
       @body = body
       @depth = depth
-      @signature = signature
+      @kind = kind
       @prev = prev || Pigeon::EMPTY_MESSAGE
-      verify!
-      store.save_message(self)
+      @signature = signature
+    end
+
+    def calculate_signature
+      return if @signature
+      @signature = author.sign(template.render_without_signature)
     end
 
     def template
       MessageSerializer.new(self)
-    end
-
-    def self.calculate_signature(author)
-      @author.sign(template.render_without_signature)
     end
 
     def self.store

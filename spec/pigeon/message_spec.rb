@@ -78,14 +78,10 @@ RSpec.describe Pigeon::Message do
   it "verifies accuracy of hash chain" do
     m1 = create_message({ "a" => "b" })
     m2 = create_message({ "c" => "d" })
-    # ./dist/pigeon.rb:66:in `verify_string'
-    # ./dist/pigeon/message.rb:70:in `verify_signature'
-    # ./dist/pigeon/message.rb:47:in `verify!'
-    # ./dist/pigeon/message.rb:82:in `initialize'
-
     m3 = create_message({ "e" => "f" })
     m4 = create_message({ "g" => "h" })
-    expect(m1.prev).to eq(nil)
+
+    expect(m1.prev).to eq(Pigeon::EMPTY_MESSAGE)
     expect(m2.prev).to be
     expect(m2.prev).to eq(m1.multihash)
     expect(m3.prev).to eq(m2.multihash)

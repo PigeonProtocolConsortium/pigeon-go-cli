@@ -60,6 +60,12 @@ module Pigeon
   # /Constants for internal use only
 
   class Helpers
+    def self.create_message(kind, params)
+      draft = Pigeon::Draft.create(kind: kind)
+      params.map { |(k, v)| draft[k] = v }
+      Pigeon::Message.publish(draft)
+    end
+
     def self.verify_string(identity, string_signature, string)
       binary_signature = decode_multihash(string_signature)
 

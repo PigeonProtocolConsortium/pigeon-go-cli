@@ -9,7 +9,7 @@ module Pigeon
     BLOB_VALUE = /&.{40,90}.sha256/
     NULL_VALUE = /NONE/
     STRG_VALUE = /".{1,64}"/
-    ALPHANUMERICISH = /[a-zA-Z\d\._]{1,64}/
+    ALPHANUMERICISH = /[a-zA-Z0-9_-]{1,64}/
     ALL_VALUES = [
       FEED_VALUE,
       MESG_VALUE,

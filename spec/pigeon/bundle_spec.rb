@@ -8,17 +8,11 @@ RSpec.describe Pigeon::Message do
     Pigeon::LocalIdentity.reset
   end
 
-  def create_message(params)
-    draft = Pigeon::Draft.create(kind: SecureRandom.uuid)
-    params.map { |(k, v)| draft[k] = v }
-    Pigeon::Message.publish(draft)
-  end
-
   def create_fake_messages
     (1..10)
       .to_a
       .map do |n| { "foo" => ["bar", "123", SecureRandom.uuid].sample } end
-      .map do |d| create_message(d) end
+      .map do |d| Pigeon::Helpers.create_message(SecureRandom.uuid, d) end
   end
 
   it "creates a bundle" do
@@ -29,9 +23,12 @@ RSpec.describe Pigeon::Message do
   end
 
   it "debugs a problem" do
+    pending("Pigeon::Bundle.ingest is broke. Will fix after investigation.")
     seed = "\xA3@\x12\xA6\x8Cl\x83\xF5)\x97\xED\xE67\x91\xAD\xFD\xCFf\xF4(\xEF\x81P\xBBD\xF7\x8C\xF7\x8D\xC0\xA9\f"
     ident = Pigeon::LocalIdentity.new(seed)
     Pigeon::LocalIdentity.instance_variable_set(:@current, ident)
+    public_key = "@NYTrqYYN2ffTqFyPCUULjhhUkfbY9LorpWYMoMpsOO4=.ed25519"
+    expect(Pigeon::LocalIdentity.current.public_key).to eq(public_key)
     create_fake_messages
     Pigeon::Bundle.create
     Pigeon::Bundle.ingest

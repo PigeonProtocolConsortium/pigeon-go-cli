@@ -34,7 +34,6 @@ RSpec.describe Pigeon::Message do
     Pigeon::LocalIdentity.instance_variable_set(:@current, ident)
     create_fake_messages
     Pigeon::Bundle.create
-    actual_bundle = File.read(Pigeon::DEFAULT_BUNDLE_PATH)
-    binding.pry
+    Pigeon::Bundle.ingest
   end
 end

@@ -3,12 +3,12 @@ module Pigeon
     attr_reader :bundle_string, :scanner, :tokens
     # TODO: Change all the `{40,90}` values in ::Lexer to real values
     # TODO: Create regexes using string and Regexp.new() for cleaner regexes.
-    FEED_VALUE = /@.{40,90}.ed25519/
+    FEED_VALUE = /@.{43,45}.ed25519/
     DEPTH_COUNT = /\d{1,7}/
     MESG_VALUE = /%.{40,90}.sha256/
     BLOB_VALUE = /&.{40,90}.sha256/
     NULL_VALUE = /NONE/
-    STRG_VALUE = /\".{1,64}\"/
+    STRG_VALUE = /".{1,64}"/
     ALPHANUMERICISH = /[a-zA-Z\d\._]{1,64}/
     ALL_VALUES = [
       FEED_VALUE,
@@ -57,8 +57,8 @@ module Pigeon
       @state = HEADER
     end
 
-    def flunk!
-      raise LexError, "Syntax error at #{scanner.pos}"
+    def flunk!(why)
+      raise LexError, "Syntax error at #{scanner.pos}. #{why}"
     end
 
     # This might be a mistake or uneccessary. NN 20 MAR 2020
@@ -98,7 +98,8 @@ module Pigeon
         @tokens << [:HEADER_END]
         return
       end
-      flunk!
+
+      flunk!("Failed to read header field.")
     end
 
     def do_body
@@ -114,7 +115,7 @@ module Pigeon
         return
       end
 
-      flunk!
+      flunk!("Failed to read body field.")
     end
 
     def do_footer

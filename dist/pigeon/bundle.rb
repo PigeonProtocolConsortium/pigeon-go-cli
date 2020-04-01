@@ -13,7 +13,7 @@ module Pigeon
       File.write(file_path, content + CR)
     end
 
-    def self.ingest(file_path)
+    def self.ingest(file_path = DEFAULT_BUNDLE_PATH)
       bundle = File.read(file_path)
       tokens = Pigeon::Lexer.tokenize(bundle)
       Pigeon::Parser.parse(tokens).map(&:save!)

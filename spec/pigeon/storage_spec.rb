@@ -4,8 +4,13 @@ RSpec.describe Pigeon::Storage do
   LOGO_BLOB = File.read("./logo.png")
   IDS = %w(@_TlC2z3FT4fimecC4eytrBhOwhLUZsVBZEZriBO9cWs=.ed25519
            @28FyT7evjcYrrwngr8G2V1HZ0ODK0VPsFctDEZwfZJc=.ed25519)
-  let(:s) do
+
+  before(:each) do
     Pigeon::Storage.reset
+    Pigeon::LocalIdentity.reset
+  end
+
+  let(:s) do
     Pigeon::Storage.current
   end
 

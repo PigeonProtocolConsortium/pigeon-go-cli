@@ -31,6 +31,7 @@ module Pigeon
 
     def save_message(msg)
       write do
+        return msg if store[MESG_NS][msg.multihash]
         insert_and_update_index(msg)
         msg
       end

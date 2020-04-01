@@ -39,13 +39,10 @@ module Pigeon
       when BLOB_SIGIL, MESSAGE_SIGIL, IDENTITY_SIGIL, STRING_SIGIL
         self.body[key] = value
       else
-        # JSON.stringify calls were done in the name of time
-        # and as a convinience for values like
-        # bools and ints
         if value.is_a?(String)
           self.body[key] = value.inspect
         else
-          self.body[key] = value.to_json
+          raise "Unexpected value! Did you wrap it in quotes?: #{value}"
         end
       end
       self.save

@@ -5,7 +5,6 @@ RSpec.describe Pigeon::Storage do
   IDS = %w(@_TlC2z3FT4fimecC4eytrBhOwhLUZsVBZEZriBO9cWs=.ed25519
            @28FyT7evjcYrrwngr8G2V1HZ0ODK0VPsFctDEZwfZJc=.ed25519)
   let(:s) do
-    # FileUtils.rm_r(Pigeon::PIGEON_DB_PATH)
     Pigeon::Storage.reset
     Pigeon::Storage.current
   end
@@ -51,6 +50,5 @@ RSpec.describe Pigeon::Storage do
     author = ingested_messages.first.author.public_key
     actual_messages = Pigeon::Storage.current.find_all(author)
     search_results = Pigeon::Storage.current.find_all(author)
-    binding.pry
   end
 end

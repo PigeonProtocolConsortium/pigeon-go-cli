@@ -37,25 +37,25 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] pigeon message find-all for local feed.
  - [X] pigeon bundle consume (We are minimally feature complete at this point)
  - [X] Fix the diagram in the spec document
- - [ ] 100% test coverage
+ - [X] Validate inputs for `Draft#[]=`.
+ - [X] Put all the [HEADER, string, FOOTER].join("") nonsense into Pigeon::Helpers
+ - [ ] Don't allow carriage return in `kind` or `string` keys. Write a test for this.
  - [ ] Why are blob multihashes in hex rather than b64?
- - [ ] Use URNs instead of multihash?
- - [ ] Put all the [HEADER, string, FOOTER].join("") nonsense into Pigeon::Helpers
+ - [ ] Ensure all disks writes perform verification!
  - [ ] Change all the `{40,90}` values in ::Lexer to real length values
- - [ ] Update the bundles.md document once `bundle consume` works.
- - [ ] Add `.pigeon` file extensions
  - [ ] Rename `message find` to `message read`, since other finders return a multihash.
- - [ ] Don't allow carriage return in `kind`. Write a test for this.
  - [ ] Create regexes in ::Lexer using strings and Regexp.new() for cleaner regexes.
  - [ ] pigeon message find-all for peer feed. I will need to add index for `author => message_count`
  - [ ] refactor `Bundle.create` to use `message find-all`.
  - [ ] add parsers and validators for all CLI inputs
- - [ ] Ensure all disks writes perform verification!
  - [ ] Remove all `.current` "singletons" / hacks
- - [ ] 100% documentation
- - [ ] Validate inputs for `Draft#[]=`.
- - [ ] Update spec to look [like this](https://gist.github.com/RickCarlino/3ff4178db4a75fd135832c403cd313d4)
  - [ ] Reduce whole darn repo into single module to aide portability. Maybe a second `::Support` module is OK.
+ - [ ] 100% documentation
+ - [ ] 100% test coverage
+ - [ ] Update the bundles.md document once `bundle consume` works.
+ - [ ] Use URNs instead of multihash?
+ - [ ] Add `.pigeon` file extensions
+ - [ ] Update spec to look [like this](https://gist.github.com/RickCarlino/3ff4178db4a75fd135832c403cd313d4)
  - [ ] Add Lipmaa links like the Bamboo folks do.
  - [ ] Publish a RubyGem
  - [ ] Performance benchmarks

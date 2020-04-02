@@ -59,5 +59,13 @@ RSpec.describe Pigeon::Storage do
   end
 
   it "finds all messages" do
+    a = Pigeon::Helpers.create_message("a", { "b" => "c" })
+    d = Pigeon::Helpers.create_message("d", { "e" => "f" })
+    g = Pigeon::Helpers.create_message("g", { "h" => "i" })
+    results = Pigeon::Storage.current.find_all
+    expect(results.length).to eq(3)
+    expect(a.multihash).to eq(results[0])
+    expect(d.multihash).to eq(results[1])
+    expect(g.multihash).to eq(results[2])
   end
 end

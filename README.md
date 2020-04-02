@@ -39,13 +39,14 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] Fix the diagram in the spec document
  - [X] Validate inputs for `Draft#[]=`.
  - [X] Put all the [HEADER, string, FOOTER].join("") nonsense into Pigeon::Helpers
- - [ ] Don't allow carriage return in `kind` or `string` keys. Write a test for this.
- - [ ] Why are blob multihashes in hex rather than b64?
- - [ ] Ensure all disks writes perform verification!
- - [ ] Change all the `{40,90}` values in ::Lexer to real length values
+ - [X] Use raw SHA256 hashes for blob multihashes, not hex.
+ - [X] Change all the `{40,90}` values in ::Lexer to real length values
+ - [ ] Rename (RemoteIdentity|LocalIdentity)#public_key to #multihash for consistency with other types.
  - [ ] Rename `message find` to `message read`, since other finders return a multihash.
+ - [ ] Don't allow carriage return in `kind` or `string` keys. Write a test for this.
  - [ ] Create regexes in ::Lexer using strings and Regexp.new() for cleaner regexes.
- - [ ] pigeon message find-all for peer feed. I will need to add index for `author => message_count`
+ - [ ] Ensure all disks writes perform verification!
+ - [ ] Implement pigeon message find-all for peer feed. I will need to add index for `author => message_count`
  - [ ] refactor `Bundle.create` to use `message find-all`.
  - [ ] add parsers and validators for all CLI inputs
  - [ ] Remove all `.current` "singletons" / hacks

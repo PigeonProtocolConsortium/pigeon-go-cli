@@ -3,11 +3,11 @@ module Pigeon
     attr_reader :bundle_string, :scanner, :tokens
     # TODO: Change all the `{40,90}` values in ::Lexer to real values
     # TODO: Create regexes using string and Regexp.new() for cleaner regexes.
-    FEED_VALUE = /@.{43,45}.ed25519/
     DEPTH_COUNT = /\d{1,7}/
-    MESG_VALUE = /%.{40,90}.sha256/
-    BLOB_VALUE = /&.{40,90}.sha256/
     NULL_VALUE = /NONE/
+    FEED_VALUE = /@.{44}\.ed25519/
+    MESG_VALUE = /%.{43}\.sha256/
+    BLOB_VALUE = /&.{43}\.sha256/
     STRG_VALUE = /".{1,64}"/
     B64LIKE = /[a-zA-Z0-9_\-=]{1,64}/
     ALL_VALUES = [

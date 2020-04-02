@@ -67,10 +67,9 @@ module Pigeon
     end
 
     def set_blob(data)
-      raw_digest = Digest::SHA256.hexdigest(data)
+      raw_digest = Digest::SHA256.digest(data)
       b64_digest = Base64.urlsafe_encode64(raw_digest)
       multihash = [BLOB_SIGIL, b64_digest, BLOB_FOOTER].join("")
-
       write { store[BLOB_NS][multihash] = data }
 
       multihash

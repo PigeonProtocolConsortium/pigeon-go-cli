@@ -57,4 +57,7 @@ RSpec.describe Pigeon::Storage do
     actual_messages = Pigeon::Storage.current.find_all(author)
     search_results = Pigeon::Storage.current.find_all(author)
   end
+
+  it "finds all messages" do
+  end
 end

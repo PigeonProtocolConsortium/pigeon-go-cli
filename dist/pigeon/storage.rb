@@ -41,7 +41,7 @@ module Pigeon
       read { store[MESG_NS].fetch(multihash) }
     end
 
-    def find_all(author = Pigeon::LocalIdentity.current)
+    def find_all(author = Pigeon::LocalIdentity.current.public_key)
       # TODO: Ability to pass an author ID to `find-all`
       store = Pigeon::Storage.current
       all = []

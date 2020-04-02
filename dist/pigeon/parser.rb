@@ -1,5 +1,7 @@
 module Pigeon
   class Parser
+    class DuplicateKeyError < StandardError; end
+
     def self.parse(tokens)
       self.new(tokens).parse
     end
@@ -37,7 +39,7 @@ module Pigeon
 
     def set(key, value, hash = @scratchpad)
       if hash[key]
-        raise "Double entry detected: #{key}"
+        raise DuplicateKeyError, "Found duplicate keys: #{key}"
       else
         hash[key] = value
       end

@@ -38,8 +38,8 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] pigeon bundle consume (We are minimally feature complete at this point)
  - [X] Fix the diagram in the spec document
  - [ ] 100% test coverage
+ - [ ] Why are blob multihashes in hex rather than b64?
  - [ ] Use URNs instead of multihash?
- - [ ] Fork detection?
  - [ ] Put all the [HEADER, string, FOOTER].join("") nonsense into Pigeon::Helpers
  - [ ] Change all the `{40,90}` values in ::Lexer to real length values
  - [ ] Update the bundles.md document once `bundle consume` works.

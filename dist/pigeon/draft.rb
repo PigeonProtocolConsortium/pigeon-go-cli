@@ -39,11 +39,10 @@ module Pigeon
       when BLOB_SIGIL, MESSAGE_SIGIL, IDENTITY_SIGIL, STRING_SIGIL
         self.body[key] = value
       else
-        if value.is_a?(String)
-          self.body[key] = value.inspect
-        else
-          raise "Unexpected value! Did you wrap it in quotes?: #{value}"
-        end
+        # If users passes a string and forgets to append
+        # the string sigil (\"), we add it for them.
+        # This might be a bad or good idea. Not sure yet.
+        self.body[key] = value.inspect
       end
       self.save
       return self.body[key]

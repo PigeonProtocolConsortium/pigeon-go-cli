@@ -23,7 +23,6 @@ RSpec.describe Pigeon::Message do
   end
 
   it "debugs a problem" do
-    pending("Pigeon::Bundle.ingest is broke. Will fix after investigation.")
     seed = "\xA3@\x12\xA6\x8Cl\x83\xF5)\x97\xED\xE67\x91\xAD\xFD\xCFf\xF4(\xEF\x81P\xBBD\xF7\x8C\xF7\x8D\xC0\xA9\f"
     ident = Pigeon::LocalIdentity.new(seed)
     Pigeon::LocalIdentity.instance_variable_set(:@current, ident)

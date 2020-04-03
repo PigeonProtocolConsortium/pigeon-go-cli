@@ -42,28 +42,28 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] Use raw SHA256 hashes for blob multihashes, not hex.
  - [X] Change all the `{40,90}` values in ::Lexer to real length values
  - [X] Don't double-ingest messages. It will screw up indexes.
- - [ ] Handle the three outcomes of bundle ingestion: `ok`, `blocked`, `already_saved`.
- - [ ] Check blocklist before ingesting bundles.
+ - [X] 100% test coverage
+ - [X] Implement pigeon message find-all for peer feed. I will need to add index for `author => message_count`
+ - [ ] refactor `Bundle.create` to use `message find-all`.
  - [ ] Rename (RemoteIdentity|LocalIdentity)#public_key to #multihash for consistency with other types.
  - [ ] Rename `message find` to `message read`, since other finders return a multihash.
- - [ ] Don't allow carriage return in `kind` or `string` keys. Write a test for this.
+ - [ ] Don't allow any type of whitespace in `kind` or `string` keys. Write a test for this.
+ - [ ] Check block list before ingesting bundles.
  - [ ] Create regexes in ::Lexer using strings and Regexp.new() for cleaner regexes.
- - [ ] Ensure all disks writes perform verification!
- - [ ] Implement pigeon message find-all for peer feed. I will need to add index for `author => message_count`
- - [ ] refactor `Bundle.create` to use `message find-all`.
+ - [ ] Handle the three outcomes of bundle ingestion: `ok`, `blocked`, `already_saved`.
  - [ ] add parsers and validators for all CLI inputs
  - [ ] Remove all `.current` "singletons" / hacks
  - [ ] Reduce whole darn repo into single module to aide portability. Maybe a second `::Support` module is OK.
- - [ ] 100% documentation
- - [ ] 100% test coverage
  - [ ] Update the bundles.md document once `bundle consume` works.
  - [ ] Use URNs instead of multihash?
  - [ ] Add `.pigeon` file extensions
- - [ ] Update spec to look [like this](https://gist.github.com/RickCarlino/3ff4178db4a75fd135832c403cd313d4)
  - [ ] Add Lipmaa links like the Bamboo folks do.
+ - [ ] Ensure all disks writes perform verification!
  - [ ] Publish a RubyGem
- - [ ] Performance benchmarks
- - [ ] Performance tuning (DO THIS LAST!)
+ - [ ] 100% documentation
+ - [ ] Update spec document CLI usage examples to reflect API changes in 2020.
+ - [ ] Performance benchmarks (Do this second to last!)
+ - [ ] Performance tuning (Do this last!)
 
 # Idea Bin
  - [ ] Map/reduce plugin support for custom indices?

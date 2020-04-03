@@ -67,7 +67,7 @@ module Pigeon
     def verify_depth_prev_and_depth
       count = store.get_message_count_for(author.public_key)
       expected_prev = store.get_message_by_depth(author.public_key, count - 1) || Pigeon::EMPTY_MESSAGE
-      assert("depth", depth, count)
+      assert("depth", count, depth)
       assert("prev", prev, expected_prev)
     end
 

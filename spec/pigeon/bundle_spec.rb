@@ -22,12 +22,7 @@ RSpec.describe Pigeon::Message do
     expect(expected_bundle).to eq(actual_bundle)
   end
 
-  it "debugs a problem" do
-    seed = "\xA3@\x12\xA6\x8Cl\x83\xF5)\x97\xED\xE67\x91\xAD\xFD\xCFf\xF4(\xEF\x81P\xBBD\xF7\x8C\xF7\x8D\xC0\xA9\f"
-    ident = Pigeon::LocalIdentity.new(seed)
-    Pigeon::LocalIdentity.instance_variable_set(:@current, ident)
-    public_key = "@NYTrqYYN2ffTqFyPCUULjhhUkfbY9LorpWYMoMpsOO4=.ed25519"
-    expect(Pigeon::LocalIdentity.current.public_key).to eq(public_key)
+  it "does not crash when ingesting old messages" do
     create_fake_messages
     Pigeon::Bundle.create
     Pigeon::Bundle.ingest

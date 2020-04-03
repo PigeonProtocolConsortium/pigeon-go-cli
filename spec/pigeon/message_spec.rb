@@ -118,4 +118,19 @@ RSpec.describe Pigeon::Message do
     expect(message.signature).to eq(sig1_b64)
     expect(message.signature).to eq(sig2_b64)
   end
+
+  it "crashes on forged fields" do
+    msg = Pigeon::Parser.parse([
+      [:AUTHOR, "@DYdgK1KUInVtG3lS45hA1HZ-jTuvfLKsxDpXPFCve04=.ed25519"],
+      [:KIND, "invalid"],
+      [:PREV, "NONE"],
+      [:DEPTH, 10],
+      [:HEADER_END],
+      [:BODY_ENTRY, "duplicate", "This key is a duplicate."],
+      [:SIGNATURE, "DN7yPTE-m433ND3jBL4oM23XGxBKafjq0Dp9ArBQa_TIGU7DmCxTumieuPBN-NKxlx_0N7-c5zjLb5XXVHYPCQ==.sig.ed25519"],
+      [:MESSAGE_END],
+    ])
+    m = "Expected field `depth` to equal 0, got: 10"
+    expect { msg.first.save! }.to raise_error(Pigeon::Message::VerificationError, m)
+  end
 end

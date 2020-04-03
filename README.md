@@ -41,6 +41,7 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] Put all the [HEADER, string, FOOTER].join("") nonsense into Pigeon::Helpers
  - [X] Use raw SHA256 hashes for blob multihashes, not hex.
  - [X] Change all the `{40,90}` values in ::Lexer to real length values
+ - [ ] Is it possible signature verification is failing beecause a CR is being prepended to the front?
  - [ ] Rename (RemoteIdentity|LocalIdentity)#public_key to #multihash for consistency with other types.
  - [ ] Rename `message find` to `message read`, since other finders return a multihash.
  - [ ] Don't allow carriage return in `kind` or `string` keys. Write a test for this.

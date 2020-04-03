@@ -1,22 +1,27 @@
-author @DYdgK1KUInVtG3lS45hA1HZ-jTuvfLKsxDpXPFCve04=.ed25519
-kind scratch_pad
+author @jdiXWunmWiex-dHONMlj7b1HMMFNjbpAj1t9oInbugY=.ed25519
+kind strings
 prev NONE
 depth 0
 
-key1:"my_value\n"
-key2:"my_value2"
-key3:"my_value3"
-key4:%jvKh9yoiEJaePzoWCF1nnqpIlPgTk9FHEtqczQbvzGM=.sha256
-key5:&29f3933302c49c60841d7620886ce54afc68630242aee6ff683926d2465e6ca3.sha256
-key6:@galdahnB3L2DE2cTU0Me54IpIUKVEgKmBwvZVtWJccg=.ed25519
+example_1.1:"This is a string."
+example=_.:"A second string."
 
-signature DN7yPTE-m433ND3jBL4oM23XGxBKafjq0Dp9ArBQa_TIGU7DmCxTumieuPBN-NKxlx_0N7-c5zjLb5XXVHYPCQ==.sig.ed25519
+signature hCPIr8xdWIIjtiJp1Sj64v0AgP_ypeDTtZrs8MRHw7w_bMJ7Hx6rSbDOgVUmdIegqD-gEk2WI2S_dUKQ8jg7CQ==.sig.ed25519
 
-author @DYdgK1KUInVtG3lS45hA1HZ-jTuvfLKsxDpXPFCve04=.ed25519
-kind second_test
-prev %ZTBmYWZlMGU0Nzg0ZWZlYjA5NjA0MzdlZWVlNTBiMmY4ODEyZWI1NTZkODcwN2FlMDQxYThmMDExNTNhM2E4NQ==.sha256
+author @jdiXWunmWiex-dHONMlj7b1HMMFNjbpAj1t9oInbugY=.ed25519
+kind d
+prev %83td57rcLLFEM7-6HPXDcniwXc4QQo9nyyWn0zhXJGg=.sha256
 depth 1
 
-hello:"world"
+e:&ZGKl9RdLU3Avwlr-Z6j5op9XJhCmW6_v_2J1MVUvCW8=.sha256
 
-signature AerpDKbKRrcaM9wihwFsPC4YRAfYWie5XFEKAdnxQom7MTvsXd9W39AvHfljJnEePZpsQVdfq2TtBPoQHc-MCw==.sig.ed25519
+signature FpfdovnJttEZkl-SMO83Nq8gqsfnB4NvtZ4YRdhxKQDK30l1OKpPw5GeFiOEdTJK8WPncq_m0eBHPP84hJ0BDg==.sig.ed25519
+
+author @jdiXWunmWiex-dHONMlj7b1HMMFNjbpAj1t9oInbugY=.ed25519
+kind g
+prev %vVMEqvHHjqubE36olIVStUp-vq0T1e2UsvKdv57kmLU=.sha256
+depth 2
+
+me_myself_and_i:@jdiXWunmWiex-dHONMlj7b1HMMFNjbpAj1t9oInbugY=.ed25519
+
+signature 4ARYLytFIcU-TAYoybL3za9cyiTX_5Jt04ueKmPjZVYA6jST6KyQXvUo57MMjfjsdAmXeV-2Nw2Jbx8HaeTqBg==.sig.ed25519

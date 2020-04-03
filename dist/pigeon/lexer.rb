@@ -6,10 +6,11 @@ module Pigeon
     DEPTH_COUNT = /\d{1,7}/
     NULL_VALUE = /NONE/
     FEED_VALUE = /@.{44}\.ed25519/
-    MESG_VALUE = /%.{43}\.sha256/
-    BLOB_VALUE = /&.{43}\.sha256/
-    STRG_VALUE = /".{1,64}"/
-    B64LIKE = /[a-zA-Z0-9_\-=]{1,64}/
+    MESG_VALUE = /%.{44}\.sha256/
+    BLOB_VALUE = /&.{44}\.sha256/
+    STRG_VALUE = /".{1,90}"/
+    # If you need other characters (but not spaces) submit an issue.
+    ALPHANUMERICISH = /[a-zA-Z0-9_\-=\.]{1,90}/
     ALL_VALUES = [
       FEED_VALUE,
       MESG_VALUE,
@@ -23,8 +24,8 @@ module Pigeon
     AUTHOR = /author #{FEED_VALUE}\n/
     DEPTH = /depth #{DEPTH_COUNT}\n/
     PREV = /prev (#{MESG_VALUE}|#{NULL_VALUE})\n/
-    KIND = /kind #{B64LIKE}\n/
-    BODY_ENTRY = /#{B64LIKE}:#{ANY_VALUE}\n/
+    KIND = /kind #{ALPHANUMERICISH}\n/
+    BODY_ENTRY = /#{ALPHANUMERICISH}:#{ANY_VALUE}\n/
 
     FOOTER_ENTRY = /signature .*{87,88}\.sig\.ed25519\n?/
 

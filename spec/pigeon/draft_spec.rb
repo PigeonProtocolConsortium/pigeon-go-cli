@@ -20,7 +20,7 @@ RSpec.describe Pigeon::Draft do
     "prev DRAFT",
     "depth DRAFT",
     "\na:\"bar\"",
-    "b:&NjQ2MmE1ZjUxNzRiNTM3MDJmYzI1YWZlNjdhOGY5YTI5ZjU3MjYxMGE2NWJhZmVmZmY2Mjc1MzE1NTJmMDk2Zg==.sha256",
+    "b:&ZGKl9RdLU3Avwlr-Z6j5op9XJhCmW6_v_2J1MVUvCW8=.sha256",
     "\n",
   ].join("\n")
 

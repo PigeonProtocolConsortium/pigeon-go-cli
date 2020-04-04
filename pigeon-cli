@@ -138,9 +138,12 @@ module Pigeon
 
     desc "find-all", "Find a pigeon message in the local DB"
 
-    def find_all()
+    def find_all(author = Pigeon::LocalIdentity.current.public_key)
       # TODO: Ability to find-all messages by author ID
-      puts Pigeon::Storage.current.find_all.join(Pigeon::CR) + Pigeon::CR
+      puts Pigeon::Storage
+             .current
+             .find_all(author)
+             .join(Pigeon::CR) + Pigeon::CR
     end
 
     desc "last", "Grab your last message. INTERNAL USE ONLY"

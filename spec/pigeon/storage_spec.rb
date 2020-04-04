@@ -70,7 +70,8 @@ RSpec.describe Pigeon::Storage do
         "me_myself_and_i" => Pigeon::LocalIdentity.current.public_key,
       }),
     ]
-    results = Pigeon::Storage.current.find_all
+    me = Pigeon::LocalIdentity.current.public_key
+    results = Pigeon::Storage.current.find_all(me)
     expect(results.length).to eq(3)
     expect(msgs[0].multihash).to eq(results[0])
     expect(msgs[1].multihash).to eq(results[1])

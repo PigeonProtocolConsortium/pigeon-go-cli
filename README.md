@@ -44,7 +44,13 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] Don't double-ingest messages. It will screw up indexes.
  - [X] 100% test coverage
  - [X] Implement pigeon message find-all for peer feed. I will need to add index for `author => message_count`
+ - [ ] Stop using base64 in favor of base32 with no padding? Simplifies support for legacy systems. Easy to implement.
+ - [ ] Need a way of importing / exporting a feeds blobs. (see "Bundle Brainstorming" below)
+ - [ ] Need a way of adding a peers messages / blobs to bundles. (see "Bundle Brainstorming" below)
  - [ ] refactor `Bundle.create` to use `message find-all`.
+ - [ ] Add mandatory `--from=` arg to `bundle create`
+ - [ ] Make the switch to LevelDB, RocksDB or similar (currently using Ruby PStore).
+ - [ ] Change all multihashes to Base32 to support case-insensitive file systems?
  - [ ] Rename (RemoteIdentity|LocalIdentity)#public_key to #multihash for consistency with other types.
  - [ ] Rename `message find` to `message read`, since other finders return a multihash.
  - [ ] Don't allow any type of whitespace in `kind` or `string` keys. Write a test for this.
@@ -68,3 +74,41 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
 # Idea Bin
  - [ ] Map/reduce plugin support for custom indices?
  - [ ] Ability to add a blob in one swoop using File objects and `Message#[]=`, maybe?
+
+# Bundle Brainstorming
+
+Bundles export need to export two things:
+ * Messages
+ * Blobs
+
+Currently, we're only exporting messages.
+We need to export both, though.
+
+## Idea: Output a directory (Zip it Yourself)
+
+1. Create a `bundle_X/` directory. The name is arbitrary and can be defined by the user.
+2. In the root directory of `bundle_x/`, a single `messages.pgn` file contains all messages.
+  * All messages are expected to be sorted by depth
+  * Messages from multiple authors may be included in a single bundle, but the messages must apear in the correct order with regards to the `depth` field.
+3. Blobs are stored in a very specific hierarchy to maintain FAT compatibility:
+  * Blob multihashes are decoded from URL safe b64
+  * Option I:
+    * Blobs are re-encoded into base32 without padding (to support legacy filesystems)
+  * Option II (not safe for FAT16?):
+    * Blobs are encoded as Base16:
+    * `xxxxxxxxxxxxxxxx/blobs/sha256/HEZB3/IFXHL4Y3/H4MWGKZV/42VVMO4S.4VQ`
+    * `N` represents a single character in a blob's multihash
+
+# Why Base32?
+
+I want to support things like:
+
+ * Hosting bundles on file servers (SFTP, HTTP, etc..)
+ * Ingesting blobs on constraints devices (Eg: FAT16 filesystems, retro machines)
+
+To do that:
+
+ * Base 16 (hex) creates blob filenames that are too long for FAT16 and visually awkward.
+ * Base64 can't be hosted on a web server
+ * URLsafeBase64 can't be used on case insensitive file systems
+

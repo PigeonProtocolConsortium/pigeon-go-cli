@@ -75,40 +75,21 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [ ] Map/reduce plugin support for custom indices?
  - [ ] Ability to add a blob in one swoop using File objects and `Message#[]=`, maybe?
 
-# Bundle Brainstorming
+# New Bundle Format
 
-Bundles export need to export two things:
- * Messages
- * Blobs
+We have a bundle format that works, but it only exports messages.
 
-Currently, we're only exporting messages.
-We need to export both, though.
+We need a bundle format that may optionally include blobs as well.
 
-## Idea: Output a directory (Zip it Yourself)
+Here's how we will support that:
 
 1. Create a `bundle_X/` directory. The name is arbitrary and can be defined by the user.
 2. In the root directory of `bundle_x/`, a single `messages.pgn` file contains all messages.
   * All messages are expected to be sorted by depth
-  * Messages from multiple authors may be included in a single bundle, but the messages must apear in the correct order with regards to the `depth` field.
+  * Messages from multiple authors may be included in a single bundle, but the messages must appear in the correct order with regards to the `depth` field.
 3. Blobs are stored in a very specific hierarchy to maintain FAT compatibility:
-  * Blob multihashes are decoded from URL safe b64
-  * Option I:
-    * Blobs are re-encoded into base32 without padding (to support legacy filesystems)
-  * Option II (not safe for FAT16?):
-    * Blobs are encoded as Base16:
-    * `xxxxxxxxxxxxxxxx/blobs/sha256/HEZB3/IFXHL4Y3/H4MWGKZV/42VVMO4S.4VQ`
-    * `N` represents a single character in a blob's multihash
+    * `bundle_x/blobs/sha256/NNNNN/NNNNNNNN/NNNNNNNN/NNNNNNNN.NNN` where `N` is a character of a blob's multihash
 
-# Why Base32?
+Additional notes:
 
-I want to support things like:
-
- * Hosting bundles on file servers (SFTP, HTTP, etc..)
- * Ingesting blobs on constraints devices (Eg: FAT16 filesystems, retro machines)
-
-To do that:
-
- * Base 16 (hex) creates blob filenames that are too long for FAT16 and visually awkward.
- * Base64 can't be hosted on a web server
- * URLsafeBase64 can't be used on case insensitive file systems
-
+ * It is recommended to compress bundles (ex: *.zip files) but these concerns are not handled by the protocol currently.

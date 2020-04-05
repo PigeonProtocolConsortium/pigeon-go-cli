@@ -44,7 +44,7 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] Don't double-ingest messages. It will screw up indexes.
  - [X] 100% test coverage
  - [X] Implement pigeon message find-all for peer feed. I will need to add index for `author => message_count`
- - [ ] Stop using base64 in favor of base32 with no padding? Simplifies support for legacy systems. Easy to implement.
+ - [ ] Switch to Crockford base32- Simplifies support for legacy systems. Easy to implement.
  - [ ] Need a way of importing / exporting a feeds blobs. (see "Bundle Brainstorming" below)
  - [ ] Need a way of adding a peers messages / blobs to bundles. (see "Bundle Brainstorming" below)
  - [ ] refactor `Bundle.create` to use `message find-all`.

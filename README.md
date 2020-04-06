@@ -47,11 +47,11 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] Switch to Crockford base32- Simplifies support for legacy systems. Easy to implement.
  - [X] Fix `scratchpad.sh` to use Base32
  - [X] Rename (RemoteIdentity|LocalIdentity)#public_key to #multihash for consistency with other types.
- - [ ] Fix diagram in spec doc
- - [ ] refactor `Bundle.create` to use `message find-all`.
+ - [X] Fix diagram in spec doc
+ - [X] refactor `Bundle.create` to use `message find-all`.
+ - [ ] Add Lipmaa links like the Bamboo folks do.
  - [ ] Need a way of importing / exporting a feeds blobs. (see "Bundle Brainstorming" below)
  - [ ] Need a way of adding peers messages / gossip to bundles. (see "Bundle Brainstorming" below)
- - [ ] Add Lipmaa links like the Bamboo folks do.
  - [ ] Add mandatory `--since=` arg to `bundle create`
  - [ ] Make the switch to LevelDB, RocksDB or similar (currently using Ruby PStore).
  - [ ] Rename `message find` to `message read`, since other finders return a multihash.

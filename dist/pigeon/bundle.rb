@@ -2,12 +2,10 @@ module Pigeon
   class Bundle
     def self.create(file_path = DEFAULT_BUNDLE_PATH)
       s = Pigeon::Storage.current
-      last = s.message_count
-      author = Pigeon::LocalIdentity.current
-      range = (0...last).to_a
-      content = range
-        .map { |depth| s.get_message_by_depth(author.multihash, depth) }
+      content = s
+        .find_all(Pigeon::LocalIdentity.current.multihash)
         .map { |multihash| s.find_message(multihash) }
+        .sort_by(&:depth)
         .map { |message| message.render }
         .join(BUNDLE_MESSAGE_SEPARATOR)
       File.write(file_path, content + CR)

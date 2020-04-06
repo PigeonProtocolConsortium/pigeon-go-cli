@@ -45,13 +45,14 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] 100% test coverage
  - [X] Implement pigeon message find-all for peer feed. I will need to add index for `author => message_count`
  - [X] Switch to Crockford base32- Simplifies support for legacy systems. Easy to implement.
- - [ ] Need a way of importing / exporting a feeds blobs. (see "Bundle Brainstorming" below)
- - [ ] Need a way of adding a peers messages / blobs to bundles. (see "Bundle Brainstorming" below)
- - [ ] refactor `Bundle.create` to use `message find-all`.
- - [ ] Add mandatory `--from=` arg to `bundle create`
- - [ ] Make the switch to LevelDB, RocksDB or similar (currently using Ruby PStore).
- - [ ] Change all multihashes to Base32 to support case-insensitive file systems?
+ - [X] Fix `scratchpad.sh` to use Base32
  - [ ] Rename (RemoteIdentity|LocalIdentity)#public_key to #multihash for consistency with other types.
+ - [ ] refactor `Bundle.create` to use `message find-all`.
+ - [ ] Need a way of importing / exporting a feeds blobs. (see "Bundle Brainstorming" below)
+ - [ ] Need a way of adding peers messages / gossip to bundles. (see "Bundle Brainstorming" below)
+ - [ ] Add Lipmaa links like the Bamboo folks do.
+ - [ ] Add mandatory `--since=` arg to `bundle create`
+ - [ ] Make the switch to LevelDB, RocksDB or similar (currently using Ruby PStore).
  - [ ] Rename `message find` to `message read`, since other finders return a multihash.
  - [ ] Don't allow any type of whitespace in `kind` or `string` keys. Write a test for this.
  - [ ] Check block list before ingesting bundles.
@@ -62,8 +63,6 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [ ] Reduce whole darn repo into single module to aide portability. Maybe a second `::Support` module is OK.
  - [ ] Update the bundles.md document once `bundle consume` works.
  - [ ] Use URNs instead of multihash?
- - [ ] Add `.pigeon` file extensions
- - [ ] Add Lipmaa links like the Bamboo folks do.
  - [ ] Ensure all disks writes perform verification!
  - [ ] Publish a RubyGem
  - [ ] 100% documentation
@@ -93,3 +92,8 @@ Here's how we will support that:
 Additional notes:
 
  * It is recommended to compress bundles (ex: *.zip files) but these concerns are not handled by the protocol currently.
+
+# Unanswered Questions
+
+ * PEER MESSAGES: I want to add a `--depth` option to bundle exports that would only return messages after the `nth` sequence number. It would not make sense to apply `--depth` to all peer messages in the bundle. It would not be practical to expect the user to provide a `--depth` for every peer every time a bundle is generated.
+   * Create a new `received_on` index that records the local user's `depth` at the time of ingestion?

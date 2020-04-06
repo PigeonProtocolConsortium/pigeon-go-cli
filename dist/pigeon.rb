@@ -1,6 +1,7 @@
 require "digest"
 require "ed25519"
 require "securerandom"
+require "set"
 
 # Remove this when we launch or add ENVs:
 require "pry"

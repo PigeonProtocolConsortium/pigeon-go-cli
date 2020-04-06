@@ -49,23 +49,23 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] Rename (RemoteIdentity|LocalIdentity)#public_key to #multihash for consistency with other types.
  - [X] Fix diagram in spec doc
  - [X] refactor `Bundle.create` to use `message find-all`.
+ - [X] Rename `message find` to `message read`, since other finders return a multihash.
+ - [ ] Don't allow any type of whitespace in `kind` or `string` keys. Write a test for this.
  - [ ] Add Lipmaa links like the Bamboo folks do.
+ - [ ] Create regexes in ::Lexer using strings and Regexp.new() for cleaner regexes.
+ - [ ] Make the switch to LevelDB, RocksDB or similar (currently using Ruby PStore).
  - [ ] Need a way of importing / exporting a feeds blobs. (see "Bundle Brainstorming" below)
  - [ ] Need a way of adding peers messages / gossip to bundles. (see "Bundle Brainstorming" below)
  - [ ] Add mandatory `--since=` arg to `bundle create`
- - [ ] Make the switch to LevelDB, RocksDB or similar (currently using Ruby PStore).
- - [ ] Rename `message find` to `message read`, since other finders return a multihash.
- - [ ] Don't allow any type of whitespace in `kind` or `string` keys. Write a test for this.
  - [ ] Check block list before ingesting bundles.
- - [ ] Create regexes in ::Lexer using strings and Regexp.new() for cleaner regexes.
  - [ ] Handle the three outcomes of bundle ingestion: `ok`, `blocked`, `already_saved`.
  - [ ] add parsers and validators for all CLI inputs
  - [ ] Remove all `.current` "singletons" / hacks
- - [ ] Reduce whole darn repo into single module to aide portability. Maybe a second `::Support` module is OK.
- - [ ] Update the bundles.md document once `bundle consume` works.
+ - [ ] Reduce whole darn repo into single module to aide portability. `::Helpers` module is OK.
  - [ ] Use URNs instead of multihash?
  - [ ] Ensure all disks writes perform verification!
  - [ ] Publish a RubyGem
+ - [ ] Update the bundles.md document once `bundle consume` works.
  - [ ] 100% documentation
  - [ ] Update spec document CLI usage examples to reflect API changes in 2020.
  - [ ] Performance benchmarks (Do this second to last!)

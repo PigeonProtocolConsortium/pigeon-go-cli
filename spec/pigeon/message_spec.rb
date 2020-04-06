@@ -133,4 +133,27 @@ RSpec.describe Pigeon::Message do
     m = "Expected field `depth` to equal 0, got: 10"
     expect { msg.first.save! }.to raise_error(Pigeon::Message::VerificationError, m)
   end
+
+  # Every ASCII character that is not a letter:
+  WHITESPACE = (0..32).to_a.map(&:chr).push(127.chr)
+
+  it "does not allow whitespace in `kind` attributes" do
+    WHITESPACE.map do |n|
+      kind = SecureRandom.alphanumeric(8)
+      kind[rand(0...8)] = n
+      draft = Pigeon::Draft.create(kind: kind)
+      draft["body"] = "empty"
+      message = Pigeon::Message.publish(draft)
+      expect { message.save! }.to raise_error("WIP")
+    end
+  end
+
+  it "does not allow whitespace in key names" do
+    WHITESPACE.map do |n|
+      draft = Pigeon::Draft.create(kind: "unit_test")
+      draft[n] = "should crash"
+      message = Pigeon::Message.publish(draft)
+      expect { message.save! }.to raise_error("WIP")
+    end
+  end
 end

@@ -35,7 +35,7 @@ module Pigeon
       puts kp.public_key
     end
 
-    desc "show", "Prints a base64 identiy string to STDOUT"
+    desc "show", "Prints your identiy string to STDOUT"
 
     def show
       puts Pigeon::LocalIdentity.current.public_key

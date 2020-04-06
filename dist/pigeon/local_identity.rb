@@ -27,19 +27,19 @@ module Pigeon
     end
 
     def private_key
-      @private_key ||= Base64.urlsafe_encode64(@seed)
+      @private_key ||= Helpers.b32_encode(@seed)
     end
 
     def public_key
       bytes = @signing_key.verify_key.to_bytes
-      b64 = Base64.urlsafe_encode64(bytes)
+      b64 = Helpers.b32_encode(bytes)
 
       @public_key ||= [IDENTITY_SIGIL, b64, IDENTITY_FOOTER].join("")
     end
 
     def sign(string)
       hex = @signing_key.sign(string)
-      b64 = Base64.urlsafe_encode64(hex)
+      b64 = Helpers.b32_encode(hex)
       return b64 + SIG_FOOTER
     end
 

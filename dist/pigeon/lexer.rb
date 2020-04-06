@@ -5,10 +5,10 @@ module Pigeon
     # TODO: Create regexes using string and Regexp.new() for cleaner regexes.
     DEPTH_COUNT = /\d{1,7}/
     NULL_VALUE = /NONE/
-    FEED_VALUE = /@.{44}\.ed25519/
-    MESG_VALUE = /%.{44}\.sha256/
-    BLOB_VALUE = /&.{44}\.sha256/
-    STRG_VALUE = /".{1,90}"/
+    FEED_VALUE = /@.{52}\.ed25519/
+    MESG_VALUE = /%.{52}\.sha256/
+    BLOB_VALUE = /&.{52}\.sha256/
+    STRG_VALUE = /".{1,128}"/
     # If you need other characters (but not spaces) submit an issue.
     ALPHANUMERICISH = /[a-zA-Z0-9_\-=\.]{1,90}/
     ALL_VALUES = [

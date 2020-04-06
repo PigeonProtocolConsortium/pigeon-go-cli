@@ -41,7 +41,7 @@ module Pigeon
     end
 
     def multihash
-      sha256 = Base64.urlsafe_encode64(Digest::SHA256.digest(self.render))
+      sha256 = Helpers.b32_encode(Digest::SHA256.digest(self.render))
       "#{MESSAGE_SIGIL}#{sha256}#{BLOB_FOOTER}"
     end
 

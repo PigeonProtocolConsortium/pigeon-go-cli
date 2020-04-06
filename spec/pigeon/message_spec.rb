@@ -113,8 +113,8 @@ RSpec.describe Pigeon::Message do
     combinations = [[key1, sig1], [key1, sig2], [key2, sig1], [key2, sig2]]
     combinations.map { |(key, sig)| key.verify_key.verify(sig, plaintext) }
 
-    sig1_b64 = Base64.urlsafe_encode64(sig1) + Pigeon::SIG_FOOTER
-    sig2_b64 = Base64.urlsafe_encode64(sig2) + Pigeon::SIG_FOOTER
+    sig1_b64 = Pigeon::Helpers.b32_encode(sig1) + Pigeon::SIG_FOOTER
+    sig2_b64 = Pigeon::Helpers.b32_encode(sig2) + Pigeon::SIG_FOOTER
     expect(message.signature).to eq(sig1_b64)
     expect(message.signature).to eq(sig2_b64)
   end

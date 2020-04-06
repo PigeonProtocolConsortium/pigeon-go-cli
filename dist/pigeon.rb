@@ -59,6 +59,54 @@ module Pigeon
   # /Constants for internal use only
 
   class Helpers
+    B32_ENC = {
+      "00000" => "0", "00001" => "1", "00010" => "2", "00011" => "3",
+      "00100" => "4", "00101" => "5", "00110" => "6", "00111" => "7",
+      "01000" => "8", "01001" => "9", "01010" => "A", "01011" => "B",
+      "01100" => "C", "01101" => "D", "01110" => "E", "01111" => "F",
+      "10000" => "G", "10001" => "H", "10010" => "J", "10011" => "K",
+      "10100" => "M", "10101" => "N", "10110" => "P", "10111" => "Q",
+      "11000" => "R", "11001" => "S", "11010" => "T", "11011" => "V",
+      "11100" => "W", "11101" => "X", "11110" => "Y", "11111" => "Z",
+    }.freeze
+
+    B32_DEC = {
+      "0" => 0b00000, "O" => 0b00000, "1" => 0b00001, "I" => 0b00001,
+      "L" => 0b00001, "2" => 0b00010, "3" => 0b00011, "4" => 0b00100,
+      "5" => 0b00101, "6" => 0b00110, "7" => 0b00111, "8" => 0b01000,
+      "9" => 0b01001, "A" => 0b01010, "B" => 0b01011, "C" => 0b01100,
+      "D" => 0b01101, "E" => 0b01110, "F" => 0b01111, "G" => 0b10000,
+      "H" => 0b10001, "J" => 0b10010, "K" => 0b10011, "M" => 0b10100,
+      "N" => 0b10101, "P" => 0b10110, "Q" => 0b10111, "R" => 0b11000,
+      "S" => 0b11001, "T" => 0b11010, "V" => 0b11011, "W" => 0b11100,
+      "X" => 0b11101, "Y" => 0b11110, "Z" => 0b11111,
+    }.freeze
+
+    # http://www.crockford.com/wrmg/base32.html
+    def self.b32_encode(string)
+      string
+        .each_byte
+        .to_a
+        .map { |x| x.to_s(2).rjust(8, "0") }
+        .join
+        .scan(/.{1,5}/)
+        .map { |x| x.ljust(5, "0") }
+        .map { |bits| B32_ENC.fetch(bits) }
+        .join
+    end
+
+    # http://www.crockford.com/wrmg/base32.html
+    def self.b32_decode(string)
+      string
+        .split("")
+        .map { |x| B32_DEC.fetch(x.upcase) }
+        .map { |x| x.to_s(2).rjust(5, "0") }
+        .join("")
+        .scan(/.{1,8}/)
+        .map { |x| x.length == 8 ? x.to_i(2).chr : "" }
+        .join("")
+    end
+
     def self.create_message(kind, params)
       draft = Pigeon::Draft.create(kind: kind)
       params.map { |(k, v)| draft[k] = v }
@@ -77,9 +125,9 @@ module Pigeon
 
     def self.decode_multihash(string)
       if string[SIG_RANGE] == SIG_FOOTER
-        return Base64.urlsafe_decode64(string.gsub(SIG_FOOTER, ""))
+        return b32_decode(string.gsub(SIG_FOOTER, ""))
       else
-        return Base64.urlsafe_decode64(string[1..].gsub(FOOTERS_REGEX, ""))
+        return b32_decode(string[1..].gsub(FOOTERS_REGEX, ""))
       end
     end
   end

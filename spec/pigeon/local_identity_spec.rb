@@ -30,7 +30,7 @@ RSpec.describe Pigeon::LocalIdentity do
       Pigeon::IDENTITY_FOOTER,
     ].join("")
     result = Pigeon::Helpers.decode_multihash(example)
-    expect(result).to eq(Base64.urlsafe_decode64(whatever))
+    expect(result).to eq(Pigeon::Helpers.b32_decode(whatever))
   end
 
   it "caches LocalIdentity.current" do

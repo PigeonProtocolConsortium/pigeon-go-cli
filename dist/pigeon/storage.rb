@@ -37,7 +37,7 @@ module Pigeon
       end
     end
 
-    def find_message(multihash)
+    def read_message(multihash)
       read { store[MESG_NS].fetch(multihash) }
     end
 

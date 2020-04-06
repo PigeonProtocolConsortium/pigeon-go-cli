@@ -4,7 +4,7 @@ module Pigeon
       s = Pigeon::Storage.current
       content = s
         .find_all(Pigeon::LocalIdentity.current.multihash)
-        .map { |multihash| s.find_message(multihash) }
+        .map { |multihash| s.read_message(multihash) }
         .sort_by(&:depth)
         .map { |message| message.render }
         .join(BUNDLE_MESSAGE_SEPARATOR)

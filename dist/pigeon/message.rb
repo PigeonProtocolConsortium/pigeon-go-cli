@@ -46,7 +46,7 @@ module Pigeon
     end
 
     def save!
-      return store.find_message(multihash) if store.message?(multihash)
+      return store.read_message(multihash) if store.message?(multihash)
       calculate_signature
       verify_depth_prev_and_depth
       verify_signature

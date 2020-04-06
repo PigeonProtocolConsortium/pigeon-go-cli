@@ -17,7 +17,7 @@ RSpec.describe Pigeon::LocalIdentity do
 
   it "generates a pair from a seed" do
     x = "@XSZY1ME6QMA5BBSJ8QSDJCSG6EVDTCKYNMV221SB7B2NZR5K09J0.ed25519"
-    expect(kp.public_key).to eq(x)
+    expect(kp.multihash).to eq(x)
     y = "2PRTG7F13HWF1HPW9FF9NDSYGSQS5VXQ2WMZY0A510J64AE9G840"
     expect(kp.private_key).to eq(y)
   end

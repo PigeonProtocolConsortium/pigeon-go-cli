@@ -25,7 +25,7 @@ RSpec.describe Pigeon::Draft do
   ].join("\n")
 
   it "renders a message" do
-    pk = Pigeon::LocalIdentity.current.public_key
+    pk = Pigeon::LocalIdentity.current.multihash
     actual = message.render
     expected = MSG.gsub("___", pk)
     expect(actual).to start_with(expected)

@@ -139,7 +139,7 @@ RSpec.describe Pigeon::Lexer do
       h
     end
 
-    expect(hash[:AUTHOR]).to eq(message.author.public_key)
+    expect(hash[:AUTHOR]).to eq(message.author.multihash)
     expect(hash[:BODY]).to eq(message.body)
     expect(hash[:DEPTH]).to eq(message.depth)
     expect(hash[:KIND]).to eq(message.kind)

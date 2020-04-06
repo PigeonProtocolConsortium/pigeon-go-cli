@@ -136,7 +136,7 @@ module Pigeon
     end
 
     def insert_and_update_index(message)
-      pub_key = message.author.public_key
+      pub_key = message.author.multihash
       # STEP 1: Update MESG_NS, the main storage spot.
       store[MESG_NS][message.multihash] = message
 

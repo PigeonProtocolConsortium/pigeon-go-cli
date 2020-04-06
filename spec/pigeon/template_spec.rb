@@ -12,7 +12,7 @@ RSpec.describe Pigeon::MessageSerializer do
   EXPECTED_DRAFT = TOP_HALF + BOTTOM_HALF
 
   class FakeLocalIdentity
-    def self.public_key
+    def self.multihash
       "FAKE_AUTHOR"
     end
   end

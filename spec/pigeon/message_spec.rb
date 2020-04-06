@@ -54,7 +54,7 @@ RSpec.describe Pigeon::Message do
       "",
       "signature __SIGNATURE__",
     ].join("\n")
-      .gsub("__AUTHOR__", message.author.public_key)
+      .gsub("__AUTHOR__", message.author.multihash)
       .gsub("__SIGNATURE__", message.signature)
     expect(actual).to eq(expected)
   end

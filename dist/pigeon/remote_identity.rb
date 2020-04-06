@@ -6,10 +6,10 @@ module Pigeon
   # help us maintain our sanity when the Gem's API
   # changes.
   class RemoteIdentity
-    attr_reader :public_key
+    attr_reader :multihash
 
     def initialize(multihash)
-      @public_key = multihash
+      @multihash = multihash
     end
   end
 end

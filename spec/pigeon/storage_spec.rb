@@ -52,7 +52,7 @@ RSpec.describe Pigeon::Storage do
 
   it "finds all authored by a particular feed" do
     ingested_messages = Pigeon::Bundle.ingest("./spec/fixtures/normal.bundle")
-    author = ingested_messages.first.author.public_key
+    author = ingested_messages.first.author.multihash
     actual_messages = Pigeon::Storage.current.find_all(author)
     search_results = Pigeon::Storage.current.find_all(author)
   end
@@ -67,10 +67,10 @@ RSpec.describe Pigeon::Storage do
         "e" => Pigeon::Storage.current.set_blob(File.read("./logo.png")),
       }),
       Pigeon::Helpers.create_message("g", {
-        "me_myself_and_i" => Pigeon::LocalIdentity.current.public_key,
+        "me_myself_and_i" => Pigeon::LocalIdentity.current.multihash,
       }),
     ]
-    me = Pigeon::LocalIdentity.current.public_key
+    me = Pigeon::LocalIdentity.current.multihash
     results = Pigeon::Storage.current.find_all(me)
     expect(results.length).to eq(3)
     expect(msgs[0].multihash).to eq(results[0])

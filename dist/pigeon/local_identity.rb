@@ -30,11 +30,11 @@ module Pigeon
       @private_key ||= Helpers.b32_encode(@seed)
     end
 
-    def public_key
+    def multihash
       bytes = @signing_key.verify_key.to_bytes
       b64 = Helpers.b32_encode(bytes)
 
-      @public_key ||= [IDENTITY_SIGIL, b64, IDENTITY_FOOTER].join("")
+      @multihash ||= [IDENTITY_SIGIL, b64, IDENTITY_FOOTER].join("")
     end
 
     def sign(string)

@@ -46,7 +46,8 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] Implement pigeon message find-all for peer feed. I will need to add index for `author => message_count`
  - [X] Switch to Crockford base32- Simplifies support for legacy systems. Easy to implement.
  - [X] Fix `scratchpad.sh` to use Base32
- - [ ] Rename (RemoteIdentity|LocalIdentity)#public_key to #multihash for consistency with other types.
+ - [X] Rename (RemoteIdentity|LocalIdentity)#public_key to #multihash for consistency with other types.
+ - [ ] Fix diagram in spec doc
  - [ ] refactor `Bundle.create` to use `message find-all`.
  - [ ] Need a way of importing / exporting a feeds blobs. (see "Bundle Brainstorming" below)
  - [ ] Need a way of adding peers messages / gossip to bundles. (see "Bundle Brainstorming" below)

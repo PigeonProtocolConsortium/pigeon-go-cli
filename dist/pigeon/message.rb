@@ -12,9 +12,9 @@ module Pigeon
       author = LocalIdentity.current
       depth = Pigeon::Storage
         .current
-        .get_message_count_for(author.public_key)
-      count = store.get_message_count_for(author.public_key)
-      prev = store.get_message_by_depth(author.public_key, count - 1)
+        .get_message_count_for(author.multihash)
+      count = store.get_message_count_for(author.multihash)
+      prev = store.get_message_by_depth(author.multihash, count - 1)
       msg = self.new(author: author,
                      kind: draft.kind,
                      body: draft.body,
@@ -65,8 +65,8 @@ module Pigeon
     end
 
     def verify_depth_prev_and_depth
-      count = store.get_message_count_for(author.public_key)
-      expected_prev = store.get_message_by_depth(author.public_key, count - 1) || Pigeon::EMPTY_MESSAGE
+      count = store.get_message_count_for(author.multihash)
+      expected_prev = store.get_message_by_depth(author.multihash, count - 1) || Pigeon::EMPTY_MESSAGE
       assert("depth", count, depth)
       assert("prev", prev, expected_prev)
     end

@@ -117,7 +117,7 @@ module Pigeon
     def self.verify_string(identity, string_signature, string)
       binary_signature = decode_multihash(string_signature)
 
-      string_key = identity.public_key
+      string_key = identity.multihash
       binary_key = decode_multihash(string_key)
       verify_key = Ed25519::VerifyKey.new(binary_key)
 

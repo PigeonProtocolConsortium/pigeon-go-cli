@@ -32,13 +32,13 @@ module Pigeon
       end
       kp = Pigeon::LocalIdentity.new()
       kp.save!
-      puts kp.public_key
+      puts kp.multihash
     end
 
     desc "show", "Prints your identiy string to STDOUT"
 
     def show
-      puts Pigeon::LocalIdentity.current.public_key
+      puts Pigeon::LocalIdentity.current.multihash
     end
   end
 
@@ -138,7 +138,7 @@ module Pigeon
 
     desc "find-all", "Find a pigeon message in the local DB"
 
-    def find_all(author = Pigeon::LocalIdentity.current.public_key)
+    def find_all(author = Pigeon::LocalIdentity.current.multihash)
       # TODO: Ability to find-all messages by author ID
       puts Pigeon::Storage
              .current
@@ -151,7 +151,7 @@ module Pigeon
     def last
       me = Pigeon::LocalIdentity.current
       store = Pigeon::Storage.current
-      multihash = store.get_message_by_depth(me.public_key, store.message_count - 1)
+      multihash = store.get_message_by_depth(me.multihash, store.message_count - 1)
       puts multihash
     end
   end
@@ -166,7 +166,7 @@ module Pigeon
          _) (   Peers:   #{Pigeon::Storage.current.all_peers.count}
         /    )  Blocked: #{Pigeon::Storage.current.all_blocks.count}
        /_,'  /  Logs:    #{Pigeon::Storage.current.message_count}
-         \\  /   Ident:   #{Pigeon::LocalIdentity.current.public_key}
+         \\  /   Ident:   #{Pigeon::LocalIdentity.current.multihash}
       ===m" "m===
       "
     end

@@ -21,7 +21,7 @@ module Pigeon
     private
 
     def do_render(template)
-      author = message.author.public_key
+      author = message.author.multihash
       body = message.body
       depth = message.depth
       kind = message.kind

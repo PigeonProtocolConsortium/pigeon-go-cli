@@ -7,18 +7,18 @@ RSpec.describe Pigeon::LocalIdentity do
   let(:kp) { Pigeon::LocalIdentity.new(FAKE_SEED) }
 
   HELLO_SIGNATURE = [
-    "erGeJdWiWzDJpKJdkLSc5uBc90j5t90aPcbCehLp6Xg",
-    "tF8f_2AYWXl6ou4oquvEOQVMgrTGuN-q6F9tTW-V5Bw",
-    "==.sig.ed25519",
+    "FARSW9ENM9DK1JD4M9ES1D4WWVG5SXT8Z6VXT6HXRV17M4Q9X5W2",
+    "T5Y7ZZC0C5JYBTMBQ2HAQBRGWGAK42PK3BHQXAX1FPTKBFJQJ1R",
+    ".sig.ed25519",
   ].join("")
   it "signs arbitrary data" do
     expect(kp.sign("hello")).to eq(HELLO_SIGNATURE)
   end
 
   it "generates a pair from a seed" do
-    x = "@7n_g0ca9FFWvMkXy2TMwM7bdMn6tNiEHKzrFX-CzAmQ=.ed25519"
+    x = "@XSZY1ME6QMA5BBSJ8QSDJCSG6EVDTCKYNMV221SB7B2NZR5K09J0.ed25519"
     expect(kp.public_key).to eq(x)
-    y = "FbGoHeEcePDG3Evemrc-hm-S77cXKf8BRQgkYinJggg="
+    y = "2PRTG7F13HWF1HPW9FF9NDSYGSQS5VXQ2WMZY0A510J64AE9G840"
     expect(kp.private_key).to eq(y)
   end
 

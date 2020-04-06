@@ -2,8 +2,8 @@ require "spec_helper"
 
 RSpec.describe Pigeon::Storage do
   LOGO_BLOB = File.read("./logo.png")
-  IDS = %w(@_TlC2z3FT4fimecC4eytrBhOwhLUZsVBZEZriBO9cWs=.ed25519
-           @28FyT7evjcYrrwngr8G2V1HZ0ODK0VPsFctDEZwfZJc=.ed25519)
+  IDS = %w(@ZMWM5PSXRN7RFRMSWW1E3V5DNGC4XGGJTHKCAGB48SNRG4XXE5NG.ed25519
+           @VF0Q4KXQNY6WCAXF17GAZGDPAX8XKM70SB8N7V0NSD1H370ZCJBG.ed25519)
 
   before(:each) do
     Pigeon::Storage.reset

@@ -44,7 +44,7 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] Don't double-ingest messages. It will screw up indexes.
  - [X] 100% test coverage
  - [X] Implement pigeon message find-all for peer feed. I will need to add index for `author => message_count`
- - [ ] Switch to Crockford base32- Simplifies support for legacy systems. Easy to implement.
+ - [X] Switch to Crockford base32- Simplifies support for legacy systems. Easy to implement.
  - [ ] Need a way of importing / exporting a feeds blobs. (see "Bundle Brainstorming" below)
  - [ ] Need a way of adding a peers messages / blobs to bundles. (see "Bundle Brainstorming" below)
  - [ ] refactor `Bundle.create` to use `message find-all`.
@@ -88,7 +88,7 @@ Here's how we will support that:
   * All messages are expected to be sorted by depth
   * Messages from multiple authors may be included in a single bundle, but the messages must appear in the correct order with regards to the `depth` field.
 3. Blobs are stored in a very specific hierarchy to maintain FAT compatibility:
-    * `bundle_x/blobs/sha256/NNNNN/NNNNNNNN/NNNNNNNN/NNNNNNNN.NNN` where `N` is a character of a blob's multihash
+    * `blobs/sha256/AAAAAAAA/BBBBBBBB/CCCCCCCC/DDDDDDDD/EEEEEEEE/FFFFFFFF/G.HHH`
 
 Additional notes:
 

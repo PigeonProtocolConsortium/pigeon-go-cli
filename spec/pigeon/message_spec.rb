@@ -50,7 +50,7 @@ RSpec.describe Pigeon::Message do
       "depth 0",
       "",
       "a:\"bar\"",
-      "b:&ZGKl9RdLU3Avwlr-Z6j5op9XJhCmW6_v_2J1MVUvCW8=.sha256",
+      "b:&CHHABX8Q9D9Q0BY2BBZ6FA7SMAFNE9GGMSDTZVZZC9TK2N9F15QG.sha256",
       "",
       "signature __SIGNATURE__",
     ].join("\n")

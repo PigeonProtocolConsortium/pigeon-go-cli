@@ -143,17 +143,21 @@ RSpec.describe Pigeon::Message do
       kind[rand(0...8)] = n
       draft = Pigeon::Draft.create(kind: kind)
       draft["body"] = "empty"
-      message = Pigeon::Message.publish(draft)
-      expect { message.save! }.to raise_error("WIP")
+      tpl = Pigeon::Message.publish(draft).render
+      boom = ->() { Pigeon::Lexer.tokenize(tpl) }
+      expect(boom).to raise_error(Pigeon::Lexer::LexError)
     end
   end
 
   it "does not allow whitespace in key names" do
     WHITESPACE.map do |n|
       draft = Pigeon::Draft.create(kind: "unit_test")
-      draft[n] = "should crash"
-      message = Pigeon::Message.publish(draft)
-      expect { message.save! }.to raise_error("WIP")
+      key = SecureRandom.alphanumeric(8)
+      key[rand(0...8)] = n
+      draft[key] = "should crash"
+      tpl = Pigeon::Message.publish(draft).render
+      boom = ->() { Pigeon::Lexer.tokenize(tpl) }
+      expect(boom).to raise_error(Pigeon::Lexer::LexError)
     end
   end
 end

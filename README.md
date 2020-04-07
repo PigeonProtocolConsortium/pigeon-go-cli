@@ -53,7 +53,7 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [ ] Don't allow any type of whitespace in `kind` or `string` keys. Write a test for this.
  - [ ] Add Lipmaa links like the Bamboo folks do.
  - [ ] Create regexes in ::Lexer using strings and Regexp.new() for cleaner regexes.
- - [ ] Make the switch to LevelDB, RocksDB or similar (currently using Ruby PStore).
+ - [ ] Make the switch to LevelDB, RocksDB, [UNQLite](https://unqlite.org/features.html) or similar (currently using Ruby PStore).
  - [ ] Need a way of importing / exporting a feeds blobs. (see "Bundle Brainstorming" below)
  - [ ] Need a way of adding peers messages / gossip to bundles. (see "Bundle Brainstorming" below)
  - [ ] Add mandatory `--since=` arg to `bundle create`

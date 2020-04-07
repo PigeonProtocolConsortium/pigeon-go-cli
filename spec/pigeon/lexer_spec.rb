@@ -108,7 +108,7 @@ RSpec.describe Pigeon::Lexer do
   let(:message) do
     draft = Pigeon::Draft.create(kind: "unit_test")
     draft["foo"] = "bar"
-    Pigeon::Message.publish(draft)
+    draft.publish
   end
 
   before(:each) do

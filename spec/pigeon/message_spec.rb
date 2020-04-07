@@ -14,7 +14,7 @@ RSpec.describe Pigeon::Message do
 
   def create_message(params)
     draft = create_draft(params)
-    Pigeon::Message.publish(draft)
+    draft.publish
   end
 
   let(:draft) do
@@ -29,13 +29,13 @@ RSpec.describe Pigeon::Message do
 
   it "discards a draft after signing" do
     expect(draft.internal_id).to eq(Pigeon::Draft.current.internal_id)
-    Pigeon::Message.publish(draft)
+    draft.publish
     expect { Pigeon::Draft.current }.to raise_error("NO DRAFT FOUND")
   end
 
   it "creates a single message" do
-    message = Pigeon::Message.publish(draft)
-    expect(message.author).to eq(Pigeon::LocalIdentity.current)
+    message = draft.publish
+    expect(message.author.multihash).to eq(Pigeon::LocalIdentity.current.multihash)
     expect(message.body).to eq(draft.body)
     expect(message.depth).to eq(0)
     expect(message.kind).to eq("unit_test")
@@ -64,7 +64,7 @@ RSpec.describe Pigeon::Message do
     0.upto(4) do |expected_depth|
       draft1 = Pigeon::Draft.create(kind: "unit_test")
       draft1["description"] = "Message number #{expected_depth}"
-      message = Pigeon::Message.publish(draft1)
+      message = draft1.publish
       all.push(message)
       expect(message.depth).to eq(expected_depth)
       if expected_depth == 0
@@ -143,7 +143,7 @@ RSpec.describe Pigeon::Message do
       kind[rand(0...8)] = n
       draft = Pigeon::Draft.create(kind: kind)
       draft["body"] = "empty"
-      tpl = Pigeon::Message.publish(draft).render
+      tpl = draft.publish.render
       boom = ->() { Pigeon::Lexer.tokenize(tpl) }
       expect(boom).to raise_error(Pigeon::Lexer::LexError)
     end
@@ -155,7 +155,7 @@ RSpec.describe Pigeon::Message do
       key = SecureRandom.alphanumeric(8)
       key[rand(0...8)] = n
       draft[key] = "should crash"
-      tpl = Pigeon::Message.publish(draft).render
+      tpl = draft.publish.render
       boom = ->() { Pigeon::Lexer.tokenize(tpl) }
       expect(boom).to raise_error(Pigeon::Lexer::LexError)
     end

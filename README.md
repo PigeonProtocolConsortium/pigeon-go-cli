@@ -50,6 +50,7 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] Fix diagram in spec doc
  - [X] refactor `Bundle.create` to use `message find-all`.
  - [X] Rename `message find` to `message read`, since other finders return a multihash.
+ - [ ] Move stuff involving `LocalIdentity` out of `Message` class and into `Draft` class (re-use lexer logic)?
  - [ ] Don't allow any type of whitespace in `kind` or `string` keys. Write a test for this.
  - [ ] Add Lipmaa links like the Bamboo folks do.
  - [ ] Create regexes in ::Lexer using strings and Regexp.new() for cleaner regexes.

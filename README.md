@@ -71,6 +71,11 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [ ] Update spec document CLI usage examples to reflect API changes in 2020.
  - [ ] Performance benchmarks (Do this second to last!)
  - [ ] Performance tuning (Do this last!)
+ - [ ] Set a max message size of 4k
+
+# Do this later
+
+ - [ ] Interest and Disinterest Signalling for document routing: Create a `$gossip` message to express `blob.have`, `blob.want` and to note last message received of a peer. This can steer bundle creation and an eventual `--for` flag at bundle creation time.
 
 # Idea Bin
  - [ ] Map/reduce plugin support for custom indices?

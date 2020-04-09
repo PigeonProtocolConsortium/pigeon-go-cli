@@ -16,7 +16,7 @@ module Pigeon
           body: body,
           prev: prev,
           signature: signature,
-          depth: depth)
+          depth: depth).save!
     end
 
     def render

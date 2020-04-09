@@ -120,18 +120,19 @@ RSpec.describe Pigeon::Message do
   end
 
   it "crashes on forged fields" do
-    msg = Pigeon::Parser.parse([
-      [:AUTHOR, "@DYdgK1KUInVtG3lS45hA1HZ-jTuvfLKsxDpXPFCve04=.ed25519"],
-      [:KIND, "invalid"],
-      [:PREV, "NONE"],
-      [:DEPTH, 10],
-      [:HEADER_END],
-      [:BODY_ENTRY, "duplicate", "This key is a duplicate."],
-      [:SIGNATURE, "DN7yPTE-m433ND3jBL4oM23XGxBKafjq0Dp9ArBQa_TIGU7DmCxTumieuPBN-NKxlx_0N7-c5zjLb5XXVHYPCQ==.sig.ed25519"],
-      [:MESSAGE_END],
-    ])
     m = "Expected field `depth` to equal 0, got: 10"
-    expect { msg.first.save! }.to raise_error(Pigeon::Message::VerificationError, m)
+    expect do
+      Pigeon::Parser.parse([
+        [:AUTHOR, "@DYdgK1KUInVtG3lS45hA1HZ-jTuvfLKsxDpXPFCve04=.ed25519"],
+        [:KIND, "invalid"],
+        [:PREV, "NONE"],
+        [:DEPTH, 10],
+        [:HEADER_END],
+        [:BODY_ENTRY, "duplicate", "This key is a duplicate."],
+        [:SIGNATURE, "DN7yPTE-m433ND3jBL4oM23XGxBKafjq0Dp9ArBQa_TIGU7DmCxTumieuPBN-NKxlx_0N7-c5zjLb5XXVHYPCQ==.sig.ed25519"],
+        [:MESSAGE_END],
+      ]).first.save!
+    end.to raise_error(Pigeon::Message::VerificationError, m)
   end
 
   # Every ASCII character that is not a letter:
@@ -155,8 +156,7 @@ RSpec.describe Pigeon::Message do
       key = SecureRandom.alphanumeric(8)
       key[rand(0...8)] = n
       draft[key] = "should crash"
-      tpl = draft.publish.render
-      boom = ->() { Pigeon::Lexer.tokenize(tpl) }
+      boom = ->() { Pigeon::Lexer.tokenize(draft.publish.render) }
       expect(boom).to raise_error(Pigeon::Lexer::LexError)
     end
   end

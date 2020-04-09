@@ -2,7 +2,8 @@ require "digest"
 
 module Pigeon
   class Draft
-    attr_reader :kind, :body, :internal_id
+    attr_reader :signature, :prev, :kind, :internal_id,
+                :depth, :body, :author
 
     def self.create(kind:, body: {})
       self.new(kind: kind, body: body).save
@@ -23,8 +24,12 @@ module Pigeon
     end
 
     def initialize(kind:, body: {})
+      @signature = Pigeon::EMPTY_MESSAGE
+      @prev = Pigeon::EMPTY_MESSAGE
       @kind = kind
+      @depth = -1
       @body = body
+      @author = Pigeon::EMPTY_MESSAGE
       @internal_id = SecureRandom.uuid
     end
 
@@ -49,12 +54,35 @@ module Pigeon
     end
 
     def save
+      puts "Rename to `save_as_draft` to avoid confusion"
       Pigeon::Storage.current.set_config(CURRENT_DRAFT, self)
       self
     end
 
+    # Author a new message.
+    def publish
+      template = MessageSerializer.new(self)
+
+      @author = LocalIdentity.current
+      @depth = store.get_message_count_for(author.multihash)
+      @prev = store.get_message_by_depth(author.multihash, @depth - 1)
+      @signature = author.sign(template.render_without_signature)
+
+      candidate = template.render
+      tokens = Lexer.tokenize(candidate)
+      message = Parser.parse(tokens)[0]
+      self.discard
+      message
+    end
+
     def render
+      puts "Rename to `render_as_draft` to avoid confusion."
+      puts "Do we even need DraftSerializer any more?"
       DraftSerializer.new(self).render
+    end
+
+    def store
+      Pigeon::Storage.current
     end
   end
 end

@@ -50,7 +50,12 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] Fix diagram in spec doc
  - [X] refactor `Bundle.create` to use `message find-all`.
  - [X] Rename `message find` to `message read`, since other finders return a multihash.
+<<<<<<< HEAD
  - [ ] Move stuff involving `LocalIdentity` out of `Message` class and into `Draft` class (re-use lexer logic)?
+=======
+ - [ ] Message.ingest should be the only code path to message authoring.
+ - [ ] Make all methods private except those required for the CLI.
+>>>>>>> draft_refactor
  - [ ] Don't allow any type of whitespace in `kind` or `string` keys. Write a test for this.
  - [ ] Add Lipmaa links like the Bamboo folks do.
  - [ ] Create regexes in ::Lexer using strings and Regexp.new() for cleaner regexes.
@@ -71,6 +76,11 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [ ] Update spec document CLI usage examples to reflect API changes in 2020.
  - [ ] Performance benchmarks (Do this second to last!)
  - [ ] Performance tuning (Do this last!)
+ - [ ] Set a max message size of 4k
+
+# Do this later
+
+ - [ ] Interest and Disinterest Signalling for document routing: Create a `$gossip` message to express `blob.have`, `blob.want` and to note last message received of a peer. This can steer bundle creation and an eventual `--for` flag at bundle creation time.
 
 # Idea Bin
  - [ ] Map/reduce plugin support for custom indices?

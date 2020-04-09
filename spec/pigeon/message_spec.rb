@@ -14,7 +14,7 @@ RSpec.describe Pigeon::Message do
 
   def create_message(params)
     draft = create_draft(params)
-    Pigeon::Message.publish(draft)
+    draft.publish
   end
 
   let(:draft) do
@@ -29,13 +29,13 @@ RSpec.describe Pigeon::Message do
 
   it "discards a draft after signing" do
     expect(draft.internal_id).to eq(Pigeon::Draft.current.internal_id)
-    Pigeon::Message.publish(draft)
+    draft.publish
     expect { Pigeon::Draft.current }.to raise_error("NO DRAFT FOUND")
   end
 
   it "creates a single message" do
-    message = Pigeon::Message.publish(draft)
-    expect(message.author).to eq(Pigeon::LocalIdentity.current)
+    message = draft.publish
+    expect(message.author.multihash).to eq(Pigeon::LocalIdentity.current.multihash)
     expect(message.body).to eq(draft.body)
     expect(message.depth).to eq(0)
     expect(message.kind).to eq("unit_test")
@@ -64,7 +64,7 @@ RSpec.describe Pigeon::Message do
     0.upto(4) do |expected_depth|
       draft1 = Pigeon::Draft.create(kind: "unit_test")
       draft1["description"] = "Message number #{expected_depth}"
-      message = Pigeon::Message.publish(draft1)
+      message = draft1.publish
       all.push(message)
       expect(message.depth).to eq(expected_depth)
       if expected_depth == 0
@@ -120,18 +120,19 @@ RSpec.describe Pigeon::Message do
   end
 
   it "crashes on forged fields" do
-    msg = Pigeon::Parser.parse([
-      [:AUTHOR, "@DYdgK1KUInVtG3lS45hA1HZ-jTuvfLKsxDpXPFCve04=.ed25519"],
-      [:KIND, "invalid"],
-      [:PREV, "NONE"],
-      [:DEPTH, 10],
-      [:HEADER_END],
-      [:BODY_ENTRY, "duplicate", "This key is a duplicate."],
-      [:SIGNATURE, "DN7yPTE-m433ND3jBL4oM23XGxBKafjq0Dp9ArBQa_TIGU7DmCxTumieuPBN-NKxlx_0N7-c5zjLb5XXVHYPCQ==.sig.ed25519"],
-      [:MESSAGE_END],
-    ])
     m = "Expected field `depth` to equal 0, got: 10"
-    expect { msg.first.save! }.to raise_error(Pigeon::Message::VerificationError, m)
+    expect do
+      Pigeon::Parser.parse([
+        [:AUTHOR, "@DYdgK1KUInVtG3lS45hA1HZ-jTuvfLKsxDpXPFCve04=.ed25519"],
+        [:KIND, "invalid"],
+        [:PREV, "NONE"],
+        [:DEPTH, 10],
+        [:HEADER_END],
+        [:BODY_ENTRY, "duplicate", "This key is a duplicate."],
+        [:SIGNATURE, "DN7yPTE-m433ND3jBL4oM23XGxBKafjq0Dp9ArBQa_TIGU7DmCxTumieuPBN-NKxlx_0N7-c5zjLb5XXVHYPCQ==.sig.ed25519"],
+        [:MESSAGE_END],
+      ]).first.save!
+    end.to raise_error(Pigeon::Message::VerificationError, m)
   end
 
   # Every ASCII character that is not a letter:
@@ -143,8 +144,7 @@ RSpec.describe Pigeon::Message do
       kind[rand(0...8)] = n
       draft = Pigeon::Draft.create(kind: kind)
       draft["body"] = "empty"
-      tpl = Pigeon::Message.publish(draft).render
-      boom = ->() { Pigeon::Lexer.tokenize(tpl) }
+      boom = ->() { Pigeon::Lexer.tokenize(draft.publish.render) }
       expect(boom).to raise_error(Pigeon::Lexer::LexError)
     end
   end
@@ -155,8 +155,7 @@ RSpec.describe Pigeon::Message do
       key = SecureRandom.alphanumeric(8)
       key[rand(0...8)] = n
       draft[key] = "should crash"
-      tpl = Pigeon::Message.publish(draft).render
-      boom = ->() { Pigeon::Lexer.tokenize(tpl) }
+      boom = ->() { Pigeon::Lexer.tokenize(draft.publish.render) }
       expect(boom).to raise_error(Pigeon::Lexer::LexError)
     end
   end

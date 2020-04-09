@@ -111,7 +111,7 @@ module Pigeon
     def self.create_message(kind, params)
       draft = Pigeon::Draft.create(kind: kind)
       params.map { |(k, v)| draft[k] = v }
-      Pigeon::Message.publish(draft)
+      draft.publish
     end
 
     def self.verify_string(identity, string_signature, string)

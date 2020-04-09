@@ -7,23 +7,6 @@ module Pigeon
     class VerificationError < StandardError; end
 
     VERFIY_ERROR = "Expected field `%s` to equal %s, got: %s"
-    # Author a new message.
-    def self.publish(draft)
-      author = LocalIdentity.current
-      depth = Pigeon::Storage
-        .current
-        .get_message_count_for(author.multihash)
-      count = store.get_message_count_for(author.multihash)
-      prev = store.get_message_by_depth(author.multihash, count - 1)
-      msg = self.new(author: author,
-                     kind: draft.kind,
-                     body: draft.body,
-                     depth: depth,
-                     prev: prev)
-      msg.save!
-      draft.discard
-      msg
-    end
 
     # Store a message that someone (not the LocalIdentity)
     # has authored.
@@ -33,7 +16,7 @@ module Pigeon
           body: body,
           prev: prev,
           signature: signature,
-          depth: depth)
+          depth: depth).save!
     end
 
     def render
@@ -41,13 +24,15 @@ module Pigeon
     end
 
     def multihash
-      sha256 = Helpers.b32_encode(Digest::SHA256.digest(self.render))
+      tpl = self.render
+      digest = Digest::SHA256.digest(tpl)
+      sha256 = Helpers.b32_encode(digest)
       "#{MESSAGE_SIGIL}#{sha256}#{BLOB_FOOTER}"
     end
 
     def save!
+      puts "TODO: Make this method private."
       return store.read_message(multihash) if store.message?(multihash)
-      calculate_signature
       verify_depth_prev_and_depth
       verify_signature
       self.freeze
@@ -86,22 +71,12 @@ module Pigeon
       @signature = signature
     end
 
-    def calculate_signature
-      return if @signature
-      #TODO: Verify that the author is Pigeon::LocalIdentity.current?
-      @signature = author.sign(template.render_without_signature)
-    end
-
     def template
       MessageSerializer.new(self)
     end
 
-    def self.store
-      Pigeon::Storage.current
-    end
-
     def store
-      self.class.store
+      Pigeon::Storage.current
     end
   end
 end

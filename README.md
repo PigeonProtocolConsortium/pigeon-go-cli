@@ -50,7 +50,7 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] Fix diagram in spec doc
  - [X] refactor `Bundle.create` to use `message find-all`.
  - [X] Rename `message find` to `message read`, since other finders return a multihash.
- - [ ] Message.ingest should be the only code path to message authoring.
+ - [X] Message.ingest should be the only code path to message authoring.
  - [ ] Make all methods private except those required for the CLI.
  - [ ] Don't allow any type of whitespace in `kind` or `string` keys. Write a test for this.
  - [ ] Add Lipmaa links like the Bamboo folks do.

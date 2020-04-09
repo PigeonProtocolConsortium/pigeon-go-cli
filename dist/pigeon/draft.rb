@@ -61,12 +61,11 @@ module Pigeon
 
     # Author a new message.
     def publish
-      count = store.get_message_count_for(author) - 1
       template = MessageSerializer.new(self)
 
       @author = LocalIdentity.current
-      @prev = store.get_message_by_depth(author.multihash, count)
       @depth = store.get_message_count_for(author.multihash)
+      @prev = store.get_message_by_depth(author.multihash, @depth - 1)
       @signature = author.sign(template.render_without_signature)
 
       candidate = template.render

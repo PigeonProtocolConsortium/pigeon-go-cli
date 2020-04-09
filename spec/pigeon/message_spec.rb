@@ -144,8 +144,7 @@ RSpec.describe Pigeon::Message do
       kind[rand(0...8)] = n
       draft = Pigeon::Draft.create(kind: kind)
       draft["body"] = "empty"
-      tpl = draft.publish.render
-      boom = ->() { Pigeon::Lexer.tokenize(tpl) }
+      boom = ->() { Pigeon::Lexer.tokenize(draft.publish.render) }
       expect(boom).to raise_error(Pigeon::Lexer::LexError)
     end
   end

@@ -53,6 +53,8 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] Message.ingest should be the only code path to message authoring.
  - [X] Don't allow any type of whitespace in `kind` or `string` keys. Write a test for this.
  - [ ] Make all methods private except those required for the CLI.
+ - [ ] Run Flog / Flay and friends to find duplications. Will aid in port to other languages.
+ - [ ] Make CLI names consistent with API names. Eg: find vs. read.
  - [ ] Add Lipmaa links like the Bamboo folks do.
  - [ ] Create regexes in ::Lexer using strings and Regexp.new() for cleaner regexes.
  - [ ] Make the switch to LevelDB, RocksDB, [UNQLite](https://unqlite.org/features.html) or similar (currently using Ruby PStore).

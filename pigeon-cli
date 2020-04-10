@@ -87,7 +87,7 @@ module Pigeon
     desc "create", "Begin a new Pigeon message"
 
     def create(kind)
-      puts Pigeon::Draft.create(kind: kind).render
+      puts Pigeon::Draft.create(kind: kind).render_as_draft
     end
 
     desc "append", "Add a key/value pair to the current DRAFT"
@@ -106,7 +106,7 @@ module Pigeon
 
     def show(message_id = "")
       if message_id == ""
-        puts Pigeon::Draft.current.render
+        puts Pigeon::Draft.current.render_as_draft
       else
         bail("You must create a draft first")
       end
@@ -115,9 +115,7 @@ module Pigeon
     desc "sign", "Commit current DRAFT to local feed."
 
     def sign
-      draft = Pigeon::Draft.current
-      message = Pigeon::Message.publish(draft)
-      puts message.render
+      puts Pigeon::Draft.current.publish.render
     end
   end
 
@@ -133,7 +131,7 @@ module Pigeon
     desc "find", "Find a pigeon message in the local DB"
 
     def find(multihash)
-      puts Pigeon::Storage.current.find_message(multihash).render
+      puts Pigeon::Storage.current.read_message(multihash).render
     end
 
     desc "find-all", "Find a pigeon message in the local DB"
@@ -151,7 +149,8 @@ module Pigeon
     def last
       me = Pigeon::LocalIdentity.current
       store = Pigeon::Storage.current
-      multihash = store.get_message_by_depth(me.multihash, store.message_count - 1)
+      mcount = store.get_message_count_for(me.multihash)
+      multihash = store.get_message_by_depth(me.multihash, mcount - 1)
       puts multihash
     end
   end
@@ -160,13 +159,16 @@ module Pigeon
     desc "status", "Show various information about the `.pigeon` directory"
 
     def status
+      store = Pigeon::Storage.current
+      me = Pigeon::LocalIdentity.current.multihash
+      mcount = store.get_message_count_for(me)
       puts "
           -`.   Pigeon Protocol Ruby Client
-        '( @ >  Version: #{Pigeon::VERSION}
-         _) (   Peers:   #{Pigeon::Storage.current.all_peers.count}
-        /    )  Blocked: #{Pigeon::Storage.current.all_blocks.count}
-       /_,'  /  Logs:    #{Pigeon::Storage.current.message_count}
-         \\  /   Ident:   #{Pigeon::LocalIdentity.current.multihash}
+        '( @ >  Version:   #{Pigeon::VERSION}
+         _) (   Peers:     #{store.all_peers.count}
+        /    )  Blocked:   #{store.all_blocks.count}
+       /_,'  /  Published: #{mcount}
+         \\  /   Ident:     #{me}
       ===m" "m===
       "
     end

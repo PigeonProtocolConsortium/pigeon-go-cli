@@ -95,7 +95,7 @@ RSpec.describe Pigeon::Lexer do
   ]
 
   MESSAGE_LINES = [
-    "author @WEf06RUKouNcEVURslzHvepOiK4WbQAgRc_9aiUy7rE=.ed25519",
+    "author @VG44QCHKA38E7754RQ5DAFBMMD2CCZQRZ8BR2J4MRHHGVTHGW670.ed25519",
     "kind unit_test",
     "prev NONE",
     "depth 0",
@@ -149,12 +149,20 @@ RSpec.describe Pigeon::Lexer do
 
   it "catches syntax errors" do
     e = Pigeon::Lexer::LexError
-    [
-      MESSAGE_LINES.dup.insert(3, "@@@").join("\n"),
-      MESSAGE_LINES.dup.insert(5, "@@@").join("\n"),
-      MESSAGE_LINES.dup.insert(7, "@@@").join("\n"),
-    ].map do |bundle|
-      expect { Pigeon::Lexer.tokenize(bundle) }.to raise_error(e)
+    err_map = {
+      0 => "Syntax error at 0. Failed to read header field.",
+      1 => "Syntax error at 69. Failed to read header field.",
+      2 => "Syntax error at 84. Failed to read header field.",
+      3 => "Syntax error at 94. Failed to read header field.",
+      4 => "Syntax error at 102. Failed to read header field.",
+      5 => "Syntax error at 103. Failed to read body field.",
+      6 => "Syntax error at 113. Failed to read body field.",
+      7 => "Parse error at 114. Double carriage return not found.",
+    }
+    (0..7).to_a.map do |n|
+      t = MESSAGE_LINES.dup.insert(n, "@@@").join("\n")
+      emsg = err_map.fetch(n)
+      expect { Pigeon::Lexer.tokenize(t) }.to raise_error(e, emsg)
     end
   end
 end

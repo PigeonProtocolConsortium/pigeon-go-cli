@@ -11,12 +11,16 @@ module Pigeon
     # Store a message that someone (not the LocalIdentity)
     # has authored.
     def self.ingest(author:, body:, depth:, kind:, prev:, signature:)
-      new(author: RemoteIdentity.new(author),
-          kind: kind,
-          body: body,
-          prev: prev,
-          signature: signature,
-          depth: depth).save!
+      params = { author: RemoteIdentity.new(author),
+                 kind: kind,
+                 body: body,
+                 prev: prev,
+                 signature: signature,
+                 depth: depth }
+      # Kind of weird to use `send` but #save! is private,
+      # and I don't want people calling it directly without going through the
+      # lexer / parser first.
+      new(**params).send(:save!)
     end
 
     def render
@@ -30,8 +34,9 @@ module Pigeon
       "#{MESSAGE_SIGIL}#{sha256}#{BLOB_FOOTER}"
     end
 
+    private
+
     def save!
-      puts "TODO: Make this method private."
       return store.read_message(multihash) if store.message?(multihash)
       verify_depth_prev_and_depth
       verify_signature
@@ -39,8 +44,6 @@ module Pigeon
       store.save_message(self)
       self
     end
-
-    private
 
     def assert(field, actual, expected)
       unless actual == expected

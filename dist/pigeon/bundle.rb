@@ -14,7 +14,7 @@ module Pigeon
     def self.ingest(file_path = DEFAULT_BUNDLE_PATH)
       bundle = File.read(file_path)
       tokens = Pigeon::Lexer.tokenize(bundle)
-      Pigeon::Parser.parse(tokens).map(&:save!)
+      Pigeon::Parser.parse(tokens) #.map(&:save!)
     end
   end
 end

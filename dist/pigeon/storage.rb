@@ -25,10 +25,6 @@ module Pigeon
       read { store[COUNT_INDEX_NS][mhash] || 0 }
     end
 
-    def message_count
-      read { store[MESG_NS].count }
-    end
-
     def save_message(msg)
       write do
         return msg if store[MESG_NS][msg.multihash]

@@ -74,9 +74,7 @@ module Pigeon
       message
     end
 
-    def render
-      puts "Rename to `render_as_draft` to avoid confusion."
-      puts "Do we even need DraftSerializer any more?"
+    def render_as_draft
       DraftSerializer.new(self).render
     end
 

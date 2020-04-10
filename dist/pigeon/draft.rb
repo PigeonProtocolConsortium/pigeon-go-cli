@@ -6,7 +6,7 @@ module Pigeon
                 :depth, :body, :author
 
     def self.create(kind:, body: {})
-      self.new(kind: kind, body: body).save
+      self.new(kind: kind, body: body).save_as_draft
     end
 
     def self.current
@@ -49,12 +49,11 @@ module Pigeon
         # This might be a bad or good idea. Not sure yet.
         self.body[key] = value.inspect
       end
-      self.save
+      self.save_as_draft
       return self.body[key]
     end
 
-    def save
-      puts "Rename to `save_as_draft` to avoid confusion"
+    def save_as_draft
       Pigeon::Storage.current.set_config(CURRENT_DRAFT, self)
       self
     end

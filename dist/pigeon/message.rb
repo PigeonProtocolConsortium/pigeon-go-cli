@@ -2,7 +2,7 @@ require "digest"
 
 module Pigeon
   class Message
-    attr_reader :author, :kind, :body, :signature, :depth, :prev
+    attr_reader :author, :kind, :body, :signature, :depth, :lipmaa, :prev
 
     class VerificationError < StandardError; end
 
@@ -10,7 +10,7 @@ module Pigeon
 
     # Store a message that someone (not the LocalIdentity)
     # has authored.
-    def self.ingest(author:, body:, depth:, kind:, prev:, signature:)
+    def self.ingest(author:, body:, depth:, kind:, lipmaa:, prev:, signature:)
       params = { author: RemoteIdentity.new(author),
                  kind: kind,
                  body: body,

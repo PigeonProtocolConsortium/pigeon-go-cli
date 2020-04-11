@@ -24,7 +24,7 @@ module Pigeon
     attr_reader :bundle_string, :scanner, :tokens
     # TODO: Change all the `{40,90}` values in ::Lexer to real values
     # TODO: Create regexes using string and Regexp.new() for cleaner regexes.
-    DEPTH_COUNT = /\d{1,7}/
+    NUMERIC = /\d{1,7}/
     NULL_VALUE = /NONE/
     FEED_VALUE = /@.{52}\.ed25519/
     MESG_VALUE = /%.{52}\.sha256/
@@ -43,7 +43,8 @@ module Pigeon
 
     SEPERATOR = /\n/
     AUTHOR = /author #{FEED_VALUE}\n/
-    DEPTH = /depth #{DEPTH_COUNT}\n/
+    DEPTH = /depth #{NUMERIC}\n/
+    LIPMAA = /lipmaa #{NUMERIC}\n/
     PREV = /prev (#{MESG_VALUE}|#{NULL_VALUE})\n/
     KIND = /kind #{ALPHANUMERICISH}\n/
     BODY_ENTRY = /#{ALPHANUMERICISH}:#{ANY_VALUE}\n/
@@ -79,6 +80,12 @@ module Pigeon
       if scanner.scan(DEPTH)
         depth = scanner.matched.chomp.gsub("depth ", "").to_i
         @tokens << [:DEPTH, depth]
+        return
+      end
+
+      if scanner.scan(LIPMAA)
+        depth = scanner.matched.chomp.gsub("depth ", "").to_i
+        @tokens << [:LIPMAA, depth]
         return
       end
 

@@ -92,10 +92,7 @@ RSpec.describe Pigeon::Message do
     expect(m4.prev).to be
   end
 
-  # Init LocalIdentity
-  # Get secret
-  # Create signing key
-
+  it "verifies accuracy of Lipmaa links"
   it "verifies accuracy of signatures" do
     # === Initial setup
     Pigeon::LocalIdentity.current

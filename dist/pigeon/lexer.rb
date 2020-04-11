@@ -1,5 +1,26 @@
 module Pigeon
   class Lexer
+    def initialize(bundle_string)
+      @bundle_string = bundle_string
+      @scanner = StringScanner.new(bundle_string)
+      @tokens = []
+      @state = HEADER
+    end
+
+    def tokenize
+      until scanner.eos?
+        case @state
+        when HEADER then do_header
+        when BODY then do_body
+        when FOOTER then do_footer
+        end
+      end
+      maybe_end_message!
+      return tokens
+    end
+
+    private
+
     attr_reader :bundle_string, :scanner, :tokens
     # TODO: Change all the `{40,90}` values in ::Lexer to real values
     # TODO: Create regexes using string and Regexp.new() for cleaner regexes.
@@ -35,27 +56,6 @@ module Pigeon
 
     def self.tokenize(bundle_string)
       new(bundle_string).tokenize
-    end
-
-    def tokenize
-      until scanner.eos?
-        case @state
-        when HEADER then do_header
-        when BODY then do_body
-        when FOOTER then do_footer
-        end
-      end
-      maybe_end_message!
-      return tokens
-    end
-
-    private
-
-    def initialize(bundle_string)
-      @bundle_string = bundle_string
-      @scanner = StringScanner.new(bundle_string)
-      @tokens = []
-      @state = HEADER
     end
 
     def flunk!(why)

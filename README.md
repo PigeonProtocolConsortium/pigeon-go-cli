@@ -53,11 +53,11 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] Message.ingest should be the only code path to message authoring.
  - [X] Don't allow any type of whitespace in `kind` or `string` keys. Write a test for this.
  - [X] Run Flog / Flay and friends to find duplications. Will aid in port to other languages.
- - [ ] Make all methods private except those required for the CLI.
- - [ ] Make CLI names consistent with API names. Eg: find vs. read.
+ - [X] Make all methods private except those required for the CLI.
  - [ ] Add Lipmaa links like the Bamboo folks do.
- - [ ] Create regexes in ::Lexer using strings and Regexp.new() for cleaner regexes.
  - [ ] Make the switch to LevelDB, RocksDB, [UNQLite](https://unqlite.org/features.html) or similar (currently using Ruby PStore).
+ - [ ] Make CLI names consistent with API names. Eg: find vs. read.
+ - [ ] Create regexes in ::Lexer using strings and Regexp.new() for cleaner regexes.
  - [ ] Need a way of importing / exporting a feeds blobs. (see "Bundle Brainstorming" below)
  - [ ] Need a way of adding peers messages / gossip to bundles. (see "Bundle Brainstorming" below)
  - [ ] Add mandatory `--since=` arg to `bundle create`

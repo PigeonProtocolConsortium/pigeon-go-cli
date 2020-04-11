@@ -83,6 +83,28 @@ module Pigeon
       "X" => 0b11101, "Y" => 0b11110, "Z" => 0b11111,
     }.freeze
 
+    def self.lipmaa(n)
+      m, po3, x = 1, 3, n
+      # find k such that (3^k - 1)/2 >= n
+      while (m < n)
+        po3 *= 3
+        m = (po3 - 1) / 2
+      end
+      po3 /= 3
+      # find longest possible backjump
+      if (m != n)
+        while x != 0
+          m = (po3 - 1) / 2
+          po3 /= 3
+          x %= m
+        end
+        if (m != po3)
+          po3 = m
+        end
+      end
+      return n - po3
+    end
+
     # http://www.crockford.com/wrmg/base32.html
     def self.b32_encode(string)
       string

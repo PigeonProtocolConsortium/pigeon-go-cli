@@ -14,11 +14,11 @@ RSpec.describe Pigeon::Storage do
     Pigeon::Storage.current
   end
 
-  it "deletes a config" do
+  it "sets a config" do
     s.set_config("FOO", "BAR")
     value = s.get_config("FOO")
     expect(value).to eq("BAR")
-    s.delete_config("FOO")
+    s.set_config("FOO", nil)
     value = s.get_config("FOO")
     expect(value).to eq(nil)
   end

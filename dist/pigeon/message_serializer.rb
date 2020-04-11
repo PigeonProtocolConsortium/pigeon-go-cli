@@ -4,8 +4,6 @@ module Pigeon
   # Wrapper around a message to perform string templating.
   # Renders a string that is a Pigeon-compliant message.
   class MessageSerializer
-    attr_reader :message
-
     def initialize(message)
       @message = message
     end
@@ -19,6 +17,8 @@ module Pigeon
     end
 
     private
+
+    attr_reader :message
 
     def do_render(template)
       author = message.author.multihash

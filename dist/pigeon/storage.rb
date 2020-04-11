@@ -11,74 +11,6 @@ module Pigeon
       @current = nil
     end
 
-    def get_message_by_depth(multihash, depth)
-      raise "Expected string, got #{multihash.class}" unless multihash.is_a?(String) # Delete later
-      # Map<[multihash(str), depth(int)], Signature>
-      key = [multihash, depth].join(".")
-      read { store[MESSAGE_BY_DEPTH_NS][key] }
-    end
-
-    # `nil` means "none"
-    #
-    def get_message_count_for(mhash)
-      raise "Expected string, got #{mhash.class}" unless mhash.is_a?(String) # Delete later
-      read { store[COUNT_INDEX_NS][mhash] || 0 }
-    end
-
-    def save_message(msg)
-      write do
-        return msg if store[MESG_NS][msg.multihash]
-        insert_and_update_index(msg)
-        msg
-      end
-    end
-
-    def read_message(multihash)
-      read { store[MESG_NS].fetch(multihash) }
-    end
-
-    def message?(multihash)
-      read { store[MESG_NS].fetch(multihash, false) }
-    end
-
-    def find_all(author)
-      # TODO: Ability to pass an author ID to `find-all`
-      store = Pigeon::Storage.current
-      all = []
-      depth = -1
-      last = ""
-      until (last == nil) || (depth > 999999)
-        last = store.get_message_by_depth(author, depth += 1)
-        all.push(last) if last
-      end
-      return all
-    end
-
-    def set_config(key, value)
-      write { store[CONF_NS][key] = value }
-    end
-
-    def delete_config(key)
-      write { store[CONF_NS].delete(key) }
-    end
-
-    def get_config(key)
-      read { store[CONF_NS][key] }
-    end
-
-    def set_blob(data)
-      raw_digest = Digest::SHA256.digest(data)
-      b64_digest = Helpers.b32_encode(raw_digest)
-      multihash = [BLOB_SIGIL, b64_digest, BLOB_FOOTER].join("")
-      write { store[BLOB_NS][multihash] = data }
-
-      multihash
-    end
-
-    def get_blob(blob_multihash)
-      read { store[BLOB_NS][blob_multihash] }
-    end
-
     def add_peer(identity)
       path = Helpers.decode_multihash(identity)
       write { store[PEER_NS].add(identity) }
@@ -105,6 +37,75 @@ module Pigeon
       read { store[BLCK_NS].to_a }
     end
 
+    def get_config(key)
+      read { store[CONF_NS][key] }
+    end
+
+    def set_config(key, value)
+      write { store[CONF_NS][key] = value }
+    end
+
+    def set_blob(data)
+      raw_digest = Digest::SHA256.digest(data)
+      b64_digest = Helpers.b32_encode(raw_digest)
+      multihash = [BLOB_SIGIL, b64_digest, BLOB_FOOTER].join("")
+      write { store[BLOB_NS][multihash] = data }
+
+      multihash
+    end
+
+    def get_blob(blob_multihash)
+      read { store[BLOB_NS][blob_multihash] }
+    end
+
+    # `nil` means "none"
+    def get_message_count_for(mhash)
+      raise "Expected string, got #{mhash.class}" unless mhash.is_a?(String) # Delete later
+      read { store[COUNT_INDEX_NS][mhash] || 0 }
+    end
+
+    def find_all(author)
+      # TODO: Ability to pass an author ID to `find-all`
+      store = Pigeon::Storage.current
+      all = []
+      depth = -1
+      last = ""
+      until (last == nil) || (depth > 999999)
+        last = store.get_message_by_depth(author, depth += 1)
+        all.push(last) if last
+      end
+      return all
+    end
+
+    def get_message_by_depth(multihash, depth)
+      raise "Expected string, got #{multihash.class}" unless multihash.is_a?(String) # Delete later
+      # Map<[multihash(str), depth(int)], Signature>
+      key = [multihash, depth].join(".")
+      read { store[MESSAGE_BY_DEPTH_NS][key] }
+    end
+
+    def message?(multihash)
+      read { store[MESG_NS].fetch(multihash, false) }
+    end
+
+    def read_message(multihash)
+      read { store[MESG_NS].fetch(multihash) }
+    end
+
+    def save_message(msg)
+      write do
+        return msg if store[MESG_NS][msg.multihash]
+        insert_and_update_index(msg)
+        msg
+      end
+    end
+
+    private
+
+    def delete_config(key)
+      write { store[CONF_NS].delete(key) }
+    end
+
     def bootstrap
       write do
         # Wait what? Why is there a depth and count
@@ -119,8 +120,6 @@ module Pigeon
       end
       store
     end
-
-    private
 
     def store
       if @store

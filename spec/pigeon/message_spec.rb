@@ -23,8 +23,10 @@ RSpec.describe Pigeon::Message do
                    "b" => hash })
   end
 
+  let(:templated_message) { create_message({ "a" => "b" }) }
+
   let (:template) do
-    Pigeon::MessageSerializer.new(create_message({ "a" => "b" }))
+    Pigeon::MessageSerializer.new(templated_message)
   end
 
   it "discards a draft after signing" do
@@ -98,7 +100,7 @@ RSpec.describe Pigeon::Message do
     # === Initial setup
     Pigeon::LocalIdentity.current
     secret = Pigeon::Storage.current.get_config(Pigeon::SEED_CONFIG_KEY)
-    message = template.message
+    message = templated_message
     plaintext = template.render_without_signature
 
     # Make fake pairs of data for cross-checking

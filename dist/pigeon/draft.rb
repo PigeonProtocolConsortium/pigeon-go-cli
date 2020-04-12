@@ -2,7 +2,7 @@ require "digest"
 
 module Pigeon
   class Draft
-    attr_reader :signature, :prev, :kind, :internal_id,
+    attr_reader :signature, :prev, :lipmaa, :kind, :internal_id,
                 :depth, :body, :author
 
     def self.create(kind:, body: {})
@@ -24,12 +24,13 @@ module Pigeon
     end
 
     def initialize(kind:, body: {})
-      @signature = Pigeon::EMPTY_MESSAGE
-      @prev = Pigeon::EMPTY_MESSAGE
+      @signature = Pigeon::NOTHING
+      @prev = Pigeon::NOTHING
       @kind = kind
       @depth = -1
       @body = body
-      @author = Pigeon::EMPTY_MESSAGE
+      @author = Pigeon::NOTHING
+      @lipmaa = Pigeon::NOTHING
       @internal_id = SecureRandom.uuid
     end
 
@@ -66,7 +67,7 @@ module Pigeon
       @depth = store.get_message_count_for(author.multihash)
       @prev = store.get_message_by_depth(author.multihash, @depth - 1)
       @signature = author.sign(template.render_without_signature)
-
+      @lipmaa = Helpers.lipmaa(@depth)
       candidate = template.render
       tokens = Lexer.tokenize(candidate)
       message = Parser.parse(tokens)[0]

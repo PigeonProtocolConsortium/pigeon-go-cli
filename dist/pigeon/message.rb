@@ -15,6 +15,7 @@ module Pigeon
                  kind: kind,
                  body: body,
                  prev: prev,
+                 lipmaa: lipmaa,
                  signature: signature,
                  depth: depth }
       # Kind of weird to use `send` but #save! is private,
@@ -54,8 +55,9 @@ module Pigeon
 
     def verify_depth_prev_and_depth
       count = store.get_message_count_for(author.multihash)
-      expected_prev = store.get_message_by_depth(author.multihash, count - 1) || Pigeon::EMPTY_MESSAGE
+      expected_prev = store.get_message_by_depth(author.multihash, count - 1) || Pigeon::NOTHING
       assert("depth", count, depth)
+      assert("lipmaa", Helpers.lipmaa(count), lipmaa)
       assert("prev", prev, expected_prev)
     end
 
@@ -64,13 +66,20 @@ module Pigeon
       Helpers.verify_string(author, signature, tpl)
     end
 
-    def initialize(author:, kind:, body:, depth:, prev:, signature: nil)
+    def initialize(author:,
+                   kind:,
+                   body:,
+                   depth:,
+                   prev:,
+                   lipmaa:,
+                   signature:)
       raise MISSING_BODY if body.empty?
       @author = author
       @body = body
       @depth = depth
       @kind = kind
-      @prev = prev || Pigeon::EMPTY_MESSAGE
+      @prev = prev || Pigeon::NOTHING
+      @lipmaa = lipmaa
       @signature = signature
     end
 

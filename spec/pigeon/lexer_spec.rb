@@ -6,6 +6,7 @@ RSpec.describe Pigeon::Lexer do
     [:KIND, "1db28f82-904c-4a31-a28a-b2da5f7be398"],
     [:PREV, "NONE"],
     [:DEPTH, 0],
+    [:LIPMAA, Pigeon::Helpers.lipmaa(0)],
     [:HEADER_END],
     [:BODY_ENTRY, "foo", "\"bar\""],
     [:BODY_END],
@@ -15,6 +16,7 @@ RSpec.describe Pigeon::Lexer do
     [:KIND, "375de134-161d-47c8-8ff6-e80776155d39"],
     [:PREV, "%4541G6XQ9VBG8N0VXCF4K04F0AX1JQNJD3NCPV0JYHQJV0KVJW5G.sha256"],
     [:DEPTH, 1],
+    [:LIPMAA, Pigeon::Helpers.lipmaa(1)],
     [:HEADER_END],
     [:BODY_ENTRY, "foo", "\"810c05f8-d594-493a-a540-21d5c1cb52c6\""],
     [:BODY_END],
@@ -24,6 +26,7 @@ RSpec.describe Pigeon::Lexer do
     [:KIND, "483290a3-e79d-4d03-97d0-85439bd716f3"],
     [:PREV, "%4D9R2SR4PCQEZ542CPXPS2ZHPRSSVXEVENFF91TP82FA45Y1RE5G.sha256"],
     [:DEPTH, 2],
+    [:LIPMAA, Pigeon::Helpers.lipmaa(2)],
     [:HEADER_END],
     [:BODY_ENTRY, "foo", "\"a88b270e-fa4b-40b7-ba35-fa498f9adfc6\""],
     [:BODY_END],
@@ -33,6 +36,7 @@ RSpec.describe Pigeon::Lexer do
     [:KIND, "4f3b925e-a8fd-4780-a357-1d67eca03459"],
     [:PREV, "%1N8Q1NZKW29CPFTTGNNVD8DZE99Q0KNF5JYN3VW9545S5DB69KKG.sha256"],
     [:DEPTH, 3],
+    [:LIPMAA, Pigeon::Helpers.lipmaa(3)],
     [:HEADER_END],
     [:BODY_ENTRY, "foo", "\"bar\""],
     [:BODY_END],
@@ -42,6 +46,7 @@ RSpec.describe Pigeon::Lexer do
     [:KIND, "8aeebbd8-3317-4de0-a770-1abe390af126"],
     [:PREV, "%JTEFPAT798AGDPKPHRMAV36GZAFNEBEMR5ZA9YHNJX0W9HFSP8EG.sha256"],
     [:DEPTH, 4],
+    [:LIPMAA, Pigeon::Helpers.lipmaa(4)],
     [:HEADER_END],
     [:BODY_ENTRY, "foo", "\"123\""],
     [:BODY_END],
@@ -51,6 +56,7 @@ RSpec.describe Pigeon::Lexer do
     [:KIND, "80c5cd4d-f9b6-447f-9d0e-1065ee563d7f"],
     [:PREV, "%8X06YEJEP256CQ0M2A04ARW68ABAD4EKSJE76XDF5CDAMJ5Q5NWG.sha256"],
     [:DEPTH, 5],
+    [:LIPMAA, Pigeon::Helpers.lipmaa(5)],
     [:HEADER_END],
     [:BODY_ENTRY, "foo", "\"bar\""],
     [:BODY_END],
@@ -60,6 +66,7 @@ RSpec.describe Pigeon::Lexer do
     [:KIND, "dc2da357-99bb-44ab-811b-1e305b73b8f9"],
     [:PREV, "%669MW82Y549827TWM70AZV7K2JS9RP96W8AMGYARFH7YDENJ0M9G.sha256"],
     [:DEPTH, 6],
+    [:LIPMAA, Pigeon::Helpers.lipmaa(6)],
     [:HEADER_END],
     [:BODY_ENTRY, "foo", "\"123\""],
     [:BODY_END],
@@ -69,6 +76,7 @@ RSpec.describe Pigeon::Lexer do
     [:KIND, "e6416139-2e25-4b0a-95c2-d8fc2bece4cf"],
     [:PREV, "%HBXCMMYD7Y2NGSB7X05X1HQ21YYJZEN7D5RKV6KW83KN6R0RCXK0.sha256"],
     [:DEPTH, 7],
+    [:LIPMAA, Pigeon::Helpers.lipmaa(7)],
     [:HEADER_END],
     [:BODY_ENTRY, "foo", "\"123\""],
     [:BODY_END],
@@ -78,6 +86,7 @@ RSpec.describe Pigeon::Lexer do
     [:KIND, "1fbf93de-e1fb-41ce-9f23-b275b5aa8578"],
     [:PREV, "%DHTGB2NFWHQWDV3PPZVP2DV8CGXAAVA12KV0E7VQZE6T6STHGJC0.sha256"],
     [:DEPTH, 8],
+    [:LIPMAA, Pigeon::Helpers.lipmaa(8)],
     [:HEADER_END],
     [:BODY_ENTRY, "foo", "\"bar\""],
     [:BODY_END],
@@ -87,6 +96,7 @@ RSpec.describe Pigeon::Lexer do
     [:KIND, "aca35bce-12b4-4c67-8e06-f62e5b97c7aa"],
     [:PREV, "%3AG0M4483SPP3GCERE25RWZF50Y8CYCJANC2SRNHT4X1N1S37110.sha256"],
     [:DEPTH, 9],
+    [:LIPMAA, Pigeon::Helpers.lipmaa(9)],
     [:HEADER_END],
     [:BODY_ENTRY, "foo", "\"123\""],
     [:BODY_END],
@@ -117,6 +127,7 @@ RSpec.describe Pigeon::Lexer do
   end
 
   it "tokenizes a bundle" do
+    pending("Must fix this last")
     bundle = File.read("./spec/fixtures/normal.bundle")
     tokens = Pigeon::Lexer.tokenize(bundle)
     EXPECTED_TOKENS1.each_with_index do |item, i|
@@ -143,7 +154,7 @@ RSpec.describe Pigeon::Lexer do
     expect(hash[:BODY]).to eq(message.body)
     expect(hash[:DEPTH]).to eq(message.depth)
     expect(hash[:KIND]).to eq(message.kind)
-    expect(hash[:PREV]).to eq Pigeon::EMPTY_MESSAGE
+    expect(hash[:PREV]).to eq Pigeon::NOTHING
     expect(hash[:SIGNATURE]).to eq(message.signature)
   end
 

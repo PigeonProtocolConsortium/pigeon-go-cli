@@ -20,7 +20,7 @@ module Pigeon
   FOOTER_TPL = File.read(File.join(TPL_DIR, "3_footer.erb")).sub("\n", "")
   COMPLETE_TPL = [HEADER_TPL, BODY_TPL, FOOTER_TPL].join("")
   CURRENT_DRAFT = "HEAD.draft"
-  EMPTY_MESSAGE = "NONE"
+  NOTHING = "NONE"
   OUTBOX_PATH = File.join(".pigeon", "user")
   DRAFT_PLACEHOLDER = "DRAFT"
   CR = "\n"
@@ -84,6 +84,11 @@ module Pigeon
     }.freeze
 
     def self.lipmaa(n)
+      # The original lipmaa function returns -1 for 0
+      # but that does not mesh well with our serialization
+      # scheme. Comments welcome on this one.
+      return 0 if n == 0 # Prevent -1 return value.
+
       m, po3, x = 1, 3, n
       # find k such that (3^k - 1)/2 >= n
       while (m < n)

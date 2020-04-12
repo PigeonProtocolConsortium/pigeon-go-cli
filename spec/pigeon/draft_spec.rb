@@ -19,6 +19,7 @@ RSpec.describe Pigeon::Draft do
     "kind unit_test",
     "prev DRAFT",
     "depth DRAFT",
+    "lipmaa DRAFT",
     "\na:\"bar\"",
     "b:&CHHABX8Q9D9Q0BY2BBZ6FA7SMAFNE9GGMSDTZVZZC9TK2N9F15QG.sha256",
     "\n",

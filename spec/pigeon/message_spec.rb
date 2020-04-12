@@ -41,7 +41,7 @@ RSpec.describe Pigeon::Message do
     expect(message.body).to eq(draft.body)
     expect(message.depth).to eq(0)
     expect(message.kind).to eq("unit_test")
-    expect(message.prev).to eq(Pigeon::EMPTY_MESSAGE)
+    expect(message.prev).to eq(Pigeon::NOTHING)
     expect(message.signature.include?(Pigeon::SIG_FOOTER)).to eq(true)
     expect(message.signature.length).to be > 99
     actual = message.render
@@ -70,7 +70,7 @@ RSpec.describe Pigeon::Message do
       all.push(message)
       expect(message.depth).to eq(expected_depth)
       if expected_depth == 0
-        expect(message.prev).to eq(Pigeon::EMPTY_MESSAGE)
+        expect(message.prev).to eq(Pigeon::NOTHING)
       else
         expect(message.prev).to eq(all[expected_depth - 1].multihash)
       end
@@ -83,7 +83,7 @@ RSpec.describe Pigeon::Message do
     m3 = create_message({ "e" => "f" })
     m4 = create_message({ "g" => "h" })
 
-    expect(m1.prev).to eq(Pigeon::EMPTY_MESSAGE)
+    expect(m1.prev).to eq(Pigeon::NOTHING)
     expect(m2.prev).to be
     expect(m2.prev).to eq(m1.multihash)
     expect(m3.prev).to eq(m2.multihash)
@@ -126,6 +126,7 @@ RSpec.describe Pigeon::Message do
         [:KIND, "invalid"],
         [:PREV, "NONE"],
         [:DEPTH, 10],
+        [:LIPMAA, Pigeon::Helpers.lipmaa(10)],
         [:HEADER_END],
         [:BODY_ENTRY, "duplicate", "This key is a duplicate."],
         [:SIGNATURE, "DN7yPTE-m433ND3jBL4oM23XGxBKafjq0Dp9ArBQa_TIGU7DmCxTumieuPBN-NKxlx_0N7-c5zjLb5XXVHYPCQ==.sig.ed25519"],

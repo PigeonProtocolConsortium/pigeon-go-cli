@@ -7,6 +7,7 @@ RSpec.describe Pigeon::MessageSerializer do
               "\nkind FAKE_KIND",
               "\nprev NONE",
               "\ndepth 23",
+              "\nlipmaa 22",
               "\n\nfoo:\"bar\"\n\n"].join("")
   BOTTOM_HALF = "signature XYZ.sig.sha256"
   EXPECTED_DRAFT = TOP_HALF + BOTTOM_HALF
@@ -25,7 +26,7 @@ RSpec.describe Pigeon::MessageSerializer do
       depth: 23,
       prev: nil,
       signature: "XYZ.sig.sha256",
-      lipmaa: 0,
+      lipmaa: 22,
     }.values
     message = MessageShim.new(*params)
     template = Pigeon::MessageSerializer.new(message)

@@ -1,5 +1,13 @@
 module Pigeon
   class Lexer
+    def self.tokenize(bundle_string)
+      new(bundle_string).tokenize
+    end
+
+    def self.tokenize_unsigned(bundle_string, signature)
+      new(bundle_string).tokenize_unsigned(signature)
+    end
+
     def initialize(bundle_string)
       @bundle_string = bundle_string
       @scanner = StringScanner.new(bundle_string)
@@ -15,6 +23,18 @@ module Pigeon
         when FOOTER then do_footer
         end
       end
+      maybe_end_message!
+      return tokens
+    end
+
+    def tokenize_unsigned(signature)
+      until scanner.eos?
+        case @state
+        when HEADER then do_header
+        when BODY then do_body
+        end
+      end
+      tokens << [:SIGNATURE, signature]
       maybe_end_message!
       return tokens
     end
@@ -55,17 +75,13 @@ module Pigeon
 
     class LexError < StandardError; end
 
-    def self.tokenize(bundle_string)
-      new(bundle_string).tokenize
-    end
-
     def flunk!(why)
       raise LexError, "Syntax error at #{scanner.pos}. #{why}"
     end
 
     # This might be a mistake or uneccessary. NN 20 MAR 2020
     def maybe_end_message!
-      unless tokens.last.last == :MESSAGE_END
+      if tokens.last.last != :MESSAGE_END
         @tokens << [:MESSAGE_END]
       end
     end

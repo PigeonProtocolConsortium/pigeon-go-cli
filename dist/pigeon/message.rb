@@ -83,6 +83,16 @@ module Pigeon
       @signature = signature
     end
 
+    def params
+      { author: @author,
+        kind: @kind,
+        body: @body,
+        depth: @depth,
+        prev: @prev,
+        lipmaa: @lipmaa,
+        signature: @signature }
+    end
+
     def template
       MessageSerializer.new(self)
     end

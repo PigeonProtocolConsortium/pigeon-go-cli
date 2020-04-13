@@ -11,7 +11,7 @@ module Pigeon
       depth = DRAFT_PLACEHOLDER
       prev = DRAFT_PLACEHOLDER
       signature = DRAFT_PLACEHOLDER
-      lipmaa = message.lipmaa
+      lipmaa = DRAFT_PLACEHOLDER
       ERB.new([HEADER_TPL, BODY_TPL].join("")).result(binding)
     end
   end

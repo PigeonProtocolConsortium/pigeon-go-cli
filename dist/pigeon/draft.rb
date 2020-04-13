@@ -62,14 +62,13 @@ module Pigeon
     # Author a new message.
     def publish
       template = MessageSerializer.new(self)
-
       @author = LocalIdentity.current
       @depth = store.get_message_count_for(author.multihash)
       @prev = store.get_message_by_depth(author.multihash, @depth - 1)
-      @signature = author.sign(template.render_without_signature)
       @lipmaa = Helpers.lipmaa(@depth)
-      candidate = template.render
-      tokens = Lexer.tokenize(candidate)
+      unsigned = template.render_without_signature
+      @signature = author.sign(unsigned)
+      tokens = Lexer.tokenize_unsigned(unsigned, signature)
       message = Parser.parse(tokens)[0]
       self.discard
       message

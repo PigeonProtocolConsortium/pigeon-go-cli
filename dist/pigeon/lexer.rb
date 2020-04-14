@@ -100,7 +100,7 @@ module Pigeon
       end
 
       if scanner.scan(LIPMAA)
-        depth = scanner.matched.chomp.gsub("depth ", "").to_i
+        depth = scanner.matched.chomp.gsub("lipmaa ", "").to_i
         @tokens << [:LIPMAA, depth]
         return
       end

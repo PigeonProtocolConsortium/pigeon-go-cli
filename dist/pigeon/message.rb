@@ -39,7 +39,7 @@ module Pigeon
 
     def save!
       return store.read_message(multihash) if store.message?(multihash)
-      verify_depth_prev_and_depth
+      verify_counted_fields
       verify_signature
       self.freeze
       store.save_message(self)
@@ -53,11 +53,14 @@ module Pigeon
       end
     end
 
-    def verify_depth_prev_and_depth
+    def verify_counted_fields
       count = store.get_message_count_for(author.multihash)
       expected_prev = store.get_message_by_depth(author.multihash, count - 1) || Pigeon::NOTHING
       assert("depth", count, depth)
-      assert("lipmaa", Helpers.lipmaa(count), lipmaa)
+      # TODO: Re-visit this. Our current verification method
+      # is probably too strict and won't allow for partial
+      # verification of feeds.
+      assert("lipmaa", Helpers.lipmaa(depth), lipmaa)
       assert("prev", prev, expected_prev)
     end
 
@@ -81,16 +84,6 @@ module Pigeon
       @prev = prev || Pigeon::NOTHING
       @lipmaa = lipmaa
       @signature = signature
-    end
-
-    def params
-      { author: @author,
-        kind: @kind,
-        body: @body,
-        depth: @depth,
-        prev: @prev,
-        lipmaa: @lipmaa,
-        signature: @signature }
     end
 
     def template

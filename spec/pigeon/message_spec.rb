@@ -50,6 +50,7 @@ RSpec.describe Pigeon::Message do
       "kind unit_test",
       "prev NONE",
       "depth 0",
+      "lipmaa 0",
       "",
       "a:\"bar\"",
       "b:&CHHABX8Q9D9Q0BY2BBZ6FA7SMAFNE9GGMSDTZVZZC9TK2N9F15QG.sha256",

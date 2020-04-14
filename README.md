@@ -54,8 +54,8 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] Don't allow any type of whitespace in `kind` or `string` keys. Write a test for this.
  - [X] Run Flog / Flay and friends to find duplications. Will aid in port to other languages.
  - [X] Make all methods private except those required for the CLI.
- - [ ] Add Lipmaa links like the Bamboo folks do.
- - [ ] Verification of `depth` and `lipmaa` may need a re-look to support partial verification.
+ - [X] Add Lipmaa links like the Bamboo folks do.
+ - [ ] Set a max message size.
  - [ ] Make the switch to LevelDB, RocksDB, [UNQLite](https://unqlite.org/features.html) or similar (currently using Ruby PStore).
  - [ ] Make CLI names consistent with API names. Eg: find vs. read.
  - [ ] Create regexes in ::Lexer using strings and Regexp.new() for cleaner regexes.
@@ -75,7 +75,7 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [ ] Update spec document CLI usage examples to reflect API changes in 2020.
  - [ ] Performance benchmarks (Do this second to last!)
  - [ ] Performance tuning (Do this last!)
- - [ ] Set a max message size of 4k
+ - [ ] (later, not now) Support partial verification via `lipmaa` property.
 
 # Do this later
 

@@ -102,10 +102,6 @@ module Pigeon
 
     private
 
-    def delete_config(key)
-      write { store[CONF_NS].delete(key) }
-    end
-
     def bootstrap
       write do
         # Wait what? Why is there a depth and count

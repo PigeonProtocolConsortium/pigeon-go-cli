@@ -23,7 +23,6 @@ RSpec.describe Pigeon::Lexer do
   ]
 
   it "parses tokens" do
-    pending("Fix this last, after all *.bundle fixtures are fixed.")
     results = Pigeon::Parser.parse(tokens)
     expect(results.length).to eq(10)
     expect(results.first).to be_kind_of(Pigeon::Message)
@@ -31,7 +30,6 @@ RSpec.describe Pigeon::Lexer do
   end
 
   it "ingests and reconstructs a bundle" do
-    pending("Must fix this last")
     messages = Pigeon::Bundle.ingest("./spec/fixtures/normal.bundle")
     expect(messages.length).to eq(10)
     expect(messages.map(&:class).uniq).to eq([Pigeon::Message])

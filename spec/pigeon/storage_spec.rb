@@ -51,7 +51,6 @@ RSpec.describe Pigeon::Storage do
   end
 
   it "finds all authored by a particular feed" do
-    pending("Fix last")
     ingested_messages = Pigeon::Bundle.ingest("./spec/fixtures/normal.bundle")
     author = ingested_messages.first.author.multihash
     actual_messages = Pigeon::Storage.current.find_all(author)

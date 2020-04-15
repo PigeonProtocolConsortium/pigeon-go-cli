@@ -10,9 +10,8 @@ RSpec.describe Pigeon::Storage do
     Pigeon::LocalIdentity.reset
   end
 
-  let(:s) do
-    Pigeon::Storage.current
-  end
+  let(:s) { Pigeon::Storage.current }
+  let(:db) { Pigeon::Database.new }
 
   it "sets a config" do
     s.set_config("FOO", "BAR")
@@ -51,7 +50,7 @@ RSpec.describe Pigeon::Storage do
   end
 
   it "finds all authored by a particular feed" do
-    ingested_messages = Pigeon::Bundle.ingest("./spec/fixtures/normal.bundle")
+    ingested_messages = db.ingest_bundle("./spec/fixtures/normal.bundle")
     author = ingested_messages.first.author.multihash
     actual_messages = Pigeon::Storage.current.find_all(author)
     search_results = Pigeon::Storage.current.find_all(author)

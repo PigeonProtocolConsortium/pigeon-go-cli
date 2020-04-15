@@ -8,6 +8,8 @@ RSpec.describe Pigeon::Message do
     Pigeon::LocalIdentity.reset
   end
 
+  let(:db) do Pigeon::Database.new end
+
   def create_fake_messages
     (1..10)
       .to_a
@@ -17,14 +19,14 @@ RSpec.describe Pigeon::Message do
 
   it "creates a bundle" do
     expected_bundle = create_fake_messages.map(&:render).join("\n\n") + "\n"
-    Pigeon::Bundle.create
+    db.create_bundle
     actual_bundle = File.read(Pigeon::DEFAULT_BUNDLE_PATH)
     expect(expected_bundle).to eq(actual_bundle)
   end
 
   it "does not crash when ingesting old messages" do
     create_fake_messages
-    Pigeon::Bundle.create
-    Pigeon::Bundle.ingest
+    db.create_bundle
+    db.ingest_bundle
   end
 end

@@ -6,6 +6,7 @@ RSpec.describe Pigeon::Lexer do
     Pigeon::LocalIdentity.reset
   end
 
+  let(:db) { Pigeon::Database.new }
   let(:example_bundle) { File.read("./spec/fixtures/normal.bundle") }
   let(:tokens) { Pigeon::Lexer.tokenize(example_bundle) }
 
@@ -30,7 +31,7 @@ RSpec.describe Pigeon::Lexer do
   end
 
   it "ingests and reconstructs a bundle" do
-    messages = Pigeon::Bundle.ingest("./spec/fixtures/normal.bundle")
+    messages = db.ingest_bundle("./spec/fixtures/normal.bundle")
     expect(messages.length).to eq(10)
     expect(messages.map(&:class).uniq).to eq([Pigeon::Message])
     re_bundled = messages.map(&:render).join("\n\n") + "\n"

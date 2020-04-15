@@ -56,6 +56,7 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] Make all methods private except those required for the CLI.
  - [X] Add Lipmaa links like the Bamboo folks do.
  - [X] Set a max message size.
+ - [ ] Update README.md. Needs user manual for new `Pigeon::Database` class.
  - [ ] Make the switch to LevelDB, RocksDB, [UNQLite](https://unqlite.org/features.html) or similar (currently using Ruby PStore).
  - [ ] Make CLI names consistent with API names. Eg: find vs. read.
  - [ ] Create regexes in ::Lexer using strings and Regexp.new() for cleaner regexes.

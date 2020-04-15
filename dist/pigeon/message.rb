@@ -5,9 +5,10 @@ module Pigeon
     attr_reader :author, :kind, :body, :signature, :depth, :lipmaa, :prev
 
     class VerificationError < StandardError; end
+    class MessageSizeError < StandardError; end
 
     VERFIY_ERROR = "Expected field `%s` to equal %s, got: %s"
-
+    MSG_SIZE_ERROR = "Messages cannot have more than 64 keys. Got %s."
     # Store a message that someone (not the LocalIdentity)
     # has authored.
     def self.ingest(author:, body:, depth:, kind:, lipmaa:, prev:, signature:)
@@ -54,6 +55,11 @@ module Pigeon
     end
 
     def verify_counted_fields
+      key_count = body.count
+      if key_count > 64
+        msg = MSG_SIZE_ERROR % key_count
+        raise MessageSizeError, msg
+      end
       count = store.get_message_count_for(author.multihash)
       expected_prev = store.get_message_by_depth(author.multihash, count - 1) || Pigeon::NOTHING
       assert("depth", count, depth)

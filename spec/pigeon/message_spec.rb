@@ -94,6 +94,18 @@ RSpec.describe Pigeon::Message do
   end
 
   it "verifies accuracy of Lipmaa links"
+
+  it "does not allow message with more than 64 keys" do
+    error = "Messages cannot have more than 64 keys. Got 65."
+    body = {}
+    65.times do
+      body[SecureRandom.hex(6)] = SecureRandom.hex(6)
+    end
+    expect do
+      create_message(body)
+    end.to raise_error(Pigeon::Message::MessageSizeError, error)
+  end
+
   it "verifies accuracy of signatures" do
     # === Initial setup
     Pigeon::LocalIdentity.current

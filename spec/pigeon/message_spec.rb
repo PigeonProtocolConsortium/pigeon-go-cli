@@ -93,8 +93,6 @@ RSpec.describe Pigeon::Message do
     expect(m4.prev).to be
   end
 
-  it "verifies accuracy of Lipmaa links"
-
   it "does not allow message with more than 64 keys" do
     error = "Messages cannot have more than 64 keys. Got 65."
     body = {}

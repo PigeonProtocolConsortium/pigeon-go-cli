@@ -56,6 +56,7 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] Make all methods private except those required for the CLI.
  - [X] Add Lipmaa links like the Bamboo folks do.
  - [X] Set a max message size.
+ - [ ] Remove all `.current` "singletons" / hacks
  - [ ] Make the switch to LevelDB, RocksDB, [UNQLite](https://unqlite.org/features.html) or similar (currently using Ruby PStore).
  - [ ] Make CLI names consistent with API names. Eg: find vs. read.
  - [ ] Create regexes in ::Lexer using strings and Regexp.new() for cleaner regexes.
@@ -65,7 +66,6 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [ ] Check block list before ingesting bundles.
  - [ ] Handle the three outcomes of bundle ingestion: `ok`, `blocked`, `already_saved`.
  - [ ] add parsers and validators for all CLI inputs
- - [ ] Remove all `.current` "singletons" / hacks
  - [ ] Reduce whole darn repo into single module to aide portability. `::Helpers` module is OK.
  - [ ] Use URNs instead of multihash?
  - [ ] Ensure all disks writes perform verification!

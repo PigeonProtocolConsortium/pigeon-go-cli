@@ -63,7 +63,6 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [ ] Create regexes in ::Lexer using strings and Regexp.new() for cleaner regexes.
  - [ ] Need a way of importing / exporting a feeds blobs. (see "Bundle Brainstorming" below)
  - [ ] Need a way of adding peers messages / gossip to bundles. (see "Bundle Brainstorming" below)
- - [ ] Add mandatory `--since=` arg to `bundle create`
  - [ ] Check block list before ingesting bundles.
  - [ ] Handle the three outcomes of bundle ingestion: `ok`, `blocked`, `already_saved`.
  - [ ] add parsers and validators for all CLI inputs
@@ -76,11 +75,12 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [ ] Update spec document CLI usage examples to reflect API changes in 2020.
  - [ ] Performance benchmarks (Do this second to last!)
  - [ ] Performance tuning (Do this last!)
+
+# After v0.0.1
+
  - [ ] (later, not now) Support partial verification via `lipmaa` property.
-
-# Do this later
-
- - [ ] Interest and Disinterest Signalling for document routing: Create a `$gossip` message to express `blob.have`, `blob.want` and to note last message received of a peer. This can steer bundle creation and an eventual `--for` flag at bundle creation time.
+ - [ ] Add mandatory `--since=` arg to `bundle create
+ - [ ] Interest and Disinterest Signalling for document routing: Create a `$gossip` message to express `blob.have`, `blob.want` and to note last message received of a peer. This can steer bundle creation and an eventual `--for` flag at bundle creation time to customize a bundle to a particular user.
 
 # Idea Bin
  - [ ] Map/reduce plugin support for custom indices?

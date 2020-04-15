@@ -65,13 +65,11 @@ module Pigeon
     end
 
     def find_all(author)
-      # TODO: Ability to pass an author ID to `find-all`
-      store = Pigeon::Storage.current
       all = []
       depth = -1
       last = ""
-      until (last == nil) || (depth > 999999)
-        last = store.get_message_by_depth(author, depth += 1)
+      until (last == nil) || (depth > 99999)
+        last = self.get_message_by_depth(author, depth += 1)
         all.push(last) if last
       end
       return all

@@ -68,7 +68,6 @@ module Pigeon
     PREV = /prev (#{MESG_VALUE}|#{NULL_VALUE})\n/
     KIND = /kind #{ALPHANUMERICISH}\n/
     BODY_ENTRY = /#{ALPHANUMERICISH}:#{ANY_VALUE}\n/
-
     FOOTER_ENTRY = /signature .*{103}\.sig\.ed25519\n?/
 
     LEXER_STATES = [HEADER = :header, BODY = :body, FOOTER = :footer]

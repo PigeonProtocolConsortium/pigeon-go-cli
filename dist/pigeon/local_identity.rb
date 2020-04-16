@@ -6,22 +6,9 @@ module Pigeon
   # help us maintain our sanity when the Gem's API
   # changes.
   class LocalIdentity
-    def self.reset
-      @current = nil
-    end
-
-    def self.current
-      if @current
-        @current
-      else
-        key = Pigeon::Storage.current.get_config(SEED_CONFIG_KEY)
-        @current = (key ? self.new(key) : self.new).save!
-      end
-    end
-
     # `seed` is a 32-byte seed value from which
     #  the key should be derived
-    def initialize(seed = SecureRandom.random_bytes(Ed25519::KEY_SIZE))
+    def initialize(seed)
       @seed = seed
       @signing_key = Ed25519::SigningKey.new(@seed)
     end
@@ -41,11 +28,6 @@ module Pigeon
       hex = @signing_key.sign(string)
       b64 = Helpers.b32_encode(hex)
       return b64 + SIG_FOOTER
-    end
-
-    def save!
-      Pigeon::Storage.current.set_config(SEED_CONFIG_KEY, @seed)
-      self
     end
   end
 end

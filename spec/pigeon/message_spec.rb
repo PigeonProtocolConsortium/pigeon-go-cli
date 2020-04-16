@@ -1,13 +1,8 @@
 require "spec_helper"
 
 RSpec.describe Pigeon::Message do
-  before(:each) do
-    Pigeon::Storage.reset
-    Pigeon::LocalIdentity.reset
-  end
-
   def create_draft(params)
-    draft = Pigeon::Draft.create(kind: "unit_test")
+    draft = db.create_draft(kind: "unit_test")
     params.each { |(k, v)| draft[k] = v }
     draft
   end
@@ -17,10 +12,13 @@ RSpec.describe Pigeon::Message do
     draft.publish
   end
 
+  let(:db) do
+    Pigeon::Database.new
+  end
+
   let(:draft) do
-    hash = Pigeon::Storage.current.set_blob(File.read("./logo.png"))
-    create_draft({ "a" => "bar",
-                   "b" => hash })
+    hash = db.put_blob(File.read("./logo.png"))
+    create_draft({ "a" => "bar", "b" => hash })
   end
 
   let(:templated_message) { create_message({ "a" => "b" }) }
@@ -65,7 +63,7 @@ RSpec.describe Pigeon::Message do
   it "creates a chain of messages" do
     all = []
     0.upto(4) do |expected_depth|
-      draft1 = Pigeon::Draft.create(kind: "unit_test")
+      draft1 = db.create_draft(kind: "unit_test")
       draft1["description"] = "Message number #{expected_depth}"
       message = draft1.publish
       all.push(message)
@@ -106,8 +104,7 @@ RSpec.describe Pigeon::Message do
 
   it "verifies accuracy of signatures" do
     # === Initial setup
-    Pigeon::LocalIdentity.current
-    secret = Pigeon::Storage.current.get_config(Pigeon::SEED_CONFIG_KEY)
+    secret = db.get_config(Pigeon::SEED_CONFIG_KEY)
     message = templated_message
     plaintext = template.render_without_signature
 
@@ -153,7 +150,7 @@ RSpec.describe Pigeon::Message do
     WHITESPACE.map do |n|
       kind = SecureRandom.alphanumeric(8)
       kind[rand(0...8)] = n
-      draft = Pigeon::Draft.create(kind: kind)
+      draft = db.create_draft(kind: kind)
       draft["body"] = "empty"
       boom = ->() { Pigeon::Lexer.tokenize(draft.publish.render) }
       expect(boom).to raise_error(Pigeon::Lexer::LexError)
@@ -162,7 +159,7 @@ RSpec.describe Pigeon::Message do
 
   it "does not allow whitespace in key names" do
     WHITESPACE.map do |n|
-      draft = Pigeon::Draft.create(kind: "unit_test")
+      draft = db.create_draft(kind: "unit_test")
       key = SecureRandom.alphanumeric(8)
       key[rand(0...8)] = n
       draft[key] = "should crash"

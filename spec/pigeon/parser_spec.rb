@@ -1,11 +1,6 @@
 require "spec_helper"
 
 RSpec.describe Pigeon::Lexer do
-  before(:each) do
-    Pigeon::Storage.reset
-    Pigeon::LocalIdentity.reset
-  end
-
   let(:db) { Pigeon::Database.new }
   let(:example_bundle) { File.read("./spec/fixtures/normal.bundle") }
   let(:tokens) { Pigeon::Lexer.tokenize(example_bundle) }

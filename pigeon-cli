@@ -47,7 +47,7 @@ module Pigeon
 
     def set(data = "")
       blob = (data != "") ? data : STDIN.read
-      puts Pigeon::Storage.current.set_blob(blob)
+      puts Pigeon::Storage.current.put_blob(blob)
     end
 
     desc "get", "Read arbitrary data from the database"
@@ -87,7 +87,7 @@ module Pigeon
     desc "create", "Begin a new Pigeon message"
 
     def create(kind)
-      puts Pigeon::Draft.create(kind: kind).render_as_draft
+      puts db.create_draft(kind: kind).render_as_draft
     end
 
     desc "append", "Add a key/value pair to the current DRAFT"

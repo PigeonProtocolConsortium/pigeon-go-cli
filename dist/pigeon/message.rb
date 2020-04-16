@@ -11,14 +11,22 @@ module Pigeon
     MSG_SIZE_ERROR = "Messages cannot have more than 64 keys. Got %s."
     # Store a message that someone (not the LocalIdentity)
     # has authored.
-    def self.ingest(author:, body:, depth:, kind:, lipmaa:, prev:, signature:)
+    def self.ingest(author:,
+                    body:,
+                    depth:,
+                    kind:,
+                    lipmaa:,
+                    prev:,
+                    signature:,
+                    db:)
       params = { author: RemoteIdentity.new(author),
                  kind: kind,
                  body: body,
                  prev: prev,
                  lipmaa: lipmaa,
                  signature: signature,
-                 depth: depth }
+                 depth: depth,
+                 db: db }
       # Kind of weird to use `send` but #save! is private,
       # and I don't want people calling it directly without going through the
       # lexer / parser first.
@@ -39,11 +47,11 @@ module Pigeon
     private
 
     def save!
-      return store.read_message(multihash) if store.message?(multihash)
+      return db.read_message(multihash) if db.message?(multihash)
       verify_counted_fields
       verify_signature
       self.freeze
-      store.save_message(self)
+      db.save_message(self)
       self
     end
 
@@ -60,8 +68,8 @@ module Pigeon
         msg = MSG_SIZE_ERROR % key_count
         raise MessageSizeError, msg
       end
-      count = store.get_message_count_for(author.multihash)
-      expected_prev = store.get_message_by_depth(author.multihash, count - 1) || Pigeon::NOTHING
+      count = db.get_message_count_for(author.multihash)
+      expected_prev = db.get_message_by_depth(author.multihash, count - 1) || Pigeon::NOTHING
       assert("depth", count, depth)
       # TODO: Re-visit this. Our current verification method
       # is probably too strict and won't allow for partial
@@ -81,8 +89,10 @@ module Pigeon
                    depth:,
                    prev:,
                    lipmaa:,
-                   signature:)
+                   signature:,
+                   db:)
       raise MISSING_BODY if body.empty?
+      @db = db
       @author = author
       @body = body
       @depth = depth
@@ -94,10 +104,6 @@ module Pigeon
 
     def template
       MessageSerializer.new(self)
-    end
-
-    def store
-      Pigeon::Storage.current
     end
   end
 end

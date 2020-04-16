@@ -56,8 +56,16 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] Make all methods private except those required for the CLI.
  - [X] Add Lipmaa links like the Bamboo folks do.
  - [X] Set a max message size.
+ - [ ] Clean up all singletons / .current hack from storage.rb
+ - [ ] Clean up all singletons / .current hack from parser.rb
+ - [ ] Clean up all singletons / .current hack from lexer.rb
+ - [ ] Clean up all singletons / .current hack from message.rb
+ - [ ] Clean up all singletons / .current hack from draft_serializer.rb
+ - [ ] Clean up all singletons / .current hack from message_serializer.rb
+ - [ ] Clean up all singletons / .current hack from remote_identity.rb
+ - [ ] Clean up all singletons / .current hack from draft.rb
+ - [ ] Clean up all singletons / .current hack from local_identity.rb
  - [ ] Update README.md. Needs user manual for new `Pigeon::Database` class.
- - [ ] Remove all `.current` "singletons" / hacks
  - [ ] Make the switch to LevelDB, RocksDB, [UNQLite](https://unqlite.org/features.html) or similar (currently using Ruby PStore).
  - [ ] Make CLI names consistent with API names. Eg: find vs. read.
  - [ ] Create regexes in ::Lexer using strings and Regexp.new() for cleaner regexes.

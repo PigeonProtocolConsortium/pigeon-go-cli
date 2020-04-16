@@ -1,18 +1,19 @@
 require "spec_helper"
 
 RSpec.describe Pigeon::Draft do
+  let(:db) do
+    Pigeon::Database.new
+  end
+
   let(:message) do
-    message = Pigeon::Draft.create(kind: "unit_test")
-    hash = Pigeon::Storage.current.set_blob(File.read("./logo.png"))
+    message = db.create_draft(kind: "unit_test")
+    hash = db.put_blob(File.read("./logo.png"))
     message["a"] = "bar"
     message["b"] = hash
     message
   end
 
-  before(:each) do
-    Pigeon::Storage.reset
-    Pigeon::LocalIdentity.reset
-  end
+  before(:each) { db.reset }
 
   MSG = [
     "author DRAFT",
@@ -26,15 +27,15 @@ RSpec.describe Pigeon::Draft do
   ].join("\n")
 
   it "renders a message" do
-    pk = Pigeon::LocalIdentity.current.multihash
+    pk = db.local_identity.multihash
     actual = message.render_as_draft
     expected = MSG.gsub("___", pk)
     expect(actual).to start_with(expected)
   end
 
   it "creates a new message" do
-    message = Pigeon::Draft.create(kind: "unit_test")
-    hash = Pigeon::Storage.current.set_blob(File.read("./logo.png"))
+    message = db.create_draft(kind: "unit_test")
+    hash = db.put_blob(File.read("./logo.png"))
     expectations = {
       kind: "unit_test",
       body: {

@@ -5,25 +5,14 @@ module Pigeon
     attr_reader :signature, :prev, :lipmaa, :kind, :internal_id,
                 :depth, :body, :author
 
-    def self.create(kind:, body: {})
-      self.new(kind: kind, body: body).save_as_draft
-    end
-
-    def self.current
-      Pigeon::Storage.current.get_config(CURRENT_DRAFT) or raise NO_DRAFT_FOUND
-    end
-
-    def self.reset_current
-      Pigeon::Storage.current.set_config(CURRENT_DRAFT, nil)
-    end
-
     def discard
       if Draft.current&.internal_id == @internal_id
         Draft.reset_current
       end
     end
 
-    def initialize(kind:, body: {})
+    def initialize(kind:, body: {}, db:)
+      @db = db
       @signature = Pigeon::NOTHING
       @prev = Pigeon::NOTHING
       @kind = kind
@@ -50,13 +39,8 @@ module Pigeon
         # This might be a bad or good idea. Not sure yet.
         self.body[key] = value.inspect
       end
-      self.save_as_draft
+      @db.save_draft(self)
       return self.body[key]
-    end
-
-    def save_as_draft
-      Pigeon::Storage.current.set_config(CURRENT_DRAFT, self)
-      self
     end
 
     # Author a new message.

@@ -32,9 +32,4 @@ RSpec.describe Pigeon::LocalIdentity do
     result = Pigeon::Helpers.decode_multihash(example)
     expect(result).to eq(Pigeon::Helpers.b32_decode(whatever))
   end
-
-  it "caches LocalIdentity.current" do
-    first_kp = Pigeon::LocalIdentity.current
-    expect(Pigeon::LocalIdentity.current).to be(first_kp) # Need strict equality here!
-  end
 end

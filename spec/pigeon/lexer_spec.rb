@@ -115,15 +115,14 @@ RSpec.describe Pigeon::Lexer do
     "signature hHvhdvUcrabhFPz52GSGa9_iuudOsGEEE7S0o0WJLqjQyhLfgUy72yppHXsG6T4E21p6EEI6B3yRcjfurxegCA==.sig.ed25519",
   ].freeze
 
-  let(:message) do
-    draft = Pigeon::Draft.create(kind: "unit_test")
-    draft["foo"] = "bar"
-    draft.publish
+  let(:db) do
+    Pigeon::Database.new
   end
 
-  before(:each) do
-    Pigeon::Storage.reset
-    Pigeon::LocalIdentity.reset
+  let(:message) do
+    draft = db.create_draft(kind: "unit_test")
+    draft["foo"] = "bar"
+    draft.publish
   end
 
   it "tokenizes a bundle" do

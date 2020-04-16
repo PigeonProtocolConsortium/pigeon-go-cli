@@ -4,17 +4,15 @@ RSpec.describe Pigeon::Message do
   before(:each) do
     p = Pigeon::DEFAULT_BUNDLE_PATH
     File.delete(p) if File.file?(p)
-    Pigeon::Storage.reset
-    Pigeon::LocalIdentity.reset
   end
 
-  let(:db) do Pigeon::Database.new end
+  let(:db) { Pigeon::Database.new }
 
   def create_fake_messages
     (1..10)
       .to_a
       .map do |n| { "foo" => ["bar", "123", SecureRandom.uuid].sample } end
-      .map do |d| Pigeon::Helpers.create_message(SecureRandom.uuid, d) end
+      .map do |d| db.create_message(SecureRandom.uuid, d) end
   end
 
   it "creates a bundle" do

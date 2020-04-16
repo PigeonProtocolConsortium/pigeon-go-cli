@@ -2,12 +2,15 @@ require "pstore"
 
 module Pigeon
   class Storage
-    def self.current
-      @current ||= self.new
+    attr_reader :path
+
+    def initialize(path: PIGEON_DB_PATH)
+      @path = path
+      bootstrap unless bootstrapped?
     end
 
-    def self.reset
-      File.delete(PIGEON_DB_PATH) if File.file?(PIGEON_DB_PATH)
+    def reset
+      File.delete(path) if bootstrapped?
       @current = nil
     end
 
@@ -45,7 +48,7 @@ module Pigeon
       write { store[CONF_NS][key] = value }
     end
 
-    def set_blob(data)
+    def put_blob(data)
       raw_digest = Digest::SHA256.digest(data)
       b64_digest = Helpers.b32_encode(raw_digest)
       multihash = [BLOB_SIGIL, b64_digest, BLOB_FOOTER].join("")
@@ -146,5 +149,9 @@ module Pigeon
 
     def write(&blk); transaction(false, &blk); end
     def read(&blk); transaction(true, &blk); end
+
+    def bootstrapped?
+      File.file?(path)
+    end
   end
 end

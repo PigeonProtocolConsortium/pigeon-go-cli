@@ -6,7 +6,11 @@ RSpec.describe Pigeon::Message do
     File.delete(p) if File.file?(p)
   end
 
-  let(:db) { Pigeon::Database.new }
+  let(:db) do
+    db = Pigeon::Database.new
+    db.reset
+    db
+  end
 
   def create_fake_messages
     (1..10)

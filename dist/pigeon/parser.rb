@@ -2,12 +2,13 @@ module Pigeon
   class Parser
     class DuplicateKeyError < StandardError; end
 
-    def self.parse(tokens)
-      self.new(tokens).parse
+    def self.parse(db, tokens)
+      self.new(db, tokens).parse
     end
 
-    def initialize(tokens)
-      @scratchpad = {}
+    def initialize(db, tokens)
+      @db = db
+      reset_scratchpad
       @tokens = tokens
       @results = []
     end
@@ -32,10 +33,14 @@ module Pigeon
 
     private
 
+    def reset_scratchpad
+      @scratchpad = { db: @db }
+    end
+
     def finish_this_message!
       @scratchpad.freeze
       @results.push(Message.ingest(**@scratchpad))
-      @scratchpad = {}
+      reset_scratchpad
     end
 
     def set(key, value, hash = @scratchpad)

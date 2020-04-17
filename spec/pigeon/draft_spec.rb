@@ -2,7 +2,9 @@ require "spec_helper"
 
 RSpec.describe Pigeon::Draft do
   let(:db) do
-    Pigeon::Database.new
+    db = Pigeon::Database.new
+    db.reset
+    db
   end
 
   let(:message) do

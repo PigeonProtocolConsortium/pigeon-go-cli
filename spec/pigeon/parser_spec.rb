@@ -1,7 +1,11 @@
 require "spec_helper"
 
 RSpec.describe Pigeon::Lexer do
-  let(:db) { Pigeon::Database.new }
+  let(:db) do
+    db = Pigeon::Database.new
+    db.reset
+    db
+  end
   let(:example_bundle) { File.read("./spec/fixtures/normal.bundle") }
   let(:tokens) { Pigeon::Lexer.tokenize(example_bundle) }
 
@@ -19,7 +23,7 @@ RSpec.describe Pigeon::Lexer do
   ]
 
   it "parses tokens" do
-    results = Pigeon::Parser.parse(tokens)
+    results = Pigeon::Parser.parse(db, tokens)
     expect(results.length).to eq(10)
     expect(results.first).to be_kind_of(Pigeon::Message)
     expect(results.last).to be_kind_of(Pigeon::Message)
@@ -35,6 +39,6 @@ RSpec.describe Pigeon::Lexer do
 
   it "finds duplicate keys" do
     error = Pigeon::Parser::DuplicateKeyError
-    expect { Pigeon::Parser.parse(BAD_TOKENS) }.to raise_error(error)
+    expect { Pigeon::Parser.parse(db, BAD_TOKENS) }.to raise_error(error)
   end
 end

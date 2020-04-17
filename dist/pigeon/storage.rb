@@ -6,12 +6,13 @@ module Pigeon
 
     def initialize(path: PIGEON_DB_PATH)
       @path = path
-      bootstrap unless bootstrapped?
+      store.ultra_safe = true
+      bootstrap
     end
 
     def reset
-      File.delete(path) if bootstrapped?
-      @current = nil
+      File.delete(path) if on_disk?
+      bootstrap
     end
 
     def add_peer(identity)
@@ -45,14 +46,20 @@ module Pigeon
     end
 
     def set_config(key, value)
-      write { store[CONF_NS][key] = value }
+      write do
+        a = store.fetch(CONF_NS)
+        raise "FIX SAVED DRAFTS" if value.instance_variable_get(:@db)
+        a[key] = value
+      end
     end
 
     def put_blob(data)
       raw_digest = Digest::SHA256.digest(data)
-      b64_digest = Helpers.b32_encode(raw_digest)
-      multihash = [BLOB_SIGIL, b64_digest, BLOB_FOOTER].join("")
-      write { store[BLOB_NS][multihash] = data }
+      b32_hash = Helpers.b32_encode(raw_digest)
+      multihash = [BLOB_SIGIL, b32_hash, BLOB_FOOTER].join("")
+      write do
+        store[BLOB_NS][multihash] = data
+      end
 
       multihash
     end
@@ -105,26 +112,20 @@ module Pigeon
 
     def bootstrap
       write do
-        # Wait what? Why is there a depth and count
-        # index??
-        store[MESSAGE_BY_DEPTH_NS] ||= {}
-        store[COUNT_INDEX_NS] ||= {}
+        # TODO: Why is there a depth and count index??
+        store[BLCK_NS] ||= Set.new
         store[BLOB_NS] ||= {}
         store[CONF_NS] ||= {}
+        store[COUNT_INDEX_NS] ||= {}
         store[MESG_NS] ||= {}
-        store[BLCK_NS] ||= Set.new
+        store[MESSAGE_BY_DEPTH_NS] ||= {}
         store[PEER_NS] ||= Set.new
       end
       store
     end
 
     def store
-      if @store
-        return @store
-      else
-        @store = PStore.new(PIGEON_DB_PATH)
-        bootstrap
-      end
+      @store ||= PStore.new(PIGEON_DB_PATH)
     end
 
     def insert_and_update_index(message)
@@ -149,9 +150,6 @@ module Pigeon
 
     def write(&blk); transaction(false, &blk); end
     def read(&blk); transaction(true, &blk); end
-
-    def bootstrapped?
-      File.file?(path)
-    end
+    def on_disk?; File.file?(path); end
   end
 end

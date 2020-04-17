@@ -6,8 +6,8 @@ module Pigeon
                 :depth, :body, :author
 
     def discard
-      if Draft.current&.internal_id == @internal_id
-        Draft.reset_current
+      if @db.current_draft&.internal_id == @internal_id
+        @db.reset_current_draft
       end
     end
 
@@ -39,31 +39,32 @@ module Pigeon
         # This might be a bad or good idea. Not sure yet.
         self.body[key] = value.inspect
       end
-      @db.save_draft(self)
+      # TODO: You can't store a PStore in a PStore.
+      #       This is terrible and should be fixed:
+      old_db = @db
+      @db = nil
+      old_db.save_draft(self)
+      @db = old_db
       return self.body[key]
     end
 
     # Author a new message.
     def publish
       template = MessageSerializer.new(self)
-      @author = LocalIdentity.current
-      @depth = store.get_message_count_for(author.multihash)
-      @prev = store.get_message_by_depth(author.multihash, @depth - 1)
+      @author = @db.local_identity
+      @depth = @db.get_message_count_for(author.multihash)
+      @prev = @db.get_message_by_depth(author.multihash, @depth - 1)
       @lipmaa = Helpers.lipmaa(@depth)
       unsigned = template.render_without_signature
       @signature = author.sign(unsigned)
       tokens = Lexer.tokenize_unsigned(unsigned, signature)
-      message = Parser.parse(tokens)[0]
+      message = Parser.parse(@db, tokens)[0]
       self.discard
       message
     end
 
     def render_as_draft
       DraftSerializer.new(self).render
-    end
-
-    def store
-      Pigeon::Storage.current
     end
   end
 end

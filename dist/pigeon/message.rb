@@ -47,11 +47,13 @@ module Pigeon
     private
 
     def save!
-      return db.read_message(multihash) if db.message?(multihash)
+      return @db.read_message(multihash) if @db.message?(multihash)
       verify_counted_fields
       verify_signature
+      old_db = @db
+      @db = nil
       self.freeze
-      db.save_message(self)
+      old_db.save_message(self)
       self
     end
 
@@ -68,8 +70,8 @@ module Pigeon
         msg = MSG_SIZE_ERROR % key_count
         raise MessageSizeError, msg
       end
-      count = db.get_message_count_for(author.multihash)
-      expected_prev = db.get_message_by_depth(author.multihash, count - 1) || Pigeon::NOTHING
+      count = @db.get_message_count_for(author.multihash)
+      expected_prev = @db.get_message_by_depth(author.multihash, count - 1) || Pigeon::NOTHING
       assert("depth", count, depth)
       # TODO: Re-visit this. Our current verification method
       # is probably too strict and won't allow for partial

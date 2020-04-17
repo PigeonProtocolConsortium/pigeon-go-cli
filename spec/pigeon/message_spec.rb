@@ -13,7 +13,9 @@ RSpec.describe Pigeon::Message do
   end
 
   let(:db) do
-    Pigeon::Database.new
+    db = Pigeon::Database.new
+    db.reset
+    db
   end
 
   let(:draft) do
@@ -129,7 +131,7 @@ RSpec.describe Pigeon::Message do
   it "crashes on forged fields" do
     m = "Expected field `depth` to equal 0, got: 10"
     expect do
-      Pigeon::Parser.parse([
+      Pigeon::Parser.parse(db, [
         [:AUTHOR, "@DYdgK1KUInVtG3lS45hA1HZ-jTuvfLKsxDpXPFCve04=.ed25519"],
         [:KIND, "invalid"],
         [:PREV, "NONE"],

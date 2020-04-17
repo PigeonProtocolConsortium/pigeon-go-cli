@@ -8,12 +8,29 @@ module Pigeon
       init_local_identity(seed)
     end
 
-    def find_all; store.find_all; end
+    def find_all(mhash); store.find_all(mhash); end
     def put_blob(b); store.put_blob(b); end
+    def get_blob(b); store.get_blob(b); end
     def set_config(k, v); store.set_config(k, v); end
     def get_config(k); store.get_config(k); end
     def reset_current_draft; set_config(CURRENT_DRAFT, nil); end
     def reset; store.reset; end
+    def add_peer(p); store.add_peer(p); end
+    def block_peer(p); store.block_peer(p); end
+    def remove_peer(p); store.remove_peer(p); end
+    def all_peers(); store.all_peers(); end
+    def all_blocks(); store.all_blocks(); end
+    def message?(multihash); store.message?(multihash); end
+    def save_message(msg_obj); store.save_message(msg_obj); end
+    def read_message(multihash); store.read_message(multihash); end
+
+    def get_message_count_for(multihash)
+      store.get_message_count_for(multihash)
+    end
+
+    def get_message_by_depth(multihash, depth)
+      store.get_message_by_depth(multihash, depth)
+    end
 
     def create_message(kind, params)
       draft = Pigeon::Draft.new(kind: kind, db: self)
@@ -23,8 +40,8 @@ module Pigeon
 
     def create_bundle(file_path = DEFAULT_BUNDLE_PATH)
       content = store
-        .find_all(Pigeon::LocalIdentity.current.multihash)
-        .map { |multihash| s.read_message(multihash) }
+        .find_all(local_identity.multihash)
+        .map { |multihash| store.read_message(multihash) }
         .sort_by(&:depth)
         .map { |message| message.render }
         .join(BUNDLE_MESSAGE_SEPARATOR)
@@ -34,11 +51,12 @@ module Pigeon
     def ingest_bundle(file_path = DEFAULT_BUNDLE_PATH)
       bundle = File.read(file_path)
       tokens = Pigeon::Lexer.tokenize(bundle)
-      Pigeon::Parser.parse(tokens)
+      Pigeon::Parser.parse(self, tokens)
     end
 
     def create_draft(kind:, body: {})
-      save_draft(Draft.new(kind: kind, body: body))
+      draft = Draft.new(kind: kind, body: body, db: self)
+      save_draft(draft)
     end
 
     def save_draft(draft)
@@ -47,7 +65,7 @@ module Pigeon
     end
 
     def current_draft
-      store.get_config(CURRENT_DRAFT) or raise NO_DRAFT_FOUND
+      store.get_config(CURRENT_DRAFT)
     end
 
     private

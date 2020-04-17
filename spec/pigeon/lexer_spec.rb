@@ -116,7 +116,9 @@ RSpec.describe Pigeon::Lexer do
   ].freeze
 
   let(:db) do
-    Pigeon::Database.new
+    db = Pigeon::Database.new
+    db.reset
+    db
   end
 
   let(:message) do

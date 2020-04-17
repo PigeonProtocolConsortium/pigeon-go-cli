@@ -5,11 +5,11 @@ RSpec.describe Pigeon::Storage do
   IDS = %w(@ZMWM5PSXRN7RFRMSWW1E3V5DNGC4XGGJTHKCAGB48SNRG4XXE5NG.ed25519
            @VF0Q4KXQNY6WCAXF17GAZGDPAX8XKM70SB8N7V0NSD1H370ZCJBG.ed25519)
 
-  before(:each) do
+  let(:db) do
+    db = Pigeon::Database.new
     db.reset
+    db
   end
-
-  let(:db) { Pigeon::Database.new }
 
   it "sets a config" do
     db.set_config("FOO", "BAR")
@@ -44,12 +44,12 @@ RSpec.describe Pigeon::Storage do
     db.block_peer(IDS[1])
     expect(db.all_peers).not_to include(IDS[1])
     expect(db.all_blocks).to include(IDS[1])
-    expect(db.all_blockdb.count).to eq(1)
+    expect(db.all_blocks.count).to eq(1)
   end
 
   it "finds all authored by a particular feed" do
     ingested_messages = db.ingest_bundle("./spec/fixtures/normal.bundle")
-    author = ingested_messagedb.first.author.multihash
+    author = ingested_messages.first.author.multihash
     actual_messages = db.find_all(author)
     search_results = db.find_all(author)
   end
@@ -64,12 +64,12 @@ RSpec.describe Pigeon::Storage do
         "e" => db.put_blob(File.read("./logo.png")),
       }),
       db.create_message("g", {
-        "me_myself_and_i" => Pigeon::LocalIdentity.current.multihash,
+        "me_myself_and_i" => db.local_identity.multihash,
       }),
     ]
-    me = Pigeon::LocalIdentity.current.multihash
+    me = db.local_identity.multihash
     results = db.find_all(me)
-    expect(resultdb.length).to eq(3)
+    expect(results.length).to eq(3)
     expect(msgs[0].multihash).to eq(results[0])
     expect(msgs[1].multihash).to eq(results[1])
     expect(msgs[2].multihash).to eq(results[2])

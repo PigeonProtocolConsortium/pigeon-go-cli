@@ -77,6 +77,22 @@ module Pigeon
       Helpers.publish_draft(self, draft)
     end
 
+    def publish_message(msg)
+      Helpers.publish_message(self, msg)
+    end
+
+    # Store a message that someone (not the LocalIdentity)
+    # has authored.
+    def ingest(author:, body:, depth:, kind:, lipmaa:, prev:, signature:)
+      self.save_message(Message.new(author: RemoteIdentity.new(author),
+                                    kind: kind,
+                                    body: body,
+                                    prev: prev,
+                                    lipmaa: lipmaa,
+                                    signature: signature,
+                                    depth: depth))
+    end
+
     private
 
     attr_reader :store

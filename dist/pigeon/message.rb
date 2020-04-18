@@ -9,30 +9,6 @@ module Pigeon
 
     VERFIY_ERROR = "Expected field `%s` to equal %s, got: %s"
     MSG_SIZE_ERROR = "Messages cannot have more than 64 keys. Got %s."
-    # Store a message that someone (not the LocalIdentity)
-    # has authored.
-    def self.ingest(author:,
-                    body:,
-                    depth:,
-                    kind:,
-                    lipmaa:,
-                    prev:,
-                    signature:,
-                    db:)
-      raise "Type mismatch: #{@db.class}" unless @db.is_a?(Pigeon::Database)
-      params = { author: RemoteIdentity.new(author),
-                 kind: kind,
-                 body: body,
-                 prev: prev,
-                 lipmaa: lipmaa,
-                 signature: signature,
-                 depth: depth,
-                 db: db }
-      # Kind of weird to use `send` but #save! is private,
-      # and I don't want people calling it directly without going through the
-      # lexer / parser first.
-      new(**params).send(:save!)
-    end
 
     def render
       template.render.chomp
@@ -47,40 +23,6 @@ module Pigeon
 
     private
 
-    def save!
-      return @db.read_message(multihash) if @db.message?(multihash)
-      verify_counted_fields
-      verify_signature
-      old_db = @db
-      @db = nil
-      self.freeze
-      old_db.save_message(self)
-      self
-    end
-
-    def assert(field, actual, expected)
-      unless actual == expected
-        message = VERFIY_ERROR % [field, actual || "nil", expected || "nil"]
-        raise VerificationError, message
-      end
-    end
-
-    def verify_counted_fields
-      key_count = body.count
-      if key_count > 64
-        msg = MSG_SIZE_ERROR % key_count
-        raise MessageSizeError, msg
-      end
-      count = @db.get_message_count_for(author.multihash)
-      expected_prev = @db.get_message_by_depth(author.multihash, count - 1) || Pigeon::NOTHING
-      assert("depth", count, depth)
-      # TODO: Re-visit this. Our current verification method
-      # is probably too strict and won't allow for partial
-      # verification of feeds.
-      assert("lipmaa", Helpers.lipmaa(depth), lipmaa)
-      assert("prev", prev, expected_prev)
-    end
-
     def verify_signature
       tpl = template.render_without_signature
       Helpers.verify_string(author, signature, tpl)
@@ -92,10 +34,8 @@ module Pigeon
                    depth:,
                    prev:,
                    lipmaa:,
-                   signature:,
-                   db:)
+                   signature:)
       raise MISSING_BODY if body.empty?
-      @db = db
       @author = author
       @body = body
       @depth = depth

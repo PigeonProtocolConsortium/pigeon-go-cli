@@ -145,6 +145,13 @@ module Pigeon
       verify_key.verify(binary_signature, string)
     end
 
+    def assert(field, actual, expected)
+      unless actual == expected
+        message = VERFIY_ERROR % [field, actual || "nil", expected || "nil"]
+        raise VerificationError, message
+      end
+    end
+
     def self.publish_draft(db, draft)
       author = db.local_identity
       mhash = author.multihash
@@ -159,9 +166,30 @@ module Pigeon
       unsigned = template.render_without_signature
       draft.signature = author.sign(unsigned)
       tokens = Lexer.tokenize_unsigned(unsigned, draft.signature)
-      message = Parser.parse(draft, tokens)[0]
+      message = Parser.parse(db, tokens)[0]
       db.discard_draft
       message
+    end
+
+    def publish_message(db, msg)
+      return db.read_message(multihash) if db.message?(multihash)
+      key_count = body.count
+      if key_count > 64
+        msg = MSG_SIZE_ERROR % key_count
+        raise MessageSizeError, msg
+      end
+      count = db.get_message_count_for(author.multihash)
+      expected_prev = db.get_message_by_depth(author.multihash, count - 1) || Pigeon::NOTHING
+      assert("depth", count, depth)
+      # TODO: Re-visit this. Our current verification method
+      # is probably too strict and won't allow for partial
+      # verification of feeds.
+      assert("lipmaa", Helpers.lipmaa(depth), lipmaa)
+      assert("prev", prev, expected_prev)
+      verify_signature
+      msg.freeze
+      db.save_message(msg)
+      msg
     end
 
     def self.decode_multihash(string)

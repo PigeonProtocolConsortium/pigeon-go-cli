@@ -3,12 +3,13 @@ module Pigeon
     class DuplicateKeyError < StandardError; end
 
     def self.parse(db, tokens)
+      raise "NO!" unless db.is_a?(Pigeon::Database)
       self.new(db, tokens).parse
     end
 
     def initialize(db, tokens)
-      @db = db
       reset_scratchpad
+      @db = db
       @tokens = tokens
       @results = []
     end
@@ -34,12 +35,12 @@ module Pigeon
     private
 
     def reset_scratchpad
-      @scratchpad = { db: @db }
+      @scratchpad = {}
     end
 
     def finish_this_message!
       @scratchpad.freeze
-      @results.push(Message.ingest(**@scratchpad))
+      @results.push(@db.ingest(**@scratchpad))
       reset_scratchpad
     end
 

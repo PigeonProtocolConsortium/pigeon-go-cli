@@ -6,7 +6,7 @@ require "set"
 module Pigeon
   SEED_CONFIG_KEY = "SEED"
   VERSION = "0.0.2"
-  TPL_DIR = "views"
+  TPL_DIR = File.join("lib", "views")
 
   PIGEON_DB_PATH = File.join("db.pigeon")
   DEFAULT_BUNDLE_PATH = "./pigeon.bundle"

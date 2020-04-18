@@ -145,6 +145,25 @@ module Pigeon
       verify_key.verify(binary_signature, string)
     end
 
+    def self.publish_draft(db, draft)
+      author = db.local_identity
+      mhash = author.multihash
+      template = MessageSerializer.new(draft)
+      depth = db.get_message_count_for(mhash)
+
+      draft.author = author
+      draft.depth = depth
+      draft.prev = db.get_message_by_depth(mhash, depth - 1)
+      draft.lipmaa = Helpers.lipmaa(depth)
+
+      unsigned = template.render_without_signature
+      draft.signature = author.sign(unsigned)
+      tokens = Lexer.tokenize_unsigned(unsigned, draft.signature)
+      message = Parser.parse(draft, tokens)[0]
+      db.discard_draft
+      message
+    end
+
     def self.decode_multihash(string)
       if string[SIG_RANGE] == SIG_FOOTER
         return b32_decode(string.gsub(SIG_FOOTER, ""))

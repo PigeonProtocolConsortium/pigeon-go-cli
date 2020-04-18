@@ -123,8 +123,8 @@ RSpec.describe Pigeon::Lexer do
 
   let(:message) do
     draft = db.create_draft(kind: "unit_test")
-    draft["foo"] = "bar"
-    draft.publish
+    draft.put(db, "foo", "bar")
+    db.publish_draft(draft)
   end
 
   it "tokenizes a bundle" do

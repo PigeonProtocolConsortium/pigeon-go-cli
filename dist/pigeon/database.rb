@@ -34,8 +34,8 @@ module Pigeon
 
     def create_message(kind, params)
       draft = Pigeon::Draft.new(kind: kind, db: self)
-      params.map { |(k, v)| draft[k] = v }
-      draft.publish
+      params.map { |(k, v)| draft.put(self, k, v) }
+      publish_draft(draft)
     end
 
     def create_bundle(file_path = DEFAULT_BUNDLE_PATH)
@@ -66,6 +66,15 @@ module Pigeon
 
     def current_draft
       store.get_config(CURRENT_DRAFT)
+    end
+
+    def discard_draft
+      set_config(CURRENT_DRAFT, nil)
+    end
+
+    # Author a new message.
+    def publish_draft(draft)
+      Helpers.publish_draft(self, draft)
     end
 
     private

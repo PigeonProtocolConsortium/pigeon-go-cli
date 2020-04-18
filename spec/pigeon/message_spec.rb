@@ -3,13 +3,13 @@ require "spec_helper"
 RSpec.describe Pigeon::Message do
   def create_draft(params)
     draft = db.create_draft(kind: "unit_test")
-    params.each { |(k, v)| draft[k] = v }
+    params.each { |(k, v)| draft.put(db, k, v) }
     draft
   end
 
   def create_message(params)
     draft = create_draft(params)
-    draft.publish
+    db.publish_draft(draft)
   end
 
   let(:db) do
@@ -30,13 +30,12 @@ RSpec.describe Pigeon::Message do
   end
 
   it "discards a draft after signing" do
-    expect(draft.internal_id).to eq(Pigeon::Draft.current.internal_id)
-    draft.publish
-    expect { Pigeon::Draft.current }.to raise_error("NO DRAFT FOUND")
+    db.publish_draft(draft)
+    expect { db.current_draft }.to raise_error("NO DRAFT FOUND")
   end
 
   it "creates a single message" do
-    message = draft.publish
+    message = db.publish_draft(draft)
     expect(message.author.multihash).to eq(Pigeon::LocalIdentity.current.multihash)
     expect(message.body).to eq(draft.body)
     expect(message.depth).to eq(0)
@@ -66,8 +65,8 @@ RSpec.describe Pigeon::Message do
     all = []
     0.upto(4) do |expected_depth|
       draft1 = db.create_draft(kind: "unit_test")
-      draft1["description"] = "Message number #{expected_depth}"
-      message = draft1.publish
+      draft1.put(db, "description", "Message number #{expected_depth}")
+      message = db.publish_draft(draft1)
       all.push(message)
       expect(message.depth).to eq(expected_depth)
       if expected_depth == 0
@@ -153,8 +152,8 @@ RSpec.describe Pigeon::Message do
       kind = SecureRandom.alphanumeric(8)
       kind[rand(0...8)] = n
       draft = db.create_draft(kind: kind)
-      draft["body"] = "empty"
-      boom = ->() { Pigeon::Lexer.tokenize(draft.publish.render) }
+      draft.put(db, "body", "empty")
+      boom = ->() { Pigeon::Lexer.tokenize(db.publish_draft(draft).render) }
       expect(boom).to raise_error(Pigeon::Lexer::LexError)
     end
   end
@@ -164,8 +163,8 @@ RSpec.describe Pigeon::Message do
       draft = db.create_draft(kind: "unit_test")
       key = SecureRandom.alphanumeric(8)
       key[rand(0...8)] = n
-      draft[key] = "should crash"
-      boom = ->() { Pigeon::Lexer.tokenize(draft.publish.render) }
+      draft.put(db, key, "should crash")
+      boom = ->() { Pigeon::Lexer.tokenize(db.publish_draft(draft).render) }
       expect(boom).to raise_error(Pigeon::Lexer::LexError)
     end
   end

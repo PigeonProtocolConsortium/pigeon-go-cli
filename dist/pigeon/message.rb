@@ -19,6 +19,7 @@ module Pigeon
                     prev:,
                     signature:,
                     db:)
+      raise "Type mismatch: #{@db.class}" unless @db.is_a?(Pigeon::Database)
       params = { author: RemoteIdentity.new(author),
                  kind: kind,
                  body: body,

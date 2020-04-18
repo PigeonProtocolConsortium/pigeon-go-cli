@@ -94,7 +94,7 @@ module Pigeon
 
     def append(key, raw_value = "")
       v = (raw_value != "") ? raw_value : STDIN.read
-      draft = Pigeon::Draft.current
+      draft = db.current_draft
       if draft
         puts draft[key] = v
       else
@@ -106,7 +106,7 @@ module Pigeon
 
     def show(message_id = "")
       if message_id == ""
-        puts Pigeon::Draft.current.render_as_draft
+        puts db.current_draft.render_as_draft
       else
         bail("You must create a draft first")
       end
@@ -115,7 +115,7 @@ module Pigeon
     desc "sign", "Commit current DRAFT to local feed."
 
     def sign
-      puts Pigeon::Draft.current.publish.render
+      puts db.current_draft.publish.render
     end
   end
 

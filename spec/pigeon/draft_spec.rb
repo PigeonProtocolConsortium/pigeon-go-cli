@@ -10,8 +10,8 @@ RSpec.describe Pigeon::Draft do
   let(:message) do
     message = db.create_draft(kind: "unit_test")
     hash = db.put_blob(File.read("./logo.png"))
-    message["a"] = "bar"
-    message["b"] = hash
+    message.put(db, "a", "bar")
+    message.put(db, "b", hash)
     message
   end
 
@@ -45,14 +45,15 @@ RSpec.describe Pigeon::Draft do
         "b" => hash,
       },
     }
-    message["a"] = "bar"
-    message["b"] = hash
+    message.put(db, "a", "bar")
+    message.put(db, "b", hash)
     expect(message["a"]).to eq(expectations.dig(:body, "a"))
     expect(message["b"]).to eq(expectations.dig(:body, "b"))
     expect(message.kind).to eq("unit_test")
     expect(message.body).to eq(expectations.fetch(:body))
     expectations.map do |k, v|
-      expect(Pigeon::Draft.current.send(k)).to eq(v)
+      left = db.current_draft.send(k)
+      expect(left).to eq(v)
     end
   end
 end

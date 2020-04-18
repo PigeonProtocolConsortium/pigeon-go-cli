@@ -1,5 +1,5 @@
 Gem::Specification.new do |s|
-  s.name = "pigeon_ruby"
+  s.name = "pigeon"
   s.version = "0.0.0"
   s.date = "2020-04-20"
   s.summary = "An offline peer-to-peer protocol"

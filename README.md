@@ -8,13 +8,25 @@ This is a WIP [Pigeon Protocol] client written in Ruby.
 
 This is a pre-release skeleton project. There is no gem yet. The gem will be released after we are fully compliant with the spec and have high test coverage stats.
 
+In the meantime:
+
+```
+git clone https://tildegit.org/PigeonProtocolConsortium/pigeon_ruby.git
+cd pigeon_ruby
+bundle install
+./pigeon-cli # Should work. Raise issue if not.
+```
+
 # Usage: CLI
 
-To get started, clone this repo and run `./pigeon-cli` in place of `pigeon`.
+We provide a CLI wrapper as `pigeon-cli`.
+Help is provided by running `./pigeon-cli`.
 
-Eg: `pigeon identity show` becomes `./pigeon-cli show`.
+See `kitchen_sink.sh` for an example of all commands.
 
 # Usage: Ruby Lib
+
+TODO
 
 # Current Status
 

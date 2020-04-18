@@ -84,10 +84,6 @@ module Pigeon
       Helpers.publish_draft(self, draft)
     end
 
-    def publish_message(msg)
-      Helpers.publish_message(self, msg)
-    end
-
     # Store a message that someone (not the LocalIdentity)
     # has authored.
     def ingest(author:, body:, depth:, kind:, lipmaa:, prev:, signature:)

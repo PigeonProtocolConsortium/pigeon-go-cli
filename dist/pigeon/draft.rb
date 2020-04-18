@@ -19,6 +19,7 @@ module Pigeon
       self.body[key]
     end
 
+    # TODO: This is a wonky API
     def put(db, key, value)
       raise STRING_KEYS_ONLY unless key.is_a?(String)
 

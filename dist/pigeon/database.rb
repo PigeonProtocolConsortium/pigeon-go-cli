@@ -4,6 +4,7 @@ module Pigeon
 
     def initialize(path: PIGEON_DB_PATH)
       @store = Pigeon::Storage.new(path: path)
+      init_ident
     end
 
     def add_peer(p); store.add_peer(p); end

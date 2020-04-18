@@ -4,6 +4,14 @@ require_relative File.join("dist", "pigeon")
 
 require "thor"
 
+def db
+  if File.file?(Pigeon::PIGEON_DB_PATH)
+    $db ||= Pigeon::Database.new
+  else
+    raise "ERROR: You need to create a database file first."
+  end
+end
+
 def bail(msg)
   $stderr.puts msg
   exit 1
@@ -25,20 +33,21 @@ module Pigeon
 
     def new
       if File.file?(Pigeon::PIGEON_DB_PATH)
-        puts "Pigeon has detected a `pigeon.db` file.
+        puts <<-END
+          Pigeon has detected a `pigeon.db` file.
           Refusing to overwrite existing Pigeon config.
           Remove config dir or switch to a different directory."
+        END
         raise ConfigAlreadyExists
       end
-      kp = Pigeon::LocalIdentity.new()
-      kp.save!
-      puts kp.multihash
+      $db = Pigeon::Database.new
+      puts db.local_identity.multihash
     end
 
     desc "show", "Prints your identiy string to STDOUT"
 
     def show
-      puts Pigeon::LocalIdentity.current.multihash
+      puts db.local_identity.multihash
     end
   end
 
@@ -47,13 +56,13 @@ module Pigeon
 
     def set(data = "")
       blob = (data != "") ? data : STDIN.read
-      puts Pigeon::Storage.current.put_blob(blob)
+      puts db.put_blob(blob)
     end
 
     desc "get", "Read arbitrary data from the database"
 
     def get(hex_digest)
-      puts Pigeon::Storage.current.get_blob(hex_digest)
+      puts db.get_blob(hex_digest)
     end
   end
 
@@ -61,25 +70,25 @@ module Pigeon
     desc "add", "Begin following a Pigeon peer"
 
     def add(identity)
-      puts Pigeon::Storage.current.add_peer(identity)
+      puts db.add_peer(identity)
     end
 
     desc "remove", "Stop following a Pigeon peer"
 
     def remove(identity)
-      puts Pigeon::Storage.current.remove_peer(identity)
+      puts db.remove_peer(identity)
     end
 
     desc "block", "Stop following a Pigeon peer AND refuse to replicate"
 
     def block(identity)
-      puts Pigeon::Storage.current.block_peer(identity)
+      puts db.block_peer(identity)
     end
 
     desc "all", "List all Pigeon peers"
 
     def all
-      puts Pigeon::Storage.current.all_peers
+      puts db.all_peers
     end
   end
 
@@ -96,7 +105,7 @@ module Pigeon
       v = (raw_value != "") ? raw_value : STDIN.read
       draft = db.current_draft
       if draft
-        puts draft[key] = v
+        puts draft.put(db, key, v)
       else
         bail("You must create a draft first")
       end
@@ -115,7 +124,7 @@ module Pigeon
     desc "sign", "Commit current DRAFT to local feed."
 
     def sign
-      puts db.current_draft.publish.render
+      puts db.publish_draft(db.current_draft).render
     end
   end
 
@@ -123,7 +132,7 @@ module Pigeon
     desc "create", "Create a pigeon bundle file"
 
     def create(file_path = Pigeon::DEFAULT_BUNDLE_PATH)
-      Pigeon::Bundle.create(file_path)
+      db.create_bundle(file_path)
     end
   end
 
@@ -131,26 +140,21 @@ module Pigeon
     desc "find", "Find a pigeon message in the local DB"
 
     def find(multihash)
-      puts Pigeon::Storage.current.read_message(multihash).render
+      puts db.read_message(multihash).render
     end
 
     desc "find-all", "Find a pigeon message in the local DB"
 
-    def find_all(author = Pigeon::LocalIdentity.current.multihash)
-      # TODO: Ability to find-all messages by author ID
-      puts Pigeon::Storage
-             .current
-             .find_all(author)
-             .join(Pigeon::CR) + Pigeon::CR
+    def find_all(author = db.local_identity.multihash)
+      puts db.find_all(author).join(Pigeon::CR) + Pigeon::CR
     end
 
     desc "last", "Grab your last message. INTERNAL USE ONLY"
 
     def last
-      me = Pigeon::LocalIdentity.current
-      store = Pigeon::Storage.current
-      mcount = store.get_message_count_for(me.multihash)
-      multihash = store.get_message_by_depth(me.multihash, mcount - 1)
+      me = db.local_identity
+      mcount = db.get_message_count_for(me.multihash)
+      multihash = db.get_message_by_depth(me.multihash, mcount - 1)
       puts multihash
     end
   end
@@ -159,14 +163,13 @@ module Pigeon
     desc "status", "Show various information about the `.pigeon` directory"
 
     def status
-      store = Pigeon::Storage.current
-      me = Pigeon::LocalIdentity.current.multihash
-      mcount = store.get_message_count_for(me)
+      me = db.local_identity.multihash
+      mcount = db.get_message_count_for(me)
       puts "
           -`.   Pigeon Protocol Ruby Client
         '( @ >  Version:   #{Pigeon::VERSION}
-         _) (   Peers:     #{store.all_peers.count}
-        /    )  Blocked:   #{store.all_blocks.count}
+         _) (   Peers:     #{db.all_peers.count}
+        /    )  Blocked:   #{db.all_blocks.count}
        /_,'  /  Published: #{mcount}
          \\  /   Ident:     #{me}
       ===m" "m===

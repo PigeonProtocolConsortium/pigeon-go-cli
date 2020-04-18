@@ -2,15 +2,19 @@
 
 # Pigeon Ruby
 
-A WIP pigeon protocol client.
+This is a WIP [Pigeon Protocol] client written in Ruby.
 
-# How to Use
+# Installation
 
 This is a pre-release skeleton project. There is no gem yet. The gem will be released after we are fully compliant with the spec and have high test coverage stats.
+
+# Usage: CLI
 
 To get started, clone this repo and run `./pigeon-cli` in place of `pigeon`.
 
 Eg: `pigeon identity show` becomes `./pigeon-cli show`.
+
+# Usage: Ruby Lib
 
 # Current Status
 
@@ -56,8 +60,8 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [X] Make all methods private except those required for the CLI.
  - [X] Add Lipmaa links like the Bamboo folks do.
  - [X] Set a max message size.
- - [ ] Clean up all singletons / .current hacks
- - [ ] Reduce cross cutting where collaborating objects need access to `@db`
+ - [X] Clean up all singletons / .current hacks
+ - [X] Reduce cross cutting where collaborating objects need access to `@db`
  - [ ] Update README.md. Needs user manual for new `Pigeon::Database` class.
  - [ ] Make the switch to LevelDB, RocksDB, [UNQLite](https://unqlite.org/features.html) or similar (currently using Ruby PStore).
  - [ ] Make CLI names consistent with API names. Eg: find vs. read.
@@ -84,6 +88,7 @@ Eg: `pigeon identity show` becomes `./pigeon-cli show`.
  - [ ] Interest and Disinterest Signalling for document routing: Create a `$gossip` message to express `blob.have`, `blob.want` and to note last message received of a peer. This can steer bundle creation and an eventual `--for` flag at bundle creation time to customize a bundle to a particular user.
 
 # Idea Bin
+
  - [ ] Map/reduce plugin support for custom indices?
  - [ ] Ability to add a blob in one swoop using File objects and `Message#[]=`, maybe?
 

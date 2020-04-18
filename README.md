@@ -14,7 +14,7 @@ In the meantime:
 git clone https://tildegit.org/PigeonProtocolConsortium/pigeon_ruby.git
 cd pigeon_ruby
 gem build pigeon.gemspec
-gem install pigeon-0.0.4.gem
+gem install pigeon-0.0.5.gem
 pigeon-cli identity new # Should work. Raise issue if not.
 pigeon-cli status
 pigeon-cli help
@@ -75,22 +75,19 @@ TODO
  - [X] Set a max message size.
  - [X] Clean up all singletons / .current hacks
  - [X] Reduce cross cutting where collaborating objects need access to `@db`
+ - [X] Ensure all disks writes perform verification!
  - [ ] Update README.md. Needs user manual for new `Pigeon::Database` class.
  - [ ] Make the switch to LevelDB, RocksDB, [UNQLite](https://unqlite.org/features.html) or similar (currently using Ruby PStore).
  - [ ] Make CLI names consistent with API names. Eg: find vs. read.
- - [ ] Create regexes in ::Lexer using strings and Regexp.new() for cleaner regexes.
  - [ ] Need a way of importing / exporting a feeds blobs. (see "Bundle Brainstorming" below)
  - [ ] Need a way of adding peers messages / gossip to bundles. (see "Bundle Brainstorming" below)
  - [ ] Check block list before ingesting bundles.
- - [ ] Handle the three outcomes of bundle ingestion: `ok`, `blocked`, `already_saved`.
  - [ ] add parsers and validators for all CLI inputs
  - [ ] Reduce whole darn repo into single module to aide portability. `::Helpers` module is OK.
- - [ ] Use URNs instead of multihash?
- - [ ] Ensure all disks writes perform verification!
- - [ ] Publish a RubyGem
  - [ ] Update the bundles.md document once `bundle consume` works.
  - [ ] 100% documentation
  - [ ] Update spec document CLI usage examples to reflect API changes in 2020.
+ - [ ] Publish to RubyGems
  - [ ] Performance benchmarks (Do this second to last!)
  - [ ] Performance tuning (Do this last!)
 

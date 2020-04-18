@@ -5,7 +5,6 @@ require "set"
 
 module Pigeon
   SEED_CONFIG_KEY = "SEED"
-  VERSION = "0.0.4"
   TPL_DIR = File.join(".", "lib", "views")
 
   PIGEON_DB_PATH = File.join("db.pigeon")
@@ -197,6 +196,7 @@ module Pigeon
       assert("prev", msg.prev, expected_prev)
       tpl = msg.template.render_without_signature
       Helpers.verify_string(author, signature, tpl)
+      msg.untaint
       msg.freeze
       msg
     end
@@ -211,6 +211,7 @@ module Pigeon
   end
 end
 
+require_relative File.join("pigeon", "version.rb")
 require_relative File.join("pigeon", "local_identity.rb")
 require_relative File.join("pigeon", "remote_identity.rb")
 require_relative File.join("pigeon", "storage.rb")

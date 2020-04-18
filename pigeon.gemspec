@@ -1,4 +1,4 @@
-require_relative "lib/pigeon"
+require_relative "lib/pigeon/version"
 
 Gem::Specification.new do |s|
   s.name = "pigeon"

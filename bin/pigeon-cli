@@ -134,6 +134,12 @@ module Pigeon
     def create(file_path = Pigeon::DEFAULT_BUNDLE_PATH)
       db.create_bundle(file_path)
     end
+
+    desc "ingest", "Ingest a pigeon bundle file"
+
+    def ingest(file_path = Pigeon::DEFAULT_BUNDLE_PATH)
+      db.ingest_bundle(file_path)
+    end
   end
 
   class PigeonMessage < ThorBase

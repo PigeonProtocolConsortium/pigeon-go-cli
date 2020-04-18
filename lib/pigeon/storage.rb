@@ -101,6 +101,9 @@ module Pigeon
     end
 
     def insert_message(msg)
+      if msg.tainted?
+        STDERR.puts "WARNING: Just saved an unverified message"
+      end
       write do
         return msg if store[MESG_NS][msg.multihash]
         insert_and_update_index(msg)

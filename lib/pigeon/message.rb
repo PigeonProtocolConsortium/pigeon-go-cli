@@ -30,6 +30,7 @@ module Pigeon
       @prev = prev || Pigeon::NOTHING
       @lipmaa = lipmaa
       @signature = signature
+      taint
     end
 
     def template

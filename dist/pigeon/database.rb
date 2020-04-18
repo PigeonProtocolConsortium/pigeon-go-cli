@@ -21,7 +21,11 @@ module Pigeon
     def all_peers(); store.all_peers(); end
     def all_blocks(); store.all_blocks(); end
     def message?(multihash); store.message?(multihash); end
-    def save_message(msg_obj); store.save_message(msg_obj); end
+
+    def save_message(msg_obj)
+      store.insert_message(Helpers.verify_message(self, msg_obj))
+    end
+
     def read_message(multihash); store.read_message(multihash); end
 
     def get_message_count_for(multihash)
@@ -84,13 +88,14 @@ module Pigeon
     # Store a message that someone (not the LocalIdentity)
     # has authored.
     def ingest(author:, body:, depth:, kind:, lipmaa:, prev:, signature:)
-      self.save_message(Message.new(author: RemoteIdentity.new(author),
-                                    kind: kind,
-                                    body: body,
-                                    prev: prev,
-                                    lipmaa: lipmaa,
-                                    signature: signature,
-                                    depth: depth))
+      msg = Message.new(author: RemoteIdentity.new(author),
+                        kind: kind,
+                        body: body,
+                        prev: prev,
+                        lipmaa: lipmaa,
+                        signature: signature,
+                        depth: depth)
+      save_message(msg)
     end
 
     private
@@ -98,7 +103,7 @@ module Pigeon
     attr_reader :store
 
     def init_local_identity(new_seed)
-      key = store.get_config(SEED_CONFIG_KEY)
+      key = get_config(SEED_CONFIG_KEY)
       if key
         @local_identity = LocalIdentity.new(key)
       else

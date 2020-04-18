@@ -60,6 +60,12 @@ module Pigeon
   # /Constants for internal use only
 
   class Helpers
+    VERFIY_ERROR = "Expected field `%s` to equal %s, got: %s"
+    MSG_SIZE_ERROR = "Messages cannot have more than 64 keys. Got %s."
+
+    class VerificationError < StandardError; end
+    class MessageSizeError < StandardError; end
+
     B32_ENC = {
       "00000" => "0", "00001" => "1", "00010" => "2", "00011" => "3",
       "00100" => "4", "00101" => "5", "00110" => "6", "00111" => "7",
@@ -145,7 +151,7 @@ module Pigeon
       verify_key.verify(binary_signature, string)
     end
 
-    def assert(field, actual, expected)
+    def self.assert(field, actual, expected)
       unless actual == expected
         message = VERFIY_ERROR % [field, actual || "nil", expected || "nil"]
         raise VerificationError, message
@@ -171,24 +177,30 @@ module Pigeon
       message
     end
 
-    def publish_message(db, msg)
-      return db.read_message(multihash) if db.message?(multihash)
+    def self.verify_message(db, msg)
+      msg_hash = msg.multihash
+      body = msg.body
       key_count = body.count
+      author = msg.author
+      signature = msg.signature
+
+      return db.read_message(msg_hash) if db.message?(msg_hash)
+
       if key_count > 64
         msg = MSG_SIZE_ERROR % key_count
         raise MessageSizeError, msg
       end
       count = db.get_message_count_for(author.multihash)
       expected_prev = db.get_message_by_depth(author.multihash, count - 1) || Pigeon::NOTHING
-      assert("depth", count, depth)
+      assert("depth", count, msg.depth)
       # TODO: Re-visit this. Our current verification method
       # is probably too strict and won't allow for partial
       # verification of feeds.
-      assert("lipmaa", Helpers.lipmaa(depth), lipmaa)
-      assert("prev", prev, expected_prev)
-      verify_signature
+      assert("lipmaa", Helpers.lipmaa(msg.depth), msg.lipmaa)
+      assert("prev", msg.prev, expected_prev)
+      tpl = msg.template.render_without_signature
+      Helpers.verify_string(author, signature, tpl)
       msg.freeze
-      db.save_message(msg)
       msg
     end
 

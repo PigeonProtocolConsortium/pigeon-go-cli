@@ -31,12 +31,12 @@ RSpec.describe Pigeon::Message do
 
   it "discards a draft after signing" do
     db.publish_draft(draft)
-    expect { db.current_draft }.to raise_error("NO DRAFT FOUND")
+    expect(db.current_draft).to be(nil)
   end
 
   it "creates a single message" do
     message = db.publish_draft(draft)
-    expect(message.author.multihash).to eq(Pigeon::LocalIdentity.current.multihash)
+    expect(message.author.multihash).to eq(db.local_identity.multihash)
     expect(message.body).to eq(draft.body)
     expect(message.depth).to eq(0)
     expect(message.kind).to eq("unit_test")
@@ -100,7 +100,7 @@ RSpec.describe Pigeon::Message do
     end
     expect do
       create_message(body)
-    end.to raise_error(Pigeon::Message::MessageSizeError, error)
+    end.to raise_error(Pigeon::Helpers::MessageSizeError, error)
   end
 
   it "verifies accuracy of signatures" do
@@ -110,7 +110,7 @@ RSpec.describe Pigeon::Message do
     plaintext = template.render_without_signature
 
     # Make fake pairs of data for cross-checking
-    key1 = Pigeon::LocalIdentity.current.instance_variable_get(:@signing_key)
+    key1 = db.local_identity.instance_variable_get(:@signing_key)
     key2 = Ed25519::SigningKey.new(secret)
 
     sig1 = key1.sign(plaintext)
@@ -128,20 +128,22 @@ RSpec.describe Pigeon::Message do
   end
 
   it "crashes on forged fields" do
+    tokens = [
+      [:AUTHOR, "@DYdgK1KUInVtG3lS45hA1HZ-jTuvfLKsxDpXPFCve04=.ed25519"],
+      [:KIND, "invalid"],
+      [:PREV, "NONE"],
+      [:DEPTH, 10],
+      [:LIPMAA, Pigeon::Helpers.lipmaa(10)],
+      [:HEADER_END],
+      [:BODY_ENTRY, "duplicate", "This key is a duplicate."],
+      [:SIGNATURE, "DN7yPTE-m433ND3jBL4oM23XGxBKafjq0Dp9ArBQa_TIGU7DmCxTumieuPBN-NKxlx_0N7-c5zjLb5XXVHYPCQ==.sig.ed25519"],
+      [:MESSAGE_END],
+    ]
+    e = Pigeon::Helpers::VerificationError
     m = "Expected field `depth` to equal 0, got: 10"
     expect do
-      Pigeon::Parser.parse(db, [
-        [:AUTHOR, "@DYdgK1KUInVtG3lS45hA1HZ-jTuvfLKsxDpXPFCve04=.ed25519"],
-        [:KIND, "invalid"],
-        [:PREV, "NONE"],
-        [:DEPTH, 10],
-        [:LIPMAA, Pigeon::Helpers.lipmaa(10)],
-        [:HEADER_END],
-        [:BODY_ENTRY, "duplicate", "This key is a duplicate."],
-        [:SIGNATURE, "DN7yPTE-m433ND3jBL4oM23XGxBKafjq0Dp9ArBQa_TIGU7DmCxTumieuPBN-NKxlx_0N7-c5zjLb5XXVHYPCQ==.sig.ed25519"],
-        [:MESSAGE_END],
-      ]).first.save!
-    end.to raise_error(Pigeon::Message::VerificationError, m)
+      msg = Pigeon::Parser.parse(db, tokens)[0]
+    end.to raise_error(e, m)
   end
 
   # Every ASCII character that is not a letter:

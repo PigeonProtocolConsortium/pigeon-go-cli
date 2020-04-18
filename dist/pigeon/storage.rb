@@ -100,7 +100,7 @@ module Pigeon
       read { store[MESG_NS].fetch(multihash) }
     end
 
-    def save_message(msg)
+    def insert_message(msg)
       write do
         return msg if store[MESG_NS][msg.multihash]
         insert_and_update_index(msg)

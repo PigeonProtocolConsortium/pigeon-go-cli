@@ -6,23 +6,24 @@ This is a WIP [Pigeon Protocol] client written in Ruby.
 
 # Installation
 
-This is a pre-release skeleton project. There is no gem yet. The gem will be released after we are fully compliant with the spec and have high test coverage stats.
+We are not yet on Rubygems. The gem will be released after we are fully compliant with the spec and have high test coverage stats.
 
 In the meantime:
 
 ```
 git clone https://tildegit.org/PigeonProtocolConsortium/pigeon_ruby.git
 cd pigeon_ruby
-bundle install
-./pigeon-cli # Should work. Raise issue if not.
+gem build pigeon.gemspec
+gem install pigeon-0.0.4.gem
+pigeon-cli identity new # Should work. Raise issue if not.
+pigeon-cli status
+pigeon-cli help
 ```
 
 # Usage: CLI
 
-We provide a CLI wrapper as `pigeon-cli`.
-Help is provided by running `./pigeon-cli`.
-
-See `kitchen_sink.sh` for an example of all commands.
+See `pigeon-cli help` for documentation.
+See `kitchen_sink.sh` examples.
 
 # Usage: Ruby Lib
 

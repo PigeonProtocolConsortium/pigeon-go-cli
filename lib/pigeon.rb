@@ -5,16 +5,16 @@ require "set"
 
 module Pigeon
   SEED_CONFIG_KEY = "SEED"
-  VERSION = "0.0.3"
+  VERSION = "0.0.4"
   TPL_DIR = File.join(".", "lib", "views")
 
   PIGEON_DB_PATH = File.join("db.pigeon")
   DEFAULT_BUNDLE_PATH = "./pigeon.bundle"
 
   # MESSAGE TEMPLATE CONSTANTS:
-  HEADER_TPL = File.read(File.join(TPL_DIR, "1_header.erb")).sub("\n", "")
-  BODY_TPL = File.read(File.join(TPL_DIR, "2_body.erb")).sub("\n", "")
-  FOOTER_TPL = File.read(File.join(TPL_DIR, "3_footer.erb")).sub("\n", "")
+  HEADER_TPL = "author <%= author %>\nkind <%= kind %>\nprev <%= prev %>\ndepth <%= depth %>\nlipmaa <%= lipmaa %>\n\n"
+  BODY_TPL = "<% body.to_a.each do |k, v| %><%= k %>:<%= v %><%= \"\\n\" %><% end %>\n"
+  FOOTER_TPL = "signature <%= signature %>"
   COMPLETE_TPL = [HEADER_TPL, BODY_TPL, FOOTER_TPL].join("")
   CURRENT_DRAFT = "HEAD.draft"
   NOTHING = "NONE"

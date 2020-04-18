@@ -5,7 +5,7 @@ require "set"
 
 module Pigeon
   SEED_CONFIG_KEY = "SEED"
-  VERSION = "0.0.1"
+  VERSION = "0.0.2"
   TPL_DIR = "views"
 
   PIGEON_DB_PATH = File.join("db.pigeon")

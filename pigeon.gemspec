@@ -1,6 +1,8 @@
+require_relative "lib/pigeon"
+
 Gem::Specification.new do |s|
   s.name = "pigeon"
-  s.version = "0.0.1"
+  s.version = Pigeon::VERSION
   s.date = "2020-04-20"
   s.summary = "An offline peer-to-peer protocol"
   s.description = "A Ruby client for Pigeon, an offline peer-to-peer protocol"

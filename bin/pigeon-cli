@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
-require_relative File.join("dist", "pigeon")
-
+require "pigeon"
 require "thor"
 
 def db

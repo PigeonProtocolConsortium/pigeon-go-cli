@@ -2,25 +2,27 @@ module Pigeon
   class Database
     attr_reader :local_identity
 
-    def initialize(path: PIGEON_DB_PATH,
-                   seed: SecureRandom.random_bytes(Ed25519::KEY_SIZE))
+    def initialize(path: PIGEON_DB_PATH)
       @store = Pigeon::Storage.new(path: path)
-      init_local_identity(seed)
     end
 
-    def find_all(mhash); store.find_all(mhash); end
-    def put_blob(b); store.put_blob(b); end
-    def get_blob(b); store.get_blob(b); end
-    def set_config(k, v); store.set_config(k, v); end
-    def get_config(k); store.get_config(k); end
-    def reset_current_draft; set_config(CURRENT_DRAFT, nil); end
-    def reset; store.reset; end
     def add_peer(p); store.add_peer(p); end
-    def block_peer(p); store.block_peer(p); end
-    def remove_peer(p); store.remove_peer(p); end
-    def all_peers(); store.all_peers(); end
     def all_blocks(); store.all_blocks(); end
+    def all_peers(); store.all_peers(); end
+    def block_peer(p); store.block_peer(p); end
+    def find_all(mhash); store.find_all(mhash); end
+    def get_blob(b); store.get_blob(b); end
+    def get_config(k); store.get_config(k); end
     def message?(multihash); store.message?(multihash); end
+    def put_blob(b); store.put_blob(b); end
+    def remove_peer(p); store.remove_peer(p); end
+    def reset_current_draft; set_config(CURRENT_DRAFT, nil); end
+    def set_config(k, v); store.set_config(k, v); end
+
+    def reset
+      store.reset
+      init_ident
+    end
 
     def save_message(msg_obj)
       store.insert_message(Helpers.verify_message(self, msg_obj))
@@ -102,13 +104,15 @@ module Pigeon
 
     attr_reader :store
 
-    def init_local_identity(new_seed)
-      key = get_config(SEED_CONFIG_KEY)
-      if key
-        @local_identity = LocalIdentity.new(key)
+    def init_ident
+      secret = get_config(SEED_CONFIG_KEY)
+      if secret
+        @local_identity = LocalIdentity.new(secret)
       else
-        @local_identity = LocalIdentity.new(new_seed)
+        new_seed = SecureRandom.random_bytes(Ed25519::KEY_SIZE)
         set_config(SEED_CONFIG_KEY, new_seed)
+        binding.pry unless get_config(SEED_CONFIG_KEY).is_a?(String)
+        @local_identity = LocalIdentity.new(new_seed)
       end
     end
   end

@@ -78,6 +78,7 @@ RSpec.describe Pigeon::Message do
   end
 
   it "verifies accuracy of hash chain" do
+    print "?SLOW?"
     m1 = create_message({ "a" => "b" })
     m2 = create_message({ "c" => "d" })
     m3 = create_message({ "e" => "f" })
@@ -106,6 +107,7 @@ RSpec.describe Pigeon::Message do
   it "verifies accuracy of signatures" do
     # === Initial setup
     secret = db.get_config(Pigeon::SEED_CONFIG_KEY)
+    expect(secret).to be_kind_of(String)
     message = templated_message
     plaintext = template.render_without_signature
 

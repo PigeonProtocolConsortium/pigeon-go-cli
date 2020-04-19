@@ -20,7 +20,7 @@ In the meantime:
 git clone https://tildegit.org/PigeonProtocolConsortium/pigeon_ruby.git
 cd pigeon_ruby
 gem build pigeon.gemspec
-gem install pigeon-0.0.5.gem
+gem install pigeon-0.0.7.gem
 pigeon-cli identity new # Should work. Raise issue if not.
 pigeon-cli status
 pigeon-cli help

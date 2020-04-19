@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require "pigeon"
+require_relative "../lib/pigeon"
 require "thor"
 
 def db
@@ -103,22 +103,18 @@ module Pigeon
 
     def append(key, raw_value = "")
       v = (raw_value != "") ? raw_value : STDIN.read
-      draft = db.current_draft
-      if draft
-        puts db.update_draft(key, v)
+      if db.current_draft
+        db.update_draft(key, v)
+        puts db.current_draft.render_as_draft
       else
         bail("You must create a draft first")
       end
     end
 
-    desc "show", "Print a message to STDOUT. If message_id is missing, current draft will be displayed."
+    desc "show", "Print current message to STDOUT."
 
-    def show(message_id = "")
-      if message_id == ""
-        puts db.current_draft.render_as_draft
-      else
-        bail("You must create a draft first")
-      end
+    def show
+      puts db.current_draft.render_as_draft
     end
 
     desc "sign", "Commit current DRAFT to local feed."

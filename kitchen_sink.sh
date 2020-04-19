@@ -39,7 +39,7 @@ pigeon-cli peer block @41FNE08J5XK9GEV1BTEPT15WW1KDK5XCC8SMM62MQNYZ0785NJ80.ed25
 echo "listing all peers:"
 pigeon-cli peer all
 
-echo "Making a new `scratch_pad` log entry"
+echo "Making a new 'scratch_pad' log entry"
 pigeon-cli draft create scratch_pad
 
 echo "Appending values..."

@@ -149,9 +149,9 @@ module Pigeon
       puts db.read_message(multihash).render
     end
 
-    desc "find-all", "Find a pigeon message in the local DB"
+    desc "find-all", "Find all message IDs of a particular identity."
 
-    def find_all(author = db.local_identity.multihash)
+    def find_all(author = nil)
       puts db.find_all_messages(author).join(Pigeon::CR) + Pigeon::CR
     end
 
@@ -170,15 +170,17 @@ module Pigeon
 
     def status
       me = db.local_identity.multihash
-      mcount = db.get_message_count_for(me)
+      mine = db.get_message_count_for(me)
       puts "
-          -`.   Pigeon Protocol Ruby Client
-        '( @ >  Version:   #{Pigeon::VERSION}
-         _) (   Peers:     #{db.all_peers.count}
-        /    )  Blocked:   #{db.all_blocks.count}
-       /_,'  /  Published: #{mcount}
-         \\  /   Ident:     #{me}
-      ===m" "m===
+          -`.     Pigeon Protocol Ruby Client
+        '( @ >    Version:            #{Pigeon::VERSION}
+         _) (     Peers:              #{db.all_peers.count}
+        /    )    Blocked:            #{db.all_blocks.count}
+       /_,'  /    Msgs Published:     #{mine}
+         \\  /     Msgs Total:         #{db.find_all_messages.count}
+      ===m\" \"m===
+      Your local identity hash:
+      #{me}
       "
     end
 

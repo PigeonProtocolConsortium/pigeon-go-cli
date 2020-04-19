@@ -75,14 +75,18 @@ module Pigeon
     end
 
     def find_all_messages(author)
-      all = []
-      depth = -1
-      last = ""
-      until (last == nil) || (depth > 99999)
-        last = self.get_message_by_depth(author, depth += 1)
-        all.push(last) if last
+      if author
+        all = []
+        depth = -1
+        last = ""
+        until (last == nil) || (depth > 99999)
+          last = self.get_message_by_depth(author, depth += 1)
+          all.push(last) if last
+        end
+        return all
+      else
+        read { store["messages"].keys }
       end
-      return all
     end
 
     def get_message_by_depth(multihash, depth)

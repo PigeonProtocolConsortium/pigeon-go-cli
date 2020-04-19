@@ -11,7 +11,7 @@ module Pigeon
     def all_blocks(); store.all_blocks(); end
     def all_peers(); store.all_peers(); end
     def block_peer(p); store.block_peer(p); end
-    def find_all_messages(mhash); store.find_all_messages(mhash); end
+    def find_all_messages(mhash = nil); store.find_all_messages(mhash); end
     def get_blob(b); store.get_blob(b); end
     def get_config(k); store.get_config(k); end
     def message?(multihash); store.message?(multihash); end
@@ -104,7 +104,6 @@ module Pigeon
       else
         new_seed = SecureRandom.random_bytes(Ed25519::KEY_SIZE)
         set_config(SEED_CONFIG_KEY, new_seed)
-        binding.pry unless get_config(SEED_CONFIG_KEY).is_a?(String)
         @local_identity = LocalIdentity.new(new_seed)
       end
     end

@@ -79,6 +79,7 @@ module Pigeon
         all = []
         depth = -1
         last = ""
+        # TODO: This loop may become unresponsive.
         until (last == nil) || (depth > 99999)
           last = self.get_message_by_depth(author, depth += 1)
           all.push(last) if last

@@ -169,23 +169,13 @@ module Pigeon
       draft.signature = author.sign(unsigned)
       tokens = Lexer.tokenize_unsigned(unsigned, draft.signature)
       message = Parser.parse(db, tokens)[0]
-      db.discard_draft
+      db.reset_draft
       message
     end
 
-    # TODO: This is a wonky API
-    def self.update_draft(db, draft, key, value)
-      raise STRING_KEYS_ONLY unless key.is_a?(String)
-
-      case value[0]
-      when BLOB_SIGIL, MESSAGE_SIGIL, IDENTITY_SIGIL, STRING_SIGIL
-        draft.body[key] = value
-      else
-        # If users passes a string and forgets to append
-        # the string sigil (\"), we add it for them.
-        # This might be a bad or good idea. Not sure yet.
-        draft.body[key] = value.inspect
-      end
+    def self.update_draft(db, key, value)
+      draft = db.current_draft
+      draft[key] = value
       db.save_draft(draft)
       return draft.body[key]
     end

@@ -96,7 +96,7 @@ module Pigeon
     desc "create", "Begin a new Pigeon message"
 
     def create(kind)
-      puts db.create_draft(kind: kind).render_as_draft
+      puts db.new_draft(kind: kind).render_as_draft
     end
 
     desc "append", "Add a key/value pair to the current DRAFT"
@@ -105,7 +105,7 @@ module Pigeon
       v = (raw_value != "") ? raw_value : STDIN.read
       draft = db.current_draft
       if draft
-        puts draft.put(db, key, v)
+        puts db.update_draft(key, v)
       else
         bail("You must create a draft first")
       end

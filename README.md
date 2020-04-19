@@ -4,6 +4,12 @@
 
 This is a WIP [Pigeon Protocol] client written in Ruby.
 
+# Caveats
+
+ * Not published to RubyGems yet (see installation instructions below)
+ * Not thread safe. This particular implementation probably never will be. Single user only.
+ * Bundle mechanism works for basic usage, but is extremely ineficient and **does not do anything with blocked identities**.
+
 # Installation
 
 We are not yet on Rubygems. The gem will be released after we are fully compliant with the spec and have high test coverage stats.

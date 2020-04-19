@@ -1,14 +1,14 @@
 require "spec_helper"
 
 RSpec.describe Pigeon::Message do
-  def create_draft(params)
-    draft = db.create_draft(kind: "unit_test")
-    params.each { |(k, v)| draft.put(db, k, v) }
-    draft
+  def reset_draft(params)
+    db.reset_draft
+    db.new_draft(kind: "unit_test", body: params)
+    db.current_draft
   end
 
   def create_message(params)
-    draft = create_draft(params)
+    draft = reset_draft(params)
     db.publish_draft(draft)
   end
 
@@ -20,7 +20,7 @@ RSpec.describe Pigeon::Message do
 
   let(:draft) do
     hash = db.put_blob(File.read("./logo.png"))
-    create_draft({ "a" => "bar", "b" => hash })
+    reset_draft({ "a" => "bar", "b" => hash })
   end
 
   let(:templated_message) { create_message({ "a" => "b" }) }
@@ -31,7 +31,7 @@ RSpec.describe Pigeon::Message do
 
   it "discards a draft after signing" do
     db.publish_draft(draft)
-    expect(db.current_draft).to be(nil)
+    expect { db.current_draft }.to raise_error("THERE IS NO DRAFT. CREATE ONE FIRST.")
   end
 
   it "creates a single message" do
@@ -64,9 +64,10 @@ RSpec.describe Pigeon::Message do
   it "creates a chain of messages" do
     all = []
     0.upto(4) do |expected_depth|
-      draft1 = db.create_draft(kind: "unit_test")
-      draft1.put(db, "description", "Message number #{expected_depth}")
-      message = db.publish_draft(draft1)
+      db.reset_draft
+      db.new_draft(kind: "unit_test")
+      db.update_draft("description", "Message number #{expected_depth}")
+      message = db.publish_draft
       all.push(message)
       expect(message.depth).to eq(expected_depth)
       if expected_depth == 0
@@ -78,7 +79,6 @@ RSpec.describe Pigeon::Message do
   end
 
   it "verifies accuracy of hash chain" do
-    print "?SLOW?"
     m1 = create_message({ "a" => "b" })
     m2 = create_message({ "c" => "d" })
     m3 = create_message({ "e" => "f" })
@@ -105,7 +105,6 @@ RSpec.describe Pigeon::Message do
   end
 
   it "verifies accuracy of signatures" do
-    print "?SLOW?"
     # === Initial setup
     secret = db.get_config(Pigeon::SEED_CONFIG_KEY)
     expect(secret).to be_kind_of(String)
@@ -156,20 +155,21 @@ RSpec.describe Pigeon::Message do
     WHITESPACE.map do |n|
       kind = SecureRandom.alphanumeric(8)
       kind[rand(0...8)] = n
-      draft = db.create_draft(kind: kind)
-      draft.put(db, "body", "empty")
-      boom = ->() { Pigeon::Lexer.tokenize(db.publish_draft(draft).render) }
+      db.reset_draft
+      db.new_draft(kind: kind)
+      boom = ->() { db.publish_draft.render }
       expect(boom).to raise_error(Pigeon::Lexer::LexError)
     end
   end
 
   it "does not allow whitespace in key names" do
     WHITESPACE.map do |n|
-      draft = db.create_draft(kind: "unit_test")
+      db.reset_draft
+      db.new_draft(kind: "unit_test")
       key = SecureRandom.alphanumeric(8)
       key[rand(0...8)] = n
-      draft.put(db, key, "should crash")
-      boom = ->() { Pigeon::Lexer.tokenize(db.publish_draft(draft).render) }
+      db.update_draft(key, "should crash")
+      boom = ->() { Pigeon::Lexer.tokenize(db.publish_draft.render) }
       expect(boom).to raise_error(Pigeon::Lexer::LexError)
     end
   end

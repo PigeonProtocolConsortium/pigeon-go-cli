@@ -3,9 +3,9 @@ require "pry"
 
 db = Pigeon::Database.new(path: "my.db")
 
-db.create_draft
+db.reset_draft
 db.current_draft
-db.discard_draft
+db.reset_draft
 db.publish_draft
 db.save_draft
 db.save_message

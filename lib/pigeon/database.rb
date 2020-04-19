@@ -33,9 +33,7 @@ module Pigeon
     end
 
     def create_message(kind, params)
-      draft = Pigeon::Draft.new(kind: kind, db: self)
-      params.map { |(k, v)| draft.put(self, k, v) }
-      publish_draft(draft)
+      publish_draft(new_draft(kind: kind, body: params))
     end
 
     # Store a message that someone (not the LocalIdentity)
@@ -60,9 +58,12 @@ module Pigeon
     # === DRAFTS
     def reset_current_draft; set_config(CURRENT_DRAFT, nil); end
 
-    def create_draft(kind:, body: {})
-      draft = Draft.new(kind: kind, body: body, db: self)
-      save_draft(draft)
+    def new_draft(kind:, body: {})
+      old = get_config(CURRENT_DRAFT)
+      if old
+        raise "PUBLISH OR RESET CURRENT DRAFT (#{old.kind}) FIRST"
+      end
+      save_draft(Draft.new(kind: kind, body: body))
     end
 
     def save_draft(draft)
@@ -71,15 +72,22 @@ module Pigeon
     end
 
     def current_draft
-      store.get_config(CURRENT_DRAFT)
+      draft = store.get_config(CURRENT_DRAFT)
+      if draft
+        return draft
+      else
+        raise "THERE IS NO DRAFT. CREATE ONE FIRST."
+      end
     end
 
-    def discard_draft
+    def update_draft(k, v); Helpers.update_draft(self, k, v); end
+
+    def reset_draft
       set_config(CURRENT_DRAFT, nil)
     end
 
     # Author a new message.
-    def publish_draft(draft)
+    def publish_draft(draft = self.current_draft)
       Helpers.publish_draft(self, draft)
     end
 

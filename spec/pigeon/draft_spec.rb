@@ -3,7 +3,7 @@ require "spec_helper"
 RSpec.describe Pigeon::Draft do
   let(:db) do
     db = Pigeon::Database.new
-    db.reset
+    db.reset_database
     db
   end
 
@@ -14,8 +14,6 @@ RSpec.describe Pigeon::Draft do
     message.put(db, "b", hash)
     message
   end
-
-  before(:each) { db.reset }
 
   MSG = [
     "author DRAFT",

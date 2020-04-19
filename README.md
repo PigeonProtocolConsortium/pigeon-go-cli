@@ -76,9 +76,12 @@ TODO
  - [X] Clean up all singletons / .current hacks
  - [X] Reduce cross cutting where collaborating objects need access to `@db`
  - [X] Ensure all disks writes perform verification!
+ - [ ] Make CLI names consistent with API names. Eg: find vs. read.
+ - [ ] Add log count to `pigeon-cli status`
+ - [ ] Name bundles after their hash?
+ - [ ] `find-all` should....find all. Currently finds all for your messages.
  - [ ] Update README.md. Needs user manual for new `Pigeon::Database` class.
  - [ ] Make the switch to LevelDB, RocksDB, [UNQLite](https://unqlite.org/features.html) or similar (currently using Ruby PStore).
- - [ ] Make CLI names consistent with API names. Eg: find vs. read.
  - [ ] Need a way of importing / exporting a feeds blobs. (see "Bundle Brainstorming" below)
  - [ ] Need a way of adding peers messages / gossip to bundles. (see "Bundle Brainstorming" below)
  - [ ] Check block list before ingesting bundles.

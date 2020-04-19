@@ -7,7 +7,7 @@ RSpec.describe Pigeon::Storage do
 
   let(:db) do
     db = Pigeon::Database.new
-    db.reset
+    db.reset_database
     db
   end
 
@@ -50,8 +50,8 @@ RSpec.describe Pigeon::Storage do
   it "finds all authored by a particular feed" do
     ingested_messages = db.ingest_bundle("./spec/fixtures/normal.bundle")
     author = ingested_messages.first.author.multihash
-    actual_messages = db.find_all(author)
-    search_results = db.find_all(author)
+    actual_messages = db.find_all_messages(author)
+    search_results = db.find_all_messages(author)
   end
 
   it "finds all messages" do
@@ -68,7 +68,7 @@ RSpec.describe Pigeon::Storage do
       }),
     ]
     me = db.local_identity.multihash
-    results = db.find_all(me)
+    results = db.find_all_messages(me)
     expect(results.length).to eq(3)
     expect(msgs[0].multihash).to eq(results[0])
     expect(msgs[1].multihash).to eq(results[1])

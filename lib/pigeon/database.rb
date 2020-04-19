@@ -11,7 +11,7 @@ module Pigeon
     def all_blocks(); store.all_blocks(); end
     def all_peers(); store.all_peers(); end
     def block_peer(p); store.block_peer(p); end
-    def find_all(mhash); store.find_all(mhash); end
+    def find_all_messages(mhash); store.find_all_messages(mhash); end
     def get_blob(b); store.get_blob(b); end
     def get_config(k); store.get_config(k); end
     def message?(multihash); store.message?(multihash); end
@@ -19,11 +19,7 @@ module Pigeon
     def remove_peer(p); store.remove_peer(p); end
     def reset_current_draft; set_config(CURRENT_DRAFT, nil); end
     def set_config(k, v); store.set_config(k, v); end
-
-    def reset
-      store.reset
-      init_ident
-    end
+    def reset_database; store.reset; init_ident; end
 
     def save_message(msg_obj)
       store.insert_message(Helpers.verify_message(self, msg_obj))
@@ -47,7 +43,7 @@ module Pigeon
 
     def create_bundle(file_path = DEFAULT_BUNDLE_PATH)
       content = store
-        .find_all(local_identity.multihash)
+        .find_all_messages(local_identity.multihash)
         .map { |multihash| store.read_message(multihash) }
         .sort_by(&:depth)
         .map { |message| message.render }
@@ -86,7 +82,7 @@ module Pigeon
 
     # Store a message that someone (not the LocalIdentity)
     # has authored.
-    def ingest(author:, body:, depth:, kind:, lipmaa:, prev:, signature:)
+    def ingest_message(author:, body:, depth:, kind:, lipmaa:, prev:, signature:)
       msg = Message.new(author: RemoteIdentity.new(author),
                         kind: kind,
                         body: body,

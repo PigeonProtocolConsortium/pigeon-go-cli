@@ -74,7 +74,7 @@ module Pigeon
       read { store[COUNT_INDEX_NS][mhash] || 0 }
     end
 
-    def find_all(author)
+    def find_all_messages(author)
       all = []
       depth = -1
       last = ""

@@ -8,7 +8,7 @@ RSpec.describe Pigeon::Message do
 
   let(:db) do
     db = Pigeon::Database.new
-    db.reset
+    db.reset_database
     db
   end
 

@@ -117,7 +117,7 @@ RSpec.describe Pigeon::Lexer do
 
   let(:db) do
     db = Pigeon::Database.new
-    db.reset
+    db.reset_database
     db
   end
 

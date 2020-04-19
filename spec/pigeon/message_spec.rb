@@ -14,7 +14,7 @@ RSpec.describe Pigeon::Message do
 
   let(:db) do
     db = Pigeon::Database.new
-    db.reset
+    db.reset_database
     db
   end
 
@@ -105,6 +105,7 @@ RSpec.describe Pigeon::Message do
   end
 
   it "verifies accuracy of signatures" do
+    print "?SLOW?"
     # === Initial setup
     secret = db.get_config(Pigeon::SEED_CONFIG_KEY)
     expect(secret).to be_kind_of(String)

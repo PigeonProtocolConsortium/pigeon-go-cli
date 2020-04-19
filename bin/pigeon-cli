@@ -152,7 +152,7 @@ module Pigeon
     desc "find-all", "Find a pigeon message in the local DB"
 
     def find_all(author = db.local_identity.multihash)
-      puts db.find_all(author).join(Pigeon::CR) + Pigeon::CR
+      puts db.find_all_messages(author).join(Pigeon::CR) + Pigeon::CR
     end
 
     desc "last", "Grab your last message. INTERNAL USE ONLY"

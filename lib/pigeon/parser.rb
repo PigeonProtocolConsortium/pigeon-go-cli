@@ -40,7 +40,7 @@ module Pigeon
 
     def finish_this_message!
       @scratchpad.freeze
-      @results.push(@db.ingest(**@scratchpad))
+      @results.push(@db.ingest_message(**@scratchpad))
       reset_scratchpad
     end
 

@@ -173,6 +173,23 @@ module Pigeon
       message
     end
 
+    # TODO: This is a wonky API
+    def self.update_draft(db, draft, key, value)
+      raise STRING_KEYS_ONLY unless key.is_a?(String)
+
+      case value[0]
+      when BLOB_SIGIL, MESSAGE_SIGIL, IDENTITY_SIGIL, STRING_SIGIL
+        draft.body[key] = value
+      else
+        # If users passes a string and forgets to append
+        # the string sigil (\"), we add it for them.
+        # This might be a bad or good idea. Not sure yet.
+        draft.body[key] = value.inspect
+      end
+      db.save_draft(draft)
+      return draft.body[key]
+    end
+
     def self.verify_message(db, msg)
       msg_hash = msg.multihash
       body = msg.body

@@ -7,19 +7,16 @@ module Pigeon
       init_ident
     end
 
+    # === PEERS
     def add_peer(p); store.add_peer(p); end
     def all_blocks(); store.all_blocks(); end
     def all_peers(); store.all_peers(); end
     def block_peer(p); store.block_peer(p); end
-    def find_all_messages(mhash = nil); store.find_all_messages(mhash); end
-    def get_blob(b); store.get_blob(b); end
-    def get_config(k); store.get_config(k); end
-    def message?(multihash); store.message?(multihash); end
-    def put_blob(b); store.put_blob(b); end
     def remove_peer(p); store.remove_peer(p); end
-    def reset_current_draft; set_config(CURRENT_DRAFT, nil); end
-    def set_config(k, v); store.set_config(k, v); end
-    def reset_database; store.reset; init_ident; end
+
+    # === MESSAGES
+    def find_all_messages(mhash = nil); store.find_all_messages(mhash); end
+    def message?(multihash); store.message?(multihash); end
 
     def save_message(msg_obj)
       store.insert_message(Helpers.verify_message(self, msg_obj))
@@ -41,21 +38,27 @@ module Pigeon
       publish_draft(draft)
     end
 
-    def create_bundle(file_path = DEFAULT_BUNDLE_PATH)
-      content = store
-        .find_all_messages(local_identity.multihash)
-        .map { |multihash| store.read_message(multihash) }
-        .sort_by(&:depth)
-        .map { |message| message.render }
-        .join(BUNDLE_MESSAGE_SEPARATOR)
-      File.write(file_path, content + CR)
+    # Store a message that someone (not the LocalIdentity)
+    # has authored.
+    def ingest_message(author:,
+                       body:,
+                       depth:,
+                       kind:,
+                       lipmaa:,
+                       prev:,
+                       signature:)
+      msg = Message.new(author: RemoteIdentity.new(author),
+                        kind: kind,
+                        body: body,
+                        prev: prev,
+                        lipmaa: lipmaa,
+                        signature: signature,
+                        depth: depth)
+      save_message(msg)
     end
 
-    def ingest_bundle(file_path = DEFAULT_BUNDLE_PATH)
-      bundle = File.read(file_path)
-      tokens = Pigeon::Lexer.tokenize(bundle)
-      Pigeon::Parser.parse(self, tokens)
-    end
+    # === DRAFTS
+    def reset_current_draft; set_config(CURRENT_DRAFT, nil); end
 
     def create_draft(kind:, body: {})
       draft = Draft.new(kind: kind, body: body, db: self)
@@ -80,18 +83,31 @@ module Pigeon
       Helpers.publish_draft(self, draft)
     end
 
-    # Store a message that someone (not the LocalIdentity)
-    # has authored.
-    def ingest_message(author:, body:, depth:, kind:, lipmaa:, prev:, signature:)
-      msg = Message.new(author: RemoteIdentity.new(author),
-                        kind: kind,
-                        body: body,
-                        prev: prev,
-                        lipmaa: lipmaa,
-                        signature: signature,
-                        depth: depth)
-      save_message(msg)
+    # === BUNDLES
+    def create_bundle(file_path = DEFAULT_BUNDLE_PATH)
+      content = store
+        .find_all_messages(local_identity.multihash)
+        .map { |multihash| store.read_message(multihash) }
+        .sort_by(&:depth)
+        .map { |message| message.render }
+        .join(BUNDLE_MESSAGE_SEPARATOR)
+      File.write(file_path, content + CR)
     end
+
+    def ingest_bundle(file_path = DEFAULT_BUNDLE_PATH)
+      bundle = File.read(file_path)
+      tokens = Pigeon::Lexer.tokenize(bundle)
+      Pigeon::Parser.parse(self, tokens)
+    end
+
+    # === BLOBS
+    def get_blob(b); store.get_blob(b); end
+    def put_blob(b); store.put_blob(b); end
+
+    # === DB Management
+    def get_config(k); store.get_config(k); end
+    def set_config(k, v); store.set_config(k, v); end
+    def reset_database; store.reset; init_ident; end
 
     private
 

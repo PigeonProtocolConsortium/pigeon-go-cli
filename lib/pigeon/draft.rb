@@ -19,23 +19,6 @@ module Pigeon
       self.body[key]
     end
 
-    # TODO: This is a wonky API
-    def put(db, key, value)
-      raise STRING_KEYS_ONLY unless key.is_a?(String)
-
-      case value[0]
-      when BLOB_SIGIL, MESSAGE_SIGIL, IDENTITY_SIGIL, STRING_SIGIL
-        self.body[key] = value
-      else
-        # If users passes a string and forgets to append
-        # the string sigil (\"), we add it for them.
-        # This might be a bad or good idea. Not sure yet.
-        self.body[key] = value.inspect
-      end
-      db.save_draft(self)
-      return self.body[key]
-    end
-
     def render_as_draft
       DraftSerializer.new(self).render
     end

@@ -2,13 +2,14 @@
 
 # Pigeon Ruby
 
-This is a WIP [Pigeon Protocol] client written in Ruby.
+This is a WIP [Pigeon Protocol](https://tildegit.org/PigeonProtocolConsortium/protocol_spec) client written in Ruby.
 
 # Caveats
 
+ * Probably does not work on Windows, but testers are welcome to try it out. Please let me know how it goes.
  * Blobs are not included in bundles yet.
  * Not published to RubyGems yet (see installation instructions below)
- * Not thread safe, never will be. Single user only.
+ * Not thread safe, never will be. This implementation is intended for a single user and makes many design tradeoffs around that use case.
  * Bundle works, but is inefficient. Will optimize after proof of concept.
 
 # Installation
@@ -112,6 +113,7 @@ TODO
 
  - [ ] Map/reduce plugin support for custom indices?
  - [ ] Ability to add a blob in one swoop using File objects and `Message#[]=`, maybe?
+ - [ ] Bundling via [Optar](http://ronja.twibright.com/optar/) or [Colorsafe](https://github.com/colorsafe/colorsafe)
 
 # New Bundle Format
 

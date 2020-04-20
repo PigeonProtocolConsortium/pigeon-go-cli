@@ -8,8 +8,8 @@ module Pigeon
   TPL_DIR = File.join(".", "lib", "views")
 
   PIGEON_DB_PATH = File.join("db.pigeon")
-  DEFAULT_BUNDLE_PATH = "./pigeon.bundle"
-
+  DEFAULT_BUNDLE_PATH = File.join(Dir.home, "pigeon.bundle")
+  PIGEON_BLOB_PATH = File.join(Dir.home, "pigeon_sha256")
   # MESSAGE TEMPLATE CONSTANTS:
   HEADER_TPL = "author <%= author %>\nkind <%= kind %>\nprev <%= prev %>\ndepth <%= depth %>\nlipmaa <%= lipmaa %>\n\n"
   BODY_TPL = "<% body.to_a.each do |k, v| %><%= k %>:<%= v %><%= \"\\n\" %><% end %>\n"
@@ -26,7 +26,6 @@ module Pigeon
   # Internal namespaces for PStore keys:
   ROOT_NS = ".pigeon"
   CONF_NS = "conf"
-  BLOB_NS = "blobs"
   PEER_NS = "peers"
   USER_NS = "user"
   BLCK_NS = "blocked"
@@ -53,7 +52,7 @@ module Pigeon
   # Constants for internal use only:
   FOOTERS_REGEX = Regexp.new("#{SIG_FOOTER}|#{IDENTITY_FOOTER}")
   SIG_RANGE = (SIG_FOOTER.length * -1)..-1
-  # /Constants for internal use only
+  BLOB_BYTE_LIMIT = 360_000
 
   class Helpers
     VERFIY_ERROR = "Expected field `%s` to equal %s, got: %s"

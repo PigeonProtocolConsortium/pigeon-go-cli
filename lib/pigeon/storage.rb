@@ -54,18 +54,23 @@ module Pigeon
     end
 
     def put_blob(data)
+      size = data.bytesize
+      if (size > BLOB_BYTE_LIMIT)
+        raise "Blob size limit is #{BLOB_BYTE_LIMIT} bytes. Got #{size}"
+      end
       raw_digest = Digest::SHA256.digest(data)
       b32_hash = Helpers.b32_encode(raw_digest)
       multihash = [BLOB_SIGIL, b32_hash, BLOB_FOOTER].join("")
-      write do
-        store[BLOB_NS][multihash] = data
-      end
-
+      write_to_disk(b32_hash, data)
       multihash
     end
 
     def get_blob(blob_multihash)
-      read { store[BLOB_NS][blob_multihash] }
+      path = File.join(split_file_path(blob_multihash[1..52]))
+      path = File.join(PIGEON_BLOB_PATH, path)
+      if File.file?(path)
+        File.read(path)
+      end
     end
 
     # `nil` means "none"
@@ -127,17 +132,40 @@ module Pigeon
 
     private
 
+    def split_file_path(b32_hash)
+      [
+        b32_hash[0],
+        b32_hash[1...9],
+        b32_hash[9...17],
+        b32_hash[17...25],
+        b32_hash[25...33],
+        b32_hash[33...41],
+        [b32_hash[41...49], ".", b32_hash[49...52]].join(""),
+      ]
+    end
+
+    def write_to_disk(b32_hash, data)
+      p = split_file_path(b32_hash)
+      file_name = p.pop
+      dir = p.reduce(PIGEON_BLOB_PATH) do |accum, item|
+        path = File.join(accum, item)
+        mkdir_p(path)
+        path
+      end
+      File.write(File.join(dir, file_name), data)
+    end
+
     def bootstrap
       write do
         # TODO: Why is there a depth and count index??
         store[BLCK_NS] ||= Set.new
-        store[BLOB_NS] ||= {}
         store[CONF_NS] ||= {}
         store[COUNT_INDEX_NS] ||= {}
         store[MESG_NS] ||= {}
         store[MESSAGE_BY_DEPTH_NS] ||= {}
         store[PEER_NS] ||= Set.new
       end
+      mkdir_p(PIGEON_BLOB_PATH)
       store
     end
 
@@ -168,5 +196,9 @@ module Pigeon
     def write(&blk); transaction(false, &blk); end
     def read(&blk); transaction(true, &blk); end
     def on_disk?; File.file?(path); end
+
+    def mkdir_p(path)
+      Dir.mkdir(path) unless Dir.exists?(path)
+    end
   end
 end

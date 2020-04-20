@@ -97,23 +97,32 @@ module Pigeon
       read { store[MESSAGE_BY_DEPTH_NS][key] }
     end
 
-    def message?(multihash)
-      read { store[MESG_NS].fetch(multihash, false) }
-    end
-
     def read_message(multihash)
       read { store[MESG_NS].fetch(multihash) }
     end
 
     def insert_message(msg)
-      if msg.tainted?
-        STDERR.puts "WARNING: Just saved an unverified message"
-      end
       write do
-        return msg if store[MESG_NS][msg.multihash]
+        if store[MESG_NS].fetch(msg.multihash, false)
+          return msg
+        end
+
+        if store[BLCK_NS].member?(msg.author.multihash)
+          STDERR.puts("Blocked peer: #{msg.author.multihash}")
+          return msg
+        end
+
         insert_and_update_index(msg)
         msg
       end
+    end
+
+    def message_saved?(multihash)
+      read { store[MESG_NS].fetch(multihash, false) }
+    end
+
+    def peer_blocked?(multihash)
+      read { store[BLCK_NS].member?(multihash) }
     end
 
     private

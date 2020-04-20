@@ -10,7 +10,7 @@ db.publish_draft
 db.save_draft
 db.save_message
 db.reset_current_draft
-db.message?
+db.message_saved?
 db.read_message
 db.create_message
 db.find_all_messages

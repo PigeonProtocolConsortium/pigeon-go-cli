@@ -9,14 +9,15 @@ module Pigeon
 
     # === PEERS
     def add_peer(p); store.add_peer(p); end
-    def all_blocks(); store.all_blocks(); end
-    def all_peers(); store.all_peers(); end
     def block_peer(p); store.block_peer(p); end
     def remove_peer(p); store.remove_peer(p); end
+    def peer_blocked?(p); store.peer_blocked?(p); end
+    def all_blocks(); store.all_blocks(); end
+    def all_peers(); store.all_peers(); end
 
     # === MESSAGES
     def find_all_messages(mhash = nil); store.find_all_messages(mhash); end
-    def message?(multihash); store.message?(multihash); end
+    def message_saved?(multihash); store.message_saved?(multihash); end
 
     def save_message(msg_obj)
       store.insert_message(Helpers.verify_message(self, msg_obj))

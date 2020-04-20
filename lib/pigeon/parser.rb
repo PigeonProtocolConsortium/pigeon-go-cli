@@ -40,7 +40,9 @@ module Pigeon
 
     def finish_this_message!
       @scratchpad.freeze
-      @results.push(@db.ingest_message(**@scratchpad))
+      unless @db.peer_blocked?(@scratchpad.fetch(:author))
+        @results.push(@db.ingest_message(**@scratchpad))
+      end
       reset_scratchpad
     end
 

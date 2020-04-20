@@ -31,4 +31,12 @@ RSpec.describe Pigeon::Message do
     db.create_bundle
     db.ingest_bundle
   end
+
+  it "does not ingest messages from blocked peers" do
+    db.reset_database
+    antagonist = "@PPJQ3Q36W258VQ1NKYY2G7VW24J8NMAACHXCD83GCQ3K8F4C9X2G.ed25519"
+    db.block_peer(antagonist)
+    db.ingest_bundle("./spec/fixtures/x.bundle")
+    expect(db.find_all_messages.count).to eq(0)
+  end
 end

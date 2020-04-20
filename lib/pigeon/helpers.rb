@@ -1,64 +1,5 @@
-require "digest"
-require "ed25519"
-require "securerandom"
-require "set"
-
 module Pigeon
-  SEED_CONFIG_KEY = "SEED"
-  TPL_DIR = File.join(".", "lib", "views")
-
-  PIGEON_DB_PATH = File.join("db.pigeon")
-  DEFAULT_BUNDLE_PATH = "./pigeon.bundle"
-
-  # MESSAGE TEMPLATE CONSTANTS:
-  HEADER_TPL = "author <%= author %>\nkind <%= kind %>\nprev <%= prev %>\ndepth <%= depth %>\nlipmaa <%= lipmaa %>\n\n"
-  BODY_TPL = "<% body.to_a.each do |k, v| %><%= k %>:<%= v %><%= \"\\n\" %><% end %>\n"
-  FOOTER_TPL = "signature <%= signature %>"
-  COMPLETE_TPL = [HEADER_TPL, BODY_TPL, FOOTER_TPL].join("")
-  CURRENT_DRAFT = "HEAD.draft"
-  NOTHING = "NONE"
-  OUTBOX_PATH = File.join(".pigeon", "user")
-  DRAFT_PLACEHOLDER = "DRAFT"
-  CR = "\n"
-  BUNDLE_MESSAGE_SEPARATOR = CR * 2
-  # /MESSAGE TEMPLATE CONSTANTS
-
-  # Internal namespaces for PStore keys:
-  ROOT_NS = ".pigeon"
-  CONF_NS = "conf"
-  BLOB_NS = "blobs"
-  PEER_NS = "peers"
-  USER_NS = "user"
-  BLCK_NS = "blocked"
-  MESG_NS = "messages"
-  MESSAGE_BY_DEPTH_NS = "messages.by_depth"
-  COUNT_INDEX_NS = "messages.count"
-
-  # ^ Internal namespaces for PStore keys
-
-  BLOB_SIGIL = "&"
-  MESSAGE_SIGIL = "%"
-  IDENTITY_SIGIL = "@"
-  STRING_SIGIL = "\""
-  IDENTITY_FOOTER = ".ed25519"
-  BLOB_FOOTER = ".sha256"
-  SIG_FOOTER = ".sig.ed25519"
-
-  # Error messages
-  PREV_REQUIRES_SAVE = "Can't fetch `prev` on unsaved messages"
-  NO_DRAFT_FOUND = "NO DRAFT FOUND"
-  STRING_KEYS_ONLY = "String keys only"
-  MISSING_BODY = "BODY CANT BE EMPTY"
-
-  # Constants for internal use only:
-  FOOTERS_REGEX = Regexp.new("#{SIG_FOOTER}|#{IDENTITY_FOOTER}")
-  SIG_RANGE = (SIG_FOOTER.length * -1)..-1
-  # /Constants for internal use only
-
   class Helpers
-    VERFIY_ERROR = "Expected field `%s` to equal %s, got: %s"
-    MSG_SIZE_ERROR = "Messages cannot have more than 64 keys. Got %s."
-
     class VerificationError < StandardError; end
     class MessageSizeError < StandardError; end
 
@@ -203,6 +144,7 @@ module Pigeon
       assert("prev", msg.prev, expected_prev)
       tpl = msg.template.render_without_signature
       Helpers.verify_string(author, signature, tpl)
+      msg.untaint
       msg.freeze
       msg
     end
@@ -211,20 +153,8 @@ module Pigeon
       if string[SIG_RANGE] == SIG_FOOTER
         return b32_decode(string.gsub(SIG_FOOTER, ""))
       else
-        return b32_decode(string[1..].gsub(FOOTERS_REGEX, ""))
+        return b32_decode(string[1, -1].gsub(FOOTERS_REGEX, ""))
       end
     end
   end
 end
-
-require_relative File.join("pigeon", "version.rb")
-require_relative File.join("pigeon", "local_identity.rb")
-require_relative File.join("pigeon", "remote_identity.rb")
-require_relative File.join("pigeon", "storage.rb")
-require_relative File.join("pigeon", "message_serializer.rb")
-require_relative File.join("pigeon", "draft_serializer.rb")
-require_relative File.join("pigeon", "message.rb")
-require_relative File.join("pigeon", "draft.rb")
-require_relative File.join("pigeon", "lexer.rb")
-require_relative File.join("pigeon", "parser.rb")
-require_relative File.join("pigeon", "database.rb")

@@ -6,9 +6,10 @@ This is a WIP [Pigeon Protocol] client written in Ruby.
 
 # Caveats
 
+ * Blobs are not included in bundles yet.
  * Not published to RubyGems yet (see installation instructions below)
- * Not thread safe. This particular implementation probably never will be. Single user only.
- * Bundle mechanism works for basic usage, but is extremely ineficient and **does not do anything with blocked identities**.
+ * Not thread safe, never will be. Single user only.
+ * Bundle works, but is inefficient. Will optimize after proof of concept.
 
 # Installation
 
@@ -85,11 +86,11 @@ TODO
  - [X] Make CLI names consistent with API names. Eg: find vs. read.
  - [X] `find-all` should....find all. Currently finds your messages or maybe peers, but not all.
  - [X] Add log count to `pigeon-cli status`
- - [ ] Delete `Draft#put` entirely.
- - [ ] Check block list before ingesting bundles.
+ - [X] Delete `Draft#put` entirely.
+ - [X] Check block list before ingesting bundles.
+ - [ ] Need a way of importing / exporting a feeds blobs. (see "Bundle Brainstorming" below)
  - [ ] Update README.md / tutorial.rb (user manual for `Pigeon::Database`).
  - [ ] Make the switch to LevelDB, RocksDB, [UNQLite](https://unqlite.org/features.html) or similar (currently using Ruby PStore).
- - [ ] Need a way of importing / exporting a feeds blobs. (see "Bundle Brainstorming" below)
  - [ ] Need a way of adding peers messages / gossip to bundles. (see "Bundle Brainstorming" below)
  - [ ] add parsers and validators for all CLI inputs
  - [ ] Reduce whole darn repo into single module to aide portability. `::Helpers` module is OK.
@@ -104,7 +105,8 @@ TODO
 
  - [ ] (later, not now) Support partial verification via `lipmaa` property.
  - [ ] Add mandatory `--since=` arg to `bundle create
- - [ ] Interest and Disinterest Signalling for document routing: Create a `$gossip` message to express `blob.have`, `blob.want` and to note last message received of a peer. This can steer bundle creation and an eventual `--for` flag at bundle creation time to customize a bundle to a particular user.
+ - [ ] Interest and Disinterest Signalling for document routing: Create a `$blob_status` message to express `have`, `want` signalling. This can steer bundle creation and an eventual `--for` flag at bundle creation time to customize a bundle to a particular user.
+ - [ ] Add a schema for `$peer_status`. Eg: `block`, `unblock`, `follow`, `unfollow`.
 
 # Idea Bin
 

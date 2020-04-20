@@ -70,6 +70,8 @@ module Pigeon
       path = File.join(PIGEON_BLOB_PATH, path)
       if File.file?(path)
         File.read(path)
+      else
+        nil
       end
     end
 
@@ -152,7 +154,10 @@ module Pigeon
         mkdir_p(path)
         path
       end
-      File.write(File.join(dir, file_name), data)
+      full_path = File.join(dir, file_name)
+      unless File.file?(full_path)
+        File.write(full_path, data)
+      end
     end
 
     def bootstrap

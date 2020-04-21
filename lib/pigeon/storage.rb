@@ -16,13 +16,11 @@ module Pigeon
     end
 
     def add_peer(identity)
-      path = Helpers.decode_multihash(identity)
       write { store[PEER_NS].add(identity) }
       identity
     end
 
     def remove_peer(identity)
-      path = Helpers.decode_multihash(identity)
       write { store[PEER_NS].delete(identity) }
       identity
     end
@@ -66,7 +64,7 @@ module Pigeon
     end
 
     def get_blob(blob_multihash)
-      path = File.join(split_file_path(blob_multihash[1..52]))
+      path = File.join(Helpers.split_file_path(blob_multihash[1..52]))
       path = File.join(PIGEON_BLOB_PATH, path)
       if File.file?(path)
         File.read(path)
@@ -134,24 +132,12 @@ module Pigeon
 
     private
 
-    def split_file_path(b32_hash)
-      [
-        b32_hash[0],
-        b32_hash[1...9],
-        b32_hash[9...17],
-        b32_hash[17...25],
-        b32_hash[25...33],
-        b32_hash[33...41],
-        [b32_hash[41...49], ".", b32_hash[49...52]].join(""),
-      ]
-    end
-
     def write_to_disk(b32_hash, data)
-      p = split_file_path(b32_hash)
+      p = Helpers.split_file_path(b32_hash)
       file_name = p.pop
       dir = p.reduce(PIGEON_BLOB_PATH) do |accum, item|
         path = File.join(accum, item)
-        mkdir_p(path)
+        Helpers.mkdir_p(path)
         path
       end
       full_path = File.join(dir, file_name)
@@ -170,7 +156,7 @@ module Pigeon
         store[MESSAGE_BY_DEPTH_NS] ||= {}
         store[PEER_NS] ||= Set.new
       end
-      mkdir_p(PIGEON_BLOB_PATH)
+      Helpers.mkdir_p(PIGEON_BLOB_PATH)
       store
     end
 
@@ -201,9 +187,5 @@ module Pigeon
     def write(&blk); transaction(false, &blk); end
     def read(&blk); transaction(true, &blk); end
     def on_disk?; File.file?(path); end
-
-    def mkdir_p(path)
-      Dir.mkdir(path) unless Dir.exists?(path)
-    end
   end
 end

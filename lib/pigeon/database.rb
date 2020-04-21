@@ -94,12 +94,26 @@ module Pigeon
 
     # === BUNDLES
     def create_bundle(file_path = DEFAULT_BUNDLE_PATH)
-      content = store
-        .find_all_messages(local_identity.multihash)
-        .map { |multihash| store.read_message(multihash) }
-        .sort_by(&:depth)
+      # Fetch messages for all peers
+      peers = all_peers + [local_identity.multihash]
+      messages = peers.map do |peer|
+        find_all_messages(peer)
+          .map { |multihash| read_message(multihash) }
+          .sort_by(&:depth)
+      end.flatten
+
+      # Render messages for all peers.
+      content = messages
         .map { |message| message.render }
         .join(BUNDLE_MESSAGE_SEPARATOR)
+
+      # MKdir
+      Helpers.mkdir_p("bundle")
+      # Get blobs for _all_ peers
+      blobs = messages.map(&:collect_blobs).flatten.uniq
+      # binding.pry if blobs.any?
+      # Write bundle to dir
+      # Link blobs to dir
       File.write(file_path, content + CR)
     end
 

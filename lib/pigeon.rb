@@ -206,6 +206,22 @@ module Pigeon
       msg
     end
 
+    def self.mkdir_p(path)
+      Dir.mkdir(path) unless Dir.exists?(path)
+    end
+
+    def self.split_file_path(b32_hash)
+      [
+        b32_hash[0],
+        b32_hash[1...9],
+        b32_hash[9...17],
+        b32_hash[17...25],
+        b32_hash[25...33],
+        b32_hash[33...41],
+        [b32_hash[41...49], ".", b32_hash[49...52]].join(""),
+      ]
+    end
+
     def self.decode_multihash(string)
       if string[SIG_RANGE] == SIG_FOOTER
         return b32_decode(string.gsub(SIG_FOOTER, ""))

@@ -13,10 +13,15 @@ RSpec.describe Pigeon::Message do
   end
 
   def create_fake_messages
-    (1..10)
+    blobs = [db.create_message(db.put_blob("one"), { "a" => "b" }),
+             db.create_message("a", { db.put_blob("two") => "b" }),
+             db.create_message("a", { "b" => db.put_blob("three") })]
+    normal = (1..10)
       .to_a
       .map do |n| { "foo" => ["bar", "123", SecureRandom.uuid].sample } end
       .map do |d| db.create_message(SecureRandom.uuid, d) end
+
+    blobs + normal
   end
 
   it "creates a bundle" do

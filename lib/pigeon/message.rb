@@ -36,5 +36,11 @@ module Pigeon
     def template
       MessageSerializer.new(self)
     end
+
+    def collect_blobs
+      ([kind] + body.keys + body.values)
+        .select { |x| x.match? Lexer::BLOB_VALUE }
+        .uniq
+    end
   end
 end

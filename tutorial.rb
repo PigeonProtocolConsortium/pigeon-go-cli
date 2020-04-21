@@ -29,5 +29,3 @@ db.get_config
 db.ingest_bundle
 db.set_config
 db.reset_database
-
-binding.pry

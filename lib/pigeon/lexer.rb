@@ -51,7 +51,7 @@ module Pigeon
     BLOB_VALUE = /&.{52}\.sha256/
     STRG_VALUE = /".{1,128}"/
     # If you need other characters (but not spaces) submit an issue.
-    ALPHANUMERICISH = /[a-zA-Z0-9_\-=\.]{1,90}/
+    ALPHANUMERICISH = /[a-zA-Z0-9_\-=\.\@\&]{1,90}/
     ALL_VALUES = [
       FEED_VALUE,
       MESG_VALUE,

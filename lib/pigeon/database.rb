@@ -106,15 +106,14 @@ module Pigeon
       content = messages
         .map { |message| message.render }
         .join(BUNDLE_MESSAGE_SEPARATOR)
-
-      # MKdir
-      Helpers.mkdir_p("bundle")
-      # Get blobs for _all_ peers
-      blobs = messages.map(&:collect_blobs).flatten.uniq
-      # binding.pry if blobs.any?
-      # Write bundle to dir
-      # Link blobs to dir
       File.write(file_path, content + CR)
+
+      messages
+        .map(&:collect_blobs)
+        .flatten
+        .uniq
+        .map { |mhash| ["bundle", mhash, get_blob(mhash)] }
+        .map { |arg| Helpers.write_to_disk(*arg) }
     end
 
     def ingest_bundle(file_path = DEFAULT_BUNDLE_PATH)

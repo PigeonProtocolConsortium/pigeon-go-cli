@@ -59,12 +59,12 @@ module Pigeon
       raw_digest = Digest::SHA256.digest(data)
       b32_hash = Helpers.b32_encode(raw_digest)
       multihash = [BLOB_SIGIL, b32_hash, BLOB_FOOTER].join("")
-      write_to_disk(b32_hash, data)
+      write_to_disk(multihash, data)
       multihash
     end
 
     def get_blob(blob_multihash)
-      path = File.join(Helpers.split_file_path(blob_multihash[1..52]))
+      path = File.join(Helpers.hash2file_path(blob_multihash))
       path = File.join(PIGEON_BLOB_PATH, path)
       if File.file?(path)
         File.read(path)
@@ -132,23 +132,12 @@ module Pigeon
 
     private
 
-    def write_to_disk(b32_hash, data)
-      p = Helpers.split_file_path(b32_hash)
-      file_name = p.pop
-      dir = p.reduce(PIGEON_BLOB_PATH) do |accum, item|
-        path = File.join(accum, item)
-        Helpers.mkdir_p(path)
-        path
-      end
-      full_path = File.join(dir, file_name)
-      unless File.file?(full_path)
-        File.write(full_path, data)
-      end
+    def write_to_disk(mhash, data)
+      Helpers.write_to_disk(PIGEON_BLOB_PATH, mhash, data)
     end
 
     def bootstrap
       write do
-        # TODO: Why is there a depth and count index??
         store[BLCK_NS] ||= Set.new
         store[CONF_NS] ||= {}
         store[COUNT_INDEX_NS] ||= {}

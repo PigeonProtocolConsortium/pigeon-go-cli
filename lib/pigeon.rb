@@ -210,15 +210,32 @@ module Pigeon
       Dir.mkdir(path) unless Dir.exists?(path)
     end
 
-    def self.split_file_path(b32_hash)
+    def self.write_to_disk(base_path, mhash, data)
+      p = Helpers.hash2file_path(mhash)
+      file_name = p.pop
+      Helpers.mkdir_p(base_path)
+      dir = p.reduce(base_path) do |accum, item|
+        path = File.join(accum, item)
+        Helpers.mkdir_p(path)
+        path
+      end
+      full_path = File.join(dir, file_name)
+      unless File.file?(full_path)
+        File.write(full_path, data)
+      end
+    end
+
+    def self.hash2file_path(mhash)
+      mhash = mhash.sub("&", "")
+
       [
-        b32_hash[0],
-        b32_hash[1...9],
-        b32_hash[9...17],
-        b32_hash[17...25],
-        b32_hash[25...33],
-        b32_hash[33...41],
-        [b32_hash[41...49], ".", b32_hash[49...52]].join(""),
+        mhash[0...7],
+        mhash[7...14],
+        mhash[14...21],
+        mhash[21...28],
+        mhash[28...35],
+        mhash[35...42],
+        [mhash[42...49], ".", mhash[49...52]].join(""),
       ]
     end
 

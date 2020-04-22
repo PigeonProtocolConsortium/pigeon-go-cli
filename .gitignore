@@ -5,3 +5,4 @@ doc/
 *scratchpad*
 pigeon.bundle
 *.gem
+bundle/

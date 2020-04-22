@@ -89,16 +89,19 @@ TODO
  - [X] Add log count to `pigeon-cli status`
  - [X] Delete `Draft#put` entirely.
  - [X] Check block list before ingesting bundles.
- - [ ] Need a way of importing / exporting a feeds blobs. (see "Bundle Brainstorming" below)
+ - [X] Need a way of importing / exporting a feeds blobs. (see "Bundle Brainstorming" below)
+ - [X] Need a way of adding peers messages / gossip to bundles. (see "Bundle Brainstorming" below)
  - [ ] Update README.md / tutorial.rb (user manual for `Pigeon::Database`).
- - [ ] Make the switch to LevelDB, RocksDB, [UNQLite](https://unqlite.org/features.html) or similar (currently using Ruby PStore).
- - [ ] Need a way of adding peers messages / gossip to bundles. (see "Bundle Brainstorming" below)
+ - [ ] Update spec document CLI usage examples to reflect API changes in 2020.
+ - [ ] Publish to RubyGems
+
+# Optimizations
  - [ ] add parsers and validators for all CLI inputs
+ - [ ] Make the switch to LevelDB, RocksDB, [UNQLite](https://unqlite.org/features.html) or similar (currently using Ruby PStore).
+ - [ ] Convert literals to constants, remove unused locals, reduce duplication.
  - [ ] Reduce whole darn repo into single module to aide portability. `::Helpers` module is OK.
  - [ ] Update the bundles.md document once `bundle consume` works.
  - [ ] 100% documentation
- - [ ] Update spec document CLI usage examples to reflect API changes in 2020.
- - [ ] Publish to RubyGems
  - [ ] Performance benchmarks (Do this second to last!)
  - [ ] Performance tuning (Do this last!)
 
@@ -128,7 +131,7 @@ Here's how we will support that:
   * All messages are expected to be sorted by depth
   * Messages from multiple authors may be included in a single bundle, but the messages must appear in the correct order with regards to the `depth` field.
 3. Blobs are stored in a very specific hierarchy to maintain FAT compatibility:
-    * `blobs/sha256/AAAAAAAA/BBBBBBBB/CCCCCCCC/DDDDDDDD/EEEEEEEE/FFFFFFFF/G.HHH`
+    * `blobs/bundle/7Z2CSZK/MB1RE5G/6SKXRZ6/3ZGCNP8/VVEM3K0/XFMYKET/RDQSM5W.BSG`
 
 Additional notes:
 

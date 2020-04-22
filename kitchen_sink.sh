@@ -5,8 +5,8 @@
 # for quick QA.
 
 echo "Deleting old pigeon configs"
-rm -f db.pigeon
-rm -f pigeon.bundle
+rm -f pigeon.db
+rm -rf bundle
 echo "OK"
 
 echo "Creating new config:"
@@ -80,9 +80,9 @@ echo "=== Sign draft #2"
 
 echo "=== Dump the bundle"
 ./bin/pigeon-cli bundle create
-cat pigeon.bundle
+cat bundle/gossip.pgn
 echo "=== end bundle dump. Ingesting bundle..."
-./bin/pigeon-cli bundle ingest pigeon.bundle
+./bin/pigeon-cli bundle ingest bundle/gossip.pgn
 
 echo "=== find a message"
 ./bin/pigeon-cli message find $(./bin/pigeon-cli message last)

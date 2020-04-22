@@ -98,7 +98,7 @@ TODO
 # Optimizations
  - [ ] add parsers and validators for all CLI inputs
  - [ ] Make the switch to LevelDB, RocksDB, [UNQLite](https://unqlite.org/features.html) or similar (currently using Ruby PStore).
- - [ ] Convert literals to constants, remove unused locals, reduce duplication.
+ - [ ] Convert literals to constants, remove unused locals, reduce duplication, run linter.
  - [ ] Reduce whole darn repo into single module to aide portability. `::Helpers` module is OK.
  - [ ] Update the bundles.md document once `bundle consume` works.
  - [ ] 100% documentation

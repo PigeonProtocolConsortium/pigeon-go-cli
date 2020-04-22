@@ -27,7 +27,7 @@ RSpec.describe Pigeon::Message do
   it "creates a bundle" do
     expected_bundle = create_fake_messages.map(&:render).join("\n\n") + "\n"
     db.create_bundle
-    actual_bundle = File.read(Pigeon::DEFAULT_BUNDLE_PATH)
+    actual_bundle = File.read(File.join(Pigeon::DEFAULT_BUNDLE_PATH, "gossip.pgn"))
     expect(expected_bundle).to eq(actual_bundle)
   end
 
@@ -41,7 +41,7 @@ RSpec.describe Pigeon::Message do
     db.reset_database
     antagonist = "@PPJQ3Q36W258VQ1NKYY2G7VW24J8NMAACHXCD83GCQ3K8F4C9X2G.ed25519"
     db.block_peer(antagonist)
-    db.ingest_bundle("./spec/fixtures/x.bundle")
+    db.ingest_bundle("./spec/fixtures/x")
     expect(db.find_all_messages.count).to eq(0)
   end
 end

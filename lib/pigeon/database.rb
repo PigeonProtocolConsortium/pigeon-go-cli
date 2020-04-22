@@ -102,22 +102,23 @@ module Pigeon
           .sort_by(&:depth)
       end.flatten
 
-      # Render messages for all peers.
-      content = messages
-        .map { |message| message.render }
-        .join(BUNDLE_MESSAGE_SEPARATOR)
-      File.write(file_path, content + CR)
-
+      # Attach blobs for all messages in bundle.
       messages
         .map(&:collect_blobs)
         .flatten
         .uniq
         .map { |mhash| ["bundle", mhash, get_blob(mhash)] }
         .map { |arg| Helpers.write_to_disk(*arg) }
+
+      # Render messages for all peers.
+      content = messages
+        .map { |message| message.render }
+        .join(BUNDLE_MESSAGE_SEPARATOR)
+      File.write(File.join(file_path, "gossip.pgn"), content + CR)
     end
 
     def ingest_bundle(file_path = DEFAULT_BUNDLE_PATH)
-      bundle = File.read(file_path)
+      bundle = File.read(File.join(file_path, "gossip.pgn"))
       tokens = Pigeon::Lexer.tokenize(bundle)
       Pigeon::Parser.parse(self, tokens)
     end

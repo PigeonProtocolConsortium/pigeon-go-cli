@@ -29,7 +29,7 @@ module Pigeon
   class Identity < ThorBase
     class ConfigAlreadyExists < StandardError; end
 
-    desc "new", "Creates a new identiy in `.pigeon` directory if none exists"
+    desc "new", "Creates a new identiy in `.pgn` directory if none exists"
 
     def new
       if File.file?(Pigeon::PIGEON_DB_PATH)
@@ -162,7 +162,7 @@ module Pigeon
   end
 
   class CLI < ThorBase
-    desc "status", "Show various information about the `.pigeon` directory"
+    desc "status", "Show various information about the `.pgn` directory"
 
     def status
       me = db.local_identity.multihash
@@ -189,7 +189,7 @@ module Pigeon
     desc "draft SUBCOMMAND ...ARGS", "Manage drafts"
     subcommand "draft", PigeonDraft
 
-    desc "identity SUBCOMMAND ...ARGS", "Manage `.pigeon` identity"
+    desc "identity SUBCOMMAND ...ARGS", "Manage `.pgn` identity"
     subcommand "identity", Identity
 
     desc "message SUBCOMMAND ...ARGS", "Manage blob storage"

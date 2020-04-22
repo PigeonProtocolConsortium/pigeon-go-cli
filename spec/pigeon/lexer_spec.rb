@@ -129,7 +129,7 @@ RSpec.describe Pigeon::Lexer do
   end
 
   it "tokenizes a bundle" do
-    bundle = File.read("./spec/fixtures/normal.bundle")
+    bundle = File.read("./spec/fixtures/normal/gossip.pgn")
     tokens = Pigeon::Lexer.tokenize(bundle)
     EXPECTED_TOKENS1.each_with_index do |item, i|
       expect(tokens[i]).to eq(EXPECTED_TOKENS1[i])

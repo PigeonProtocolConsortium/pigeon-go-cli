@@ -6,7 +6,7 @@ RSpec.describe Pigeon::Lexer do
     db.reset_database
     db
   end
-  let(:example_bundle) { File.read("./spec/fixtures/normal.bundle") }
+  let(:example_bundle) { File.read("./spec/fixtures/normal/gossip.pgn") }
   let(:tokens) { Pigeon::Lexer.tokenize(example_bundle) }
 
   BAD_TOKENS = [
@@ -30,7 +30,7 @@ RSpec.describe Pigeon::Lexer do
   end
 
   it "ingests and reconstructs a bundle" do
-    messages = db.ingest_bundle("./spec/fixtures/normal.bundle")
+    messages = db.ingest_bundle("./spec/fixtures/normal")
     expect(messages.length).to eq(10)
     expect(messages.map(&:class).uniq).to eq([Pigeon::Message])
     re_bundled = messages.map(&:render).join("\n\n") + "\n"

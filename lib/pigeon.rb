@@ -7,8 +7,8 @@ module Pigeon
   SEED_CONFIG_KEY = "SEED"
   TPL_DIR = File.join(".", "lib", "views")
 
-  PIGEON_DB_PATH = File.join("db.pigeon")
-  DEFAULT_BUNDLE_PATH = File.join(Dir.home, "pigeon.bundle")
+  PIGEON_DB_PATH = File.join("pigeon.db")
+  DEFAULT_BUNDLE_PATH = File.join(Dir.pwd, "bundle")
   PIGEON_BLOB_PATH = File.join(Dir.home, "pigeon_sha256")
   # MESSAGE TEMPLATE CONSTANTS:
   HEADER_TPL = "author <%= author %>\nkind <%= kind %>\nprev <%= prev %>\ndepth <%= depth %>\nlipmaa <%= lipmaa %>\n\n"
@@ -17,14 +17,14 @@ module Pigeon
   COMPLETE_TPL = [HEADER_TPL, BODY_TPL, FOOTER_TPL].join("")
   CURRENT_DRAFT = "HEAD.draft"
   NOTHING = "NONE"
-  OUTBOX_PATH = File.join(".pigeon", "user")
+  OUTBOX_PATH = File.join(".pgn", "user")
   DRAFT_PLACEHOLDER = "DRAFT"
   CR = "\n"
   BUNDLE_MESSAGE_SEPARATOR = CR * 2
   # /MESSAGE TEMPLATE CONSTANTS
 
   # Internal namespaces for PStore keys:
-  ROOT_NS = ".pigeon"
+  ROOT_NS = ".pgn"
   CONF_NS = "conf"
   PEER_NS = "peers"
   USER_NS = "user"

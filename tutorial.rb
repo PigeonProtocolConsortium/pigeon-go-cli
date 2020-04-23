@@ -1,31 +1,36 @@
-require "pigeon"
+# add_blob
+# add_config
+# add_message
+# add_peer
+# all_blocks
+# all_messages
+# all_peers
+# block_peer
+# get_blob
+# get_config
+# get_draft
+# get_message_by_depth
+# get_message_count_for
+# message_saved?
+# peer_blocked?
+# who_am_i
+# new_draft
+# publish_bundle
+# publish_draft
+# read_message
+# remove_peer
+# reset_database
+# reset_draft
+# save_bundle
+# save_draft
+# update_draft
+
+require_relative "lib/pigeon"
 require "pry"
-
-db = Pigeon::Database.new(path: "my.db")
-
-db.reset_draft
-db.current_draft
-db.reset_draft
-db.publish_draft
-db.save_draft
-db.save_message
-db.reset_current_draft
-db.message_saved?
-db.read_message
-db.create_message
-db.find_all_messages
-db.get_message_by_depth
-db.get_message_count_for
-db.local_identity
-db.remove_peer
-db.add_peer
-db.block_peer
-db.all_peers
-db.all_blocks
-db.get_blob
-db.put_blob
-db.create_bundle
-db.get_config
-db.ingest_bundle
-db.set_config
-db.reset_database
+files = %w(a.gif b.gif c.gif)
+body = { "what" => "A simple bundle with a few blobs" }
+db = Pigeon::Database.new(path: "new.db")
+db.add_message("description", body)
+files.map { |file| db.add_blob(file) }
+binding.pry
+db.save_bundle("./spec/fixtures/has_blobs")

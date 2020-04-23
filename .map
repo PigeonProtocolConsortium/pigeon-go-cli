@@ -1,0 +1,60 @@
+=> [32m#<Pigeon::Database:0x0000559bd1590cc8[0m
+ @who_am_i[32m=[0m[32m#<Pigeon::LocalIdentity:0x0000559bd15d1890[0m @seed[32m=[0m[31m[1;31m"[0m[31m[1;35m\x1F[0m[31mL^9[1;35m\x90[0m[31me[1;35m\xF8[0m[31mg[1;35m\xF2[0m[31m[1;35m\x83[0m[31m[1;35m\xB4[0m[31m[1;35m\xC4[0m[31m>c[1;35m\x85[0m[31m[1;35m\xAE[0m[31m2w[1;35m\xBA[0m[31m&,@[1;35m\xD3[0m[31m[1;35m\x96[0m[31m[1;35m\xCA[0m[31mlO*[1;35m\xB9[0m[31m[1;35m\x8D[0m[31mkX[1;31m"[0m[31m[0m, @signing_key[32m=[0m[32m#<Ed25519::SigningKey:0x0000559bd15d17c8>[0m[32m>[0m,
+ @store[32m=[0m
+  [32m#<Pigeon::Storage:0x0000559bd15909f8[0m
+   @path[32m=[0m[31m[1;31m"[0m[31mold.db[1;31m"[0m[31m[0m,
+   @store[32m=[0m
+    [32m#<PStore:0x0000559bd1590458[0m
+     @abort[32m=[0m[1;36mfalse[0m,
+     @filename[32m=[0m[31m[1;31m"[0m[31mpigeon.db[1;31m"[0m[31m[0m,
+     @lock[32m=[0m[32m#<Thread::Mutex:0x0000559bd1597988[0m[32m>[0m,
+     @rdonly[32m=[0m[1;36mtrue[0m,
+     @table[32m=[0m
+      {[31m[1;31m"[0m[31mblocked[1;31m"[0m[31m[0m=>[32m#<Set: {[0m}>,
+       [31m[1;31m"[0m[31mconf[1;31m"[0m[31m[0m=>{[31m[1;31m"[0m[31mSEED[1;31m"[0m[31m[0m=>[31m[1;31m"[0m[31m[1;35m\x1F[0m[31mL^9[1;35m\x90[0m[31me[1;35m\xF8[0m[31mg[1;35m\xF2[0m[31m[1;35m\x83[0m[31m[1;35m\xB4[0m[31m[1;35m\xC4[0m[31m>c[1;35m\x85[0m[31m[1;35m\xAE[0m[31m2w[1;35m\xBA[0m[31m&,@[1;35m\xD3[0m[31m[1;35m\x96[0m[31m[1;35m\xCA[0m[31mlO*[1;35m\xB9[0m[31m[1;35m\x8D[0m[31mkX[1;31m"[0m[31m[0m, [31m[1;31m"[0m[31mHEAD.draft[1;31m"[0m[31m[0m=>[1;36mnil[0m},
+       [31m[1;31m"[0m[31mmessages.count[1;31m"[0m[31m[0m=>{[31m[1;31m"[0m[31m@Y4ZFMFQPWCX0S5KD4C4NMFSRCRCT92FY410M4ACFBK3P24RH9MD0.ed25519[1;31m"[0m[31m[0m=>[1;34m4[0m},
+       [31m[1;31m"[0m[31mmessages[1;31m"[0m[31m[0m=>
+        {[31m[1;31m"[0m[31m%8STBRYR0WYJJRSD8DRA9RT6RF6QD6AKARCDYV17X8REGACHZ41W0.sha256[1;31m"[0m[31m[0m=>
+          [32m#<Pigeon::Message:0x0000559bd15eb448[0m
+           @author[32m=[0m[32m#<Pigeon::RemoteIdentity:0x0000559bd15ea4d0[0m @multihash[32m=[0m[31m[1;31m"[0m[31m@Y4ZFMFQPWCX0S5KD4C4NMFSRCRCT92FY410M4ACFBK3P24RH9MD0.ed25519[1;31m"[0m[31m[0m[32m>[0m,
+           @body[32m=[0m{[31m[1;31m"[0m[31ma[1;31m"[0m[31m[0m=>[31m[1;31m"[0m[31m[1;35m\"[0m[31mb[1;35m\"[0m[31m[1;31m"[0m[31m[0m},
+           @depth[32m=[0m[1;34m0[0m,
+           @kind[32m=[0m[31m[1;31m"[0m[31munit_test[1;31m"[0m[31m[0m,
+           @lipmaa[32m=[0m[1;34m0[0m,
+           @prev[32m=[0m[31m[1;31m"[0m[31mNONE[1;31m"[0m[31m[0m,
+           @signature[32m=[0m[31m[1;31m"[0m[31m8581280WEPNQGJ4DA6K0M7W726YVK1QGW5T7EPGZ61V4HV2GD1RKAB5AN8FXREW0NZKYKFANHW64H3YT0RSMMY30T8TBDJJSR0G9E0G.sig.ed25519[1;31m"[0m[31m[0m[32m>[0m,
+         [31m[1;31m"[0m[31m%T88VZKCWN33CVD0TFBRPJ13NJHXF19TFRWP8NFJ1JGE5RB5ETC0G.sha256[1;31m"[0m[31m[0m=>
+          [32m#<Pigeon::Message:0x0000559bd160cb98[0m
+           @author[32m=[0m[32m#<Pigeon::RemoteIdentity:0x0000559bd160c7d8[0m @multihash[32m=[0m[31m[1;31m"[0m[31m@Y4ZFMFQPWCX0S5KD4C4NMFSRCRCT92FY410M4ACFBK3P24RH9MD0.ed25519[1;31m"[0m[31m[0m[32m>[0m,
+           @body[32m=[0m{[31m[1;31m"[0m[31mc[1;31m"[0m[31m[0m=>[31m[1;31m"[0m[31m[1;35m\"[0m[31md[1;35m\"[0m[31m[1;31m"[0m[31m[0m},
+           @depth[32m=[0m[1;34m1[0m,
+           @kind[32m=[0m[31m[1;31m"[0m[31munit_test[1;31m"[0m[31m[0m,
+           @lipmaa[32m=[0m[1;34m0[0m,
+           @prev[32m=[0m[31m[1;31m"[0m[31m%8STBRYR0WYJJRSD8DRA9RT6RF6QD6AKARCDYV17X8REGACHZ41W0.sha256[1;31m"[0m[31m[0m,
+           @signature[32m=[0m[31m[1;31m"[0m[31m60R873HBC5GHGVFWBC3RZBHXTQW0240GNF20JYBR71V4B1Z57HHXJ6N39Y4QZZPD34PQGZEQVMSAXTC71PATXAMWBVDCF2S9S45KM1G.sig.ed25519[1;31m"[0m[31m[0m[32m>[0m,
+         [31m[1;31m"[0m[31m%JD4BETS4YH4ZA7CMP4ZHG0R62T5B0EAFDYHNM5S12M04SAF9AJ4G.sha256[1;31m"[0m[31m[0m=>
+          [32m#<Pigeon::Message:0x0000559bd16165a8[0m
+           @author[32m=[0m[32m#<Pigeon::RemoteIdentity:0x0000559bd1616300[0m @multihash[32m=[0m[31m[1;31m"[0m[31m@Y4ZFMFQPWCX0S5KD4C4NMFSRCRCT92FY410M4ACFBK3P24RH9MD0.ed25519[1;31m"[0m[31m[0m[32m>[0m,
+           @body[32m=[0m{[31m[1;31m"[0m[31me[1;31m"[0m[31m[0m=>[31m[1;31m"[0m[31m[1;35m\"[0m[31mf[1;35m\"[0m[31m[1;31m"[0m[31m[0m},
+           @depth[32m=[0m[1;34m2[0m,
+           @kind[32m=[0m[31m[1;31m"[0m[31munit_test[1;31m"[0m[31m[0m,
+           @lipmaa[32m=[0m[1;34m1[0m,
+           @prev[32m=[0m[31m[1;31m"[0m[31m%T88VZKCWN33CVD0TFBRPJ13NJHXF19TFRWP8NFJ1JGE5RB5ETC0G.sha256[1;31m"[0m[31m[0m,
+           @signature[32m=[0m[31m[1;31m"[0m[31m7DH9ZXMVT6RJEX31BPNSJ3XRA3AMPV97A1CPWW4BV0N99FW2JEPSCVQNJP7SZWA1N7BT560Y9EAK4N7AWFHDEFZV9AJ7PS81CVRF600.sig.ed25519[1;31m"[0m[31m[0m[32m>[0m,
+         [31m[1;31m"[0m[31m%WTRSWSVA84DK2QMX5FDSNCVSAKQ4AFNPBW6VE93X4SJ1R60WDYMG.sha256[1;31m"[0m[31m[0m=>
+          [32m#<Pigeon::Message:0x0000559bd1638978[0m
+           @author[32m=[0m[32m#<Pigeon::RemoteIdentity:0x0000559bd1638590[0m @multihash[32m=[0m[31m[1;31m"[0m[31m@Y4ZFMFQPWCX0S5KD4C4NMFSRCRCT92FY410M4ACFBK3P24RH9MD0.ed25519[1;31m"[0m[31m[0m[32m>[0m,
+           @body[32m=[0m{[31m[1;31m"[0m[31mg[1;31m"[0m[31m[0m=>[31m[1;31m"[0m[31m[1;35m\"[0m[31mh[1;35m\"[0m[31m[1;31m"[0m[31m[0m},
+           @depth[32m=[0m[1;34m3[0m,
+           @kind[32m=[0m[31m[1;31m"[0m[31munit_test[1;31m"[0m[31m[0m,
+           @lipmaa[32m=[0m[1;34m2[0m,
+           @prev[32m=[0m[31m[1;31m"[0m[31m%JD4BETS4YH4ZA7CMP4ZHG0R62T5B0EAFDYHNM5S12M04SAF9AJ4G.sha256[1;31m"[0m[31m[0m,
+           @signature[32m=[0m[31m[1;31m"[0m[31m6KZZ2816J8V28QZG5EFM1BZAB2TF1HC87YTCQRSN1Q7395K91C9E7KE7DATT99N7XGQEJ5MRCNDS7354C5KN7763C1XVARKWRDG4T1R.sig.ed25519[1;31m"[0m[31m[0m[32m>[0m},
+       [31m[1;31m"[0m[31mmessages.by_depth[1;31m"[0m[31m[0m=>
+        {[31m[1;31m"[0m[31m@Y4ZFMFQPWCX0S5KD4C4NMFSRCRCT92FY410M4ACFBK3P24RH9MD0.ed25519.0[1;31m"[0m[31m[0m=>[31m[1;31m"[0m[31m%8STBRYR0WYJJRSD8DRA9RT6RF6QD6AKARCDYV17X8REGACHZ41W0.sha256[1;31m"[0m[31m[0m,
+         [31m[1;31m"[0m[31m@Y4ZFMFQPWCX0S5KD4C4NMFSRCRCT92FY410M4ACFBK3P24RH9MD0.ed25519.1[1;31m"[0m[31m[0m=>[31m[1;31m"[0m[31m%T88VZKCWN33CVD0TFBRPJ13NJHXF19TFRWP8NFJ1JGE5RB5ETC0G.sha256[1;31m"[0m[31m[0m,
+         [31m[1;31m"[0m[31m@Y4ZFMFQPWCX0S5KD4C4NMFSRCRCT92FY410M4ACFBK3P24RH9MD0.ed25519.2[1;31m"[0m[31m[0m=>[31m[1;31m"[0m[31m%JD4BETS4YH4ZA7CMP4ZHG0R62T5B0EAFDYHNM5S12M04SAF9AJ4G.sha256[1;31m"[0m[31m[0m,
+         [31m[1;31m"[0m[31m@Y4ZFMFQPWCX0S5KD4C4NMFSRCRCT92FY410M4ACFBK3P24RH9MD0.ed25519.3[1;31m"[0m[31m[0m=>[31m[1;31m"[0m[31m%WTRSWSVA84DK2QMX5FDSNCVSAKQ4AFNPBW6VE93X4SJ1R60WDYMG.sha256[1;31m"[0m[31m[0m},
+       [31m[1;31m"[0m[31mpeers[1;31m"[0m[31m[0m=>[32m#<Set: {[0m}>},
+     @thread_safe[32m=[0m[1;36mfalse[0m,
+     @ultra_safe[32m=[0m[1;36mtrue[0m[32m>[0m[32m>[0m[32m>[0m

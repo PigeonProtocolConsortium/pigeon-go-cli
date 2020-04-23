@@ -1,6 +1,6 @@
 module Pigeon
   class Database
-    attr_reader :local_identity
+    attr_reader :who_am_i
 
     def initialize(path: PIGEON_DB_PATH)
       @store = Pigeon::Storage.new(path: path)
@@ -16,10 +16,10 @@ module Pigeon
     def all_peers(); store.all_peers(); end
 
     # === MESSAGES
-    def find_all_messages(mhash = nil); store.find_all_messages(mhash); end
+    def all_messages(mhash = nil); store.all_messages(mhash); end
     def message_saved?(multihash); store.message_saved?(multihash); end
 
-    def save_message(msg_obj)
+    def _save_message(msg_obj)
       store.insert_message(Helpers.verify_message(self, msg_obj))
     end
 
@@ -33,19 +33,19 @@ module Pigeon
       store.get_message_by_depth(multihash, depth)
     end
 
-    def create_message(kind, params)
+    def add_message(kind, params)
       publish_draft(new_draft(kind: kind, body: params))
     end
 
     # Store a message that someone (not the LocalIdentity)
     # has authored.
-    def ingest_message(author:,
-                       body:,
-                       depth:,
-                       kind:,
-                       lipmaa:,
-                       prev:,
-                       signature:)
+    def _ingest_message(author:,
+                        body:,
+                        depth:,
+                        kind:,
+                        lipmaa:,
+                        prev:,
+                        signature:)
       msg = Message.new(author: RemoteIdentity.new(author),
                         kind: kind,
                         body: body,
@@ -53,11 +53,11 @@ module Pigeon
                         lipmaa: lipmaa,
                         signature: signature,
                         depth: depth)
-      save_message(msg)
+      _save_message(msg)
     end
 
     # === DRAFTS
-    def reset_current_draft; set_config(CURRENT_DRAFT, nil); end
+    def reset_draft; add_config(CURRENT_DRAFT, nil); end
 
     def new_draft(kind:, body: {})
       old = get_config(CURRENT_DRAFT)
@@ -68,11 +68,11 @@ module Pigeon
     end
 
     def save_draft(draft)
-      set_config(CURRENT_DRAFT, draft)
+      add_config(CURRENT_DRAFT, draft)
       draft
     end
 
-    def current_draft
+    def get_draft
       draft = store.get_config(CURRENT_DRAFT)
       if draft
         return draft
@@ -84,20 +84,20 @@ module Pigeon
     def update_draft(k, v); Helpers.update_draft(self, k, v); end
 
     def reset_draft
-      set_config(CURRENT_DRAFT, nil)
+      add_config(CURRENT_DRAFT, nil)
     end
 
     # Author a new message.
-    def publish_draft(draft = self.current_draft)
+    def publish_draft(draft = self.get_draft)
       Helpers.publish_draft(self, draft)
     end
 
     # === BUNDLES
-    def create_bundle(file_path = DEFAULT_BUNDLE_PATH)
+    def save_bundle(file_path = DEFAULT_BUNDLE_PATH)
       # Fetch messages for all peers
-      peers = all_peers + [local_identity.multihash]
+      peers = all_peers + [who_am_i.multihash]
       messages = peers.map do |peer|
-        find_all_messages(peer)
+        all_messages(peer)
           .map { |multihash| read_message(multihash) }
           .sort_by(&:depth)
       end.flatten
@@ -114,10 +114,11 @@ module Pigeon
       content = messages
         .map { |message| message.render }
         .join(BUNDLE_MESSAGE_SEPARATOR)
+      File.join(file_path, "gossip.pgn")
       File.write(File.join(file_path, "gossip.pgn"), content + CR)
     end
 
-    def ingest_bundle(file_path = DEFAULT_BUNDLE_PATH)
+    def publish_bundle(file_path = DEFAULT_BUNDLE_PATH)
       bundle = File.read(File.join(file_path, "gossip.pgn"))
       tokens = Pigeon::Lexer.tokenize(bundle)
       Pigeon::Parser.parse(self, tokens)
@@ -125,11 +126,11 @@ module Pigeon
 
     # === BLOBS
     def get_blob(b); store.get_blob(b); end
-    def put_blob(b); store.put_blob(b); end
+    def add_blob(b); store.add_blob(b); end
 
     # === DB Management
     def get_config(k); store.get_config(k); end
-    def set_config(k, v); store.set_config(k, v); end
+    def add_config(k, v); store.add_config(k, v); end
     def reset_database; store.reset; init_ident; end
 
     private
@@ -139,11 +140,11 @@ module Pigeon
     def init_ident
       secret = get_config(SEED_CONFIG_KEY)
       if secret
-        @local_identity = LocalIdentity.new(secret)
+        @who_am_i = LocalIdentity.new(secret)
       else
         new_seed = SecureRandom.random_bytes(Ed25519::KEY_SIZE)
-        set_config(SEED_CONFIG_KEY, new_seed)
-        @local_identity = LocalIdentity.new(new_seed)
+        add_config(SEED_CONFIG_KEY, new_seed)
+        @who_am_i = LocalIdentity.new(new_seed)
       end
     end
   end

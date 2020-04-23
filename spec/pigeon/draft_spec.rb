@@ -12,8 +12,8 @@ RSpec.describe Pigeon::Draft do
     db.new_draft(kind: "unit_test")
     logo = File.read("./logo.png")
     db.update_draft("a", "bar")
-    db.update_draft("b", db.put_blob(logo))
-    db.current_draft
+    db.update_draft("b", db.add_blob(logo))
+    db.get_draft
   end
 
   MSG = [
@@ -28,7 +28,7 @@ RSpec.describe Pigeon::Draft do
   ].join("\n")
 
   it "renders a message" do
-    pk = db.local_identity.multihash
+    pk = db.who_am_i.multihash
     actual = message.render_as_draft
     expected = MSG.gsub("___", pk)
     expect(actual).to start_with(expected)
@@ -37,7 +37,7 @@ RSpec.describe Pigeon::Draft do
   it "creates a new message" do
     db.reset_draft
     db.new_draft(kind: "unit_test")
-    hash = db.put_blob(File.read("./logo.png"))
+    hash = db.add_blob(File.read("./logo.png"))
     expectations = {
       kind: "unit_test",
       body: {
@@ -52,7 +52,7 @@ RSpec.describe Pigeon::Draft do
     expect(message.kind).to eq("unit_test")
     expect(message.body).to eq(expectations.fetch(:body))
     expectations.map do |k, v|
-      left = db.current_draft.send(k)
+      left = db.get_draft.send(k)
       expect(left).to eq(v)
     end
   end

@@ -4,10 +4,10 @@ RSpec.describe Pigeon::Message do
   def reset_draft(params)
     db.reset_draft
     db.new_draft(kind: "unit_test", body: params)
-    db.current_draft
+    db.get_draft
   end
 
-  def create_message(params)
+  def add_message(params)
     draft = reset_draft(params)
     db.publish_draft(draft)
   end
@@ -19,11 +19,11 @@ RSpec.describe Pigeon::Message do
   end
 
   let(:draft) do
-    hash = db.put_blob(File.read("./logo.png"))
+    hash = db.add_blob(File.read("./logo.png"))
     reset_draft({ "a" => "bar", "b" => hash })
   end
 
-  let(:templated_message) { create_message({ "a" => "b" }) }
+  let(:templated_message) { add_message({ "a" => "b" }) }
 
   let (:template) do
     Pigeon::MessageSerializer.new(templated_message)
@@ -31,12 +31,12 @@ RSpec.describe Pigeon::Message do
 
   it "discards a draft after signing" do
     db.publish_draft(draft)
-    expect { db.current_draft }.to raise_error("THERE IS NO DRAFT. CREATE ONE FIRST.")
+    expect { db.get_draft }.to raise_error("THERE IS NO DRAFT. CREATE ONE FIRST.")
   end
 
   it "creates a single message" do
     message = db.publish_draft(draft)
-    expect(message.author.multihash).to eq(db.local_identity.multihash)
+    expect(message.author.multihash).to eq(db.who_am_i.multihash)
     expect(message.body).to eq(draft.body)
     expect(message.depth).to eq(0)
     expect(message.kind).to eq("unit_test")
@@ -79,10 +79,10 @@ RSpec.describe Pigeon::Message do
   end
 
   it "verifies accuracy of hash chain" do
-    m1 = create_message({ "a" => "b" })
-    m2 = create_message({ "c" => "d" })
-    m3 = create_message({ "e" => "f" })
-    m4 = create_message({ "g" => "h" })
+    m1 = add_message({ "a" => "b" })
+    m2 = add_message({ "c" => "d" })
+    m3 = add_message({ "e" => "f" })
+    m4 = add_message({ "g" => "h" })
 
     expect(m1.prev).to eq(Pigeon::NOTHING)
     expect(m2.prev).to be
@@ -100,7 +100,7 @@ RSpec.describe Pigeon::Message do
       body[SecureRandom.hex(6)] = SecureRandom.hex(6)
     end
     expect do
-      create_message(body)
+      add_message(body)
     end.to raise_error(Pigeon::Helpers::MessageSizeError, error)
   end
 
@@ -112,7 +112,7 @@ RSpec.describe Pigeon::Message do
     plaintext = template.render_without_signature
 
     # Make fake pairs of data for cross-checking
-    key1 = db.local_identity.instance_variable_get(:@signing_key)
+    key1 = db.who_am_i.instance_variable_get(:@signing_key)
     key2 = Ed25519::SigningKey.new(secret)
 
     sig1 = key1.sign(plaintext)

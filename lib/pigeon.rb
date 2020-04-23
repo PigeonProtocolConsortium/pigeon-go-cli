@@ -154,7 +154,7 @@ module Pigeon
     end
 
     def self.publish_draft(db, draft)
-      author = db.local_identity
+      author = db.who_am_i
       mhash = author.multihash
       template = MessageSerializer.new(draft)
       depth = db.get_message_count_for(mhash)
@@ -173,7 +173,7 @@ module Pigeon
     end
 
     def self.update_draft(db, key, value)
-      draft = db.current_draft
+      draft = db.get_draft
       draft[key] = value
       db.save_draft(draft)
       return draft.body[key]

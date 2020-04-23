@@ -43,7 +43,7 @@ module Pigeon
       read { store[CONF_NS][key] }
     end
 
-    def set_config(key, value)
+    def add_config(key, value)
       write do
         a = store.fetch(CONF_NS)
         raise "FIX SAVED DRAFTS" if value.instance_variable_get(:@db)
@@ -51,7 +51,7 @@ module Pigeon
       end
     end
 
-    def put_blob(data)
+    def add_blob(data)
       size = data.bytesize
       if (size > BLOB_BYTE_LIMIT)
         raise "Blob size limit is #{BLOB_BYTE_LIMIT} bytes. Got #{size}"
@@ -79,7 +79,7 @@ module Pigeon
       read { store[COUNT_INDEX_NS][mhash] || 0 }
     end
 
-    def find_all_messages(author)
+    def all_messages(author)
       if author
         all = []
         depth = -1

@@ -41,13 +41,13 @@ module Pigeon
         raise ConfigAlreadyExists
       end
       $db = Pigeon::Database.new
-      puts db.local_identity.multihash
+      puts db.who_am_i.multihash
     end
 
     desc "show", "Prints your identiy string to STDOUT"
 
     def show
-      puts db.local_identity.multihash
+      puts db.who_am_i.multihash
     end
   end
 
@@ -56,7 +56,7 @@ module Pigeon
 
     def set(data = "")
       blob = (data != "") ? data : STDIN.read
-      puts db.put_blob(blob)
+      puts db.add_blob(blob)
     end
 
     desc "get", "Read arbitrary data from the database"
@@ -103,9 +103,9 @@ module Pigeon
 
     def append(key, raw_value = "")
       v = (raw_value != "") ? raw_value : STDIN.read
-      if db.current_draft
+      if db.get_draft
         db.update_draft(key, v)
-        puts db.current_draft.render_as_draft
+        puts db.get_draft.render_as_draft
       else
         bail("You must create a draft first")
       end
@@ -114,13 +114,13 @@ module Pigeon
     desc "show", "Print current message to STDOUT."
 
     def show
-      puts db.current_draft.render_as_draft
+      puts db.get_draft.render_as_draft
     end
 
     desc "sign", "Commit current DRAFT to local feed."
 
     def sign
-      puts db.publish_draft(db.current_draft).render
+      puts db.publish_draft(db.get_draft).render
     end
   end
 
@@ -128,13 +128,13 @@ module Pigeon
     desc "create", "Create a pigeon bundle file"
 
     def create(file_path = Pigeon::DEFAULT_BUNDLE_PATH)
-      db.create_bundle(file_path)
+      db.save_bundle(file_path)
     end
 
     desc "ingest", "Ingest a pigeon bundle file"
 
     def ingest(file_path = Pigeon::DEFAULT_BUNDLE_PATH)
-      db.ingest_bundle(file_path)
+      db.publish_bundle(file_path)
     end
   end
 
@@ -148,13 +148,13 @@ module Pigeon
     desc "find-all", "Find all message IDs of a particular identity."
 
     def find_all(author = nil)
-      puts db.find_all_messages(author).join(Pigeon::CR) + Pigeon::CR
+      puts db.all_messages(author).join(Pigeon::CR) + Pigeon::CR
     end
 
     desc "last", "Grab your last message. INTERNAL USE ONLY"
 
     def last
-      me = db.local_identity
+      me = db.who_am_i
       mcount = db.get_message_count_for(me.multihash)
       multihash = db.get_message_by_depth(me.multihash, mcount - 1)
       puts multihash
@@ -165,7 +165,7 @@ module Pigeon
     desc "status", "Show various information about the `.pgn` directory"
 
     def status
-      me = db.local_identity.multihash
+      me = db.who_am_i.multihash
       mine = db.get_message_count_for(me)
       puts "
           -`.     Pigeon Protocol Ruby Client
@@ -173,7 +173,7 @@ module Pigeon
          _) (     Peers:              #{db.all_peers.count}
         /    )    Blocked:            #{db.all_blocks.count}
        /_,'  /    Msgs Published:     #{mine}
-         \\  /     Msgs Total:         #{db.find_all_messages.count}
+         \\  /     Msgs Total:         #{db.all_messages.count}
       ===m\" \"m===
       Your local identity hash:
       #{me}

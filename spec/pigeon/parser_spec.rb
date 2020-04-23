@@ -30,7 +30,7 @@ RSpec.describe Pigeon::Lexer do
   end
 
   it "ingests and reconstructs a bundle" do
-    messages = db.ingest_bundle("./spec/fixtures/normal")
+    messages = db.publish_bundle("./spec/fixtures/normal")
     expect(messages.length).to eq(10)
     expect(messages.map(&:class).uniq).to eq([Pigeon::Message])
     re_bundled = messages.map(&:render).join("\n\n") + "\n"

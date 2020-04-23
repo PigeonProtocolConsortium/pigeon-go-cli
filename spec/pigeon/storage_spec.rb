@@ -12,22 +12,22 @@ RSpec.describe Pigeon::Storage do
   end
 
   it "sets a config" do
-    db.set_config("FOO", "BAR")
+    db.add_config("FOO", "BAR")
     value = db.get_config("FOO")
     expect(value).to eq("BAR")
-    db.set_config("FOO", nil)
+    db.add_config("FOO", nil)
     value = db.get_config("FOO")
     expect(value).to eq(nil)
   end
 
   it "manages configs" do
-    db.set_config("FOO", "BAR")
+    db.add_config("FOO", "BAR")
     value = db.get_config("FOO")
     expect(value).to eq("BAR")
   end
 
   it "manages blobs" do
-    logo_hash = db.put_blob(LOGO_BLOB)
+    logo_hash = db.add_blob(LOGO_BLOB)
     expect(db.get_blob(logo_hash)).to eq(LOGO_BLOB)
   end
 
@@ -48,27 +48,27 @@ RSpec.describe Pigeon::Storage do
   end
 
   it "finds all authored by a particular feed" do
-    ingested_messages = db.ingest_bundle("./spec/fixtures/normal")
+    ingested_messages = db.publish_bundle("./spec/fixtures/normal")
     author = ingested_messages.first.author.multihash
-    actual_messages = db.find_all_messages(author)
-    search_results = db.find_all_messages(author)
+    actual_messages = db.all_messages(author)
+    search_results = db.all_messages(author)
   end
 
   it "finds all messages" do
     msgs = [
-      db.create_message("strings", {
+      db.add_message("strings", {
         "example_1.1" => "This is a string.",
         "example=_." => "A second string.",
       }),
-      db.create_message("d", {
-        "e" => db.put_blob(File.read("./logo.png")),
+      db.add_message("d", {
+        "e" => db.add_blob(File.read("./logo.png")),
       }),
-      db.create_message("g", {
-        "me_myself_and_i" => db.local_identity.multihash,
+      db.add_message("g", {
+        "me_myself_and_i" => db.who_am_i.multihash,
       }),
     ]
-    me = db.local_identity.multihash
-    results = db.find_all_messages(me)
+    me = db.who_am_i.multihash
+    results = db.all_messages(me)
     expect(results.length).to eq(3)
     expect(msgs[0].multihash).to eq(results[0])
     expect(msgs[1].multihash).to eq(results[1])

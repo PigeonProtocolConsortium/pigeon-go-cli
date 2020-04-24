@@ -26,28 +26,28 @@ RSpec.describe Pigeon::Message do
 
   it "creates a bundle" do
     expected_bundle = create_fake_messages.map(&:render).join("\n\n") + "\n"
-    db.save_bundle
+    db.export_bundle
     actual_bundle = File.read(File.join(Pigeon::DEFAULT_BUNDLE_PATH, "gossip.pgn"))
     expect(expected_bundle).to eq(actual_bundle)
   end
 
   it "does not crash when ingesting old messages" do
     create_fake_messages
-    db.save_bundle
-    db.publish_bundle
+    db.export_bundle
+    db.import_bundle
   end
 
   it "does not ingest messages from blocked peers" do
     db.reset_database
     antagonist = "@PPJQ3Q36W258VQ1NKYY2G7VW24J8NMAACHXCD83GCQ3K8F4C9X2G.ed25519"
     db.block_peer(antagonist)
-    db.publish_bundle("./spec/fixtures/x")
+    db.import_bundle("./spec/fixtures/x")
     expect(db.all_messages.count).to eq(0)
   end
 
   it "ingests a bundle's blobs" do
     db.reset_database
-    db.publish_bundle("./spec/fixtures/has_blobs")
+    db.import_bundle("./spec/fixtures/has_blobs")
     expect(db.all_messages.count).to eq(0)
   end
 end

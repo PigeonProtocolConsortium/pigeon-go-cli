@@ -93,7 +93,7 @@ module Pigeon
     end
 
     # === BUNDLES
-    def save_bundle(file_path = DEFAULT_BUNDLE_PATH)
+    def export_bundle(file_path = DEFAULT_BUNDLE_PATH)
       # Fetch messages for all peers
       peers = all_peers + [who_am_i.multihash]
       messages = peers.map do |peer|
@@ -118,7 +118,7 @@ module Pigeon
       File.write(File.join(file_path, "gossip.pgn"), content + CR)
     end
 
-    def publish_bundle(file_path = DEFAULT_BUNDLE_PATH)
+    def import_bundle(file_path = DEFAULT_BUNDLE_PATH)
       bundle = File.read(File.join(file_path, "gossip.pgn"))
       tokens = Pigeon::Lexer.tokenize(bundle)
       Pigeon::Parser.parse(self, tokens)

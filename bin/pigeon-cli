@@ -128,13 +128,13 @@ module Pigeon
     desc "create", "Create a pigeon bundle file"
 
     def create(file_path = Pigeon::DEFAULT_BUNDLE_PATH)
-      db.save_bundle(file_path)
+      db.export_bundle(file_path)
     end
 
     desc "ingest", "Ingest a pigeon bundle file"
 
     def ingest(file_path = Pigeon::DEFAULT_BUNDLE_PATH)
-      db.publish_bundle(file_path)
+      db.import_bundle(file_path)
     end
   end
 

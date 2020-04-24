@@ -15,13 +15,13 @@
 # peer_blocked?
 # who_am_i
 # new_draft
-# publish_bundle
+# import_bundle
 # publish_draft
 # read_message
 # remove_peer
 # reset_database
 # reset_draft
-# save_bundle
+# export_bundle
 # save_draft
 # update_draft
 
@@ -33,4 +33,4 @@ db = Pigeon::Database.new(path: "new.db")
 db.add_message("description", body)
 files.map { |file| db.add_blob(file) }
 binding.pry
-db.save_bundle("./spec/fixtures/has_blobs")
+db.export_bundle("./spec/fixtures/has_blobs")

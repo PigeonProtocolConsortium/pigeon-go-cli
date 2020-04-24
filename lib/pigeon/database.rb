@@ -94,6 +94,8 @@ module Pigeon
 
     # === BUNDLES
     def export_bundle(file_path = DEFAULT_BUNDLE_PATH)
+      Helpers.mkdir_p(file_path)
+
       # Fetch messages for all peers
       peers = all_peers + [who_am_i.multihash]
       messages = peers.map do |peer|
@@ -107,20 +109,32 @@ module Pigeon
         .map(&:collect_blobs)
         .flatten
         .uniq
-        .map { |mhash| ["bundle", mhash, get_blob(mhash)] }
-        .map { |arg| Helpers.write_to_disk(*arg) }
+        .map do |mhash|
+        blob_path = File.join(file_path, Helpers.hash2file_path(mhash))
+        Helpers.write_to_disk(blob_path, mhash, get_blob(mhash))
+      end
 
       # Render messages for all peers.
       content = messages
         .map { |message| message.render }
         .join(BUNDLE_MESSAGE_SEPARATOR)
-      File.join(file_path, "gossip.pgn")
+
       File.write(File.join(file_path, "gossip.pgn"), content + CR)
     end
 
     def import_bundle(file_path = DEFAULT_BUNDLE_PATH)
       bundle = File.read(File.join(file_path, "gossip.pgn"))
       tokens = Pigeon::Lexer.tokenize(bundle)
+      blobs = tokens.reduce(Set.new) do |set, (a, b, c)|
+        [b, c].map do |d|
+          set.add(d) if Helpers.blob_multihash?(d)
+        end
+        set
+      end.map do |multihash|
+        if !store.have_blob?(multihash)
+          binding.pry
+        end
+      end
       Pigeon::Parser.parse(self, tokens)
     end
 

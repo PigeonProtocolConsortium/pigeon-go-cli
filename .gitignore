@@ -6,3 +6,4 @@ doc/
 pigeon.bundle
 *.gem
 bundle/
+pigeon.db

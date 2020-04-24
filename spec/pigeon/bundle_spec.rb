@@ -47,6 +47,12 @@ RSpec.describe Pigeon::Message do
 
   it "ingests a bundle's blobs" do
     db.reset_database
+    db.add_message(db.add_blob("a.gif"), {
+      db.add_blob("b.gif") => db.add_blob("c.gif"),
+    })
+    db.export_bundle("./spec/fixtures/has_blobs")
+    STDERR.puts("The directory structure is not correct.")
+    exit(1)
     db.import_bundle("./spec/fixtures/has_blobs")
     expect(db.all_messages.count).to eq(0)
   end

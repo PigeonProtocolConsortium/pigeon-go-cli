@@ -2,6 +2,7 @@ require "digest"
 require "ed25519"
 require "securerandom"
 require "set"
+require "fileutils"
 
 module Pigeon
   SEED_CONFIG_KEY = "SEED"
@@ -207,7 +208,7 @@ module Pigeon
     end
 
     def self.mkdir_p(path)
-      Dir.mkdir(path) unless Dir.exists?(path)
+      FileUtils.makedirs(path) unless Dir.exists?(path)
     end
 
     def self.write_to_disk(base_path, mhash, data)
@@ -226,7 +227,7 @@ module Pigeon
     end
 
     def self.hash2file_path(mhash)
-      mhash = mhash.sub("&", "")
+      mhash = mhash.sub(BLOB_SIGIL, "")
 
       [
         mhash[0...7],
@@ -245,6 +246,12 @@ module Pigeon
       else
         return b32_decode(string[1..].gsub(FOOTERS_REGEX, ""))
       end
+    end
+
+    def self.blob_multihash?(unknown)
+      (unknown.is_a?(String) &&
+       unknown.length == 60 &&
+       (unknown[0] == BLOB_SIGIL))
     end
   end
 end

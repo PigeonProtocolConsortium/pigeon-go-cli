@@ -130,6 +130,11 @@ module Pigeon
       read { store[BLCK_NS].member?(multihash) }
     end
 
+    def have_blob?(multihash)
+      path = File.join(PIGEON_BLOB_PATH, Helpers.hash2file_path(multihash))
+      File.file?(path)
+    end
+
     private
 
     def write_to_disk(mhash, data)

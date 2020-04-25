@@ -49,6 +49,10 @@ RSpec.describe Pigeon::Message do
     db.reset_database
     db.import_bundle("./spec/fixtures/has_blobs")
     expect(db.all_messages.count).to eq(1)
-    warn("TODO: Write better tests")
+    ["&622PRNJ7C0S05XR2AHDPKWMG051B1QW5SXMN2RQHF2AND6J8VGPG.sha256",
+     "&FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG.sha256",
+     "&YPF11E5N9JFVB6KB1N1WDVVT9DXMCHE0XJWBZHT2CQ29S5SEPCSG.sha256"].map do |h|
+      expect(db.get_blob(h)).to be_kind_of(String)
+    end
   end
 end

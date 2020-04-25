@@ -4,7 +4,8 @@ module Pigeon
 
     def self.parse(db, tokens)
       raise "NO!" unless db.is_a?(Pigeon::Database)
-      self.new(db, tokens).parse
+
+      new(db, tokens).parse
     end
 
     def initialize(db, tokens)
@@ -14,8 +15,8 @@ module Pigeon
       @results = []
     end
 
-    def parse()
-      @tokens.each_with_index do |token, i|
+    def parse
+      @tokens.each_with_index do |token, _i|
         case token.first
         when :AUTHOR then set(:author, token.last)
         when :KIND then set(:kind, token.last)

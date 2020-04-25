@@ -157,7 +157,7 @@ RSpec.describe Pigeon::Message do
       kind[rand(0...8)] = n
       db.reset_draft
       db.new_draft(kind: kind)
-      boom = ->() { db.publish_draft.render }
+      boom = -> { db.publish_draft.render }
       expect(boom).to raise_error(Pigeon::Lexer::LexError)
     end
   end
@@ -169,7 +169,7 @@ RSpec.describe Pigeon::Message do
       key = SecureRandom.alphanumeric(8)
       key[rand(0...8)] = n
       db.update_draft(key, "should crash")
-      boom = ->() { Pigeon::Lexer.tokenize(db.publish_draft.render) }
+      boom = -> { Pigeon::Lexer.tokenize(db.publish_draft.render) }
       expect(boom).to raise_error(Pigeon::Lexer::LexError)
     end
   end

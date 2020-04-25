@@ -12,6 +12,6 @@ Gem::Specification.new do |s|
   s.homepage = "https://tildegit.org/PigeonProtocolConsortium/pigeon_ruby"
   s.license = "GPL-3.0-or-later"
   s.executables = "pigeon-cli"
-  s.add_runtime_dependency "thor", "~> 0.20", ">= 0.20.3"
   s.add_runtime_dependency "ed25519", "~> 1.2", ">= 1.2.4"
+  s.add_runtime_dependency "thor", "~> 0.20", ">= 0.20.3"
 end

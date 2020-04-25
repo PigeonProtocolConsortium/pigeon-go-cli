@@ -17,11 +17,12 @@ module Pigeon
     end
 
     def [](key)
-      self.body[key]
+      body[key]
     end
 
     def []=(key, value)
       raise STRING_KEYS_ONLY unless key.is_a?(String)
+
       case value[0]
       when BLOB_SIGIL, MESSAGE_SIGIL, IDENTITY_SIGIL, STRING_SIGIL
         body[key] = value

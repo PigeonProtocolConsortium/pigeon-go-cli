@@ -8,22 +8,46 @@ module Pigeon
     end
 
     # === PEERS
-    def add_peer(p); store.add_peer(p); end
-    def block_peer(p); store.block_peer(p); end
-    def remove_peer(p); store.remove_peer(p); end
-    def peer_blocked?(p); store.peer_blocked?(p); end
-    def all_blocks(); store.all_blocks(); end
-    def all_peers(); store.all_peers(); end
+    def add_peer(p)
+      store.add_peer(p)
+    end
+
+    def block_peer(p)
+      store.block_peer(p)
+    end
+
+    def remove_peer(p)
+      store.remove_peer(p)
+    end
+
+    def peer_blocked?(p)
+      store.peer_blocked?(p)
+    end
+
+    def all_blocks
+      store.all_blocks
+    end
+
+    def all_peers
+      store.all_peers
+    end
 
     # === MESSAGES
-    def all_messages(mhash = nil); store.all_messages(mhash); end
-    def message_saved?(multihash); store.message_saved?(multihash); end
+    def all_messages(mhash = nil)
+      store.all_messages(mhash)
+    end
+
+    def message_saved?(multihash)
+      store.message_saved?(multihash)
+    end
 
     def _save_message(msg_obj)
       store.insert_message(Helpers.verify_message(self, msg_obj))
     end
 
-    def read_message(multihash); store.read_message(multihash); end
+    def read_message(multihash)
+      store.read_message(multihash)
+    end
 
     def get_message_count_for(multihash)
       store.get_message_count_for(multihash)
@@ -57,13 +81,14 @@ module Pigeon
     end
 
     # === DRAFTS
-    def reset_draft; add_config(CURRENT_DRAFT, nil); end
+    def reset_draft
+      add_config(CURRENT_DRAFT, nil)
+    end
 
     def new_draft(kind:, body: {})
       old = get_config(CURRENT_DRAFT)
-      if old
-        raise "PUBLISH OR RESET CURRENT DRAFT (#{old.kind}) FIRST"
-      end
+      raise "PUBLISH OR RESET CURRENT DRAFT (#{old.kind}) FIRST" if old
+
       save_draft(Draft.new(kind: kind, body: body))
     end
 
@@ -74,21 +99,22 @@ module Pigeon
 
     def get_draft
       draft = store.get_config(CURRENT_DRAFT)
-      if draft
-        return draft
-      else
+      unless draft
         raise "THERE IS NO DRAFT. CREATE ONE FIRST."
       end
+      draft
     end
 
-    def update_draft(k, v); Helpers.update_draft(self, k, v); end
+    def update_draft(k, v)
+      Helpers.update_draft(self, k, v)
+    end
 
     def reset_draft
       add_config(CURRENT_DRAFT, nil)
     end
 
     # Author a new message.
-    def publish_draft(draft = self.get_draft)
+    def publish_draft(draft = get_draft)
       Helpers.publish_draft(self, draft)
     end
 
@@ -113,12 +139,16 @@ module Pigeon
         hash2filepath = Helpers.hash2file_path(mhash)
         blob_path = File.join(file_path, hash2filepath)
         blob = get_blob(mhash)
-        Helpers.write_to_disk(blob_path, mhash, blob) if blob
+        puts "=== EXPORT"
+        puts "    blob_path: #{blob_path}"
+        puts "    mhash: #{mhash}"
+        puts "    blob: #{blob.length} bytes"
+        Helpers.write_to_disk(blob_path, mhash, blob)
       end
 
       # Render messages for all peers.
       content = messages
-        .map { |message| message.render }
+        .map(&:render)
         .join(BUNDLE_MESSAGE_SEPARATOR)
 
       File.write(File.join(file_path, "gossip.pgn"), content + CR)
@@ -127,27 +157,38 @@ module Pigeon
     def import_bundle(file_path = DEFAULT_BUNDLE_PATH)
       bundle = File.read(File.join(file_path, "gossip.pgn"))
       tokens = Pigeon::Lexer.tokenize(bundle)
-      blobs = tokens.reduce(Set.new) do |set, (a, b, c)|
+      blobs = tokens.each_with_object(Set.new) do |(_a, b, c), set|
         [b, c].map do |d|
           set.add(d) if Helpers.blob_multihash?(d)
         end
-        set
       end.map do |multihash|
-        if !store.have_blob?(multihash)
-          binding.pry
-        end
+        binding.pry unless store.have_blob?(multihash)
       end
       Pigeon::Parser.parse(self, tokens)
     end
 
     # === BLOBS
-    def get_blob(b); store.get_blob(b); end
-    def add_blob(b); store.add_blob(b); end
+    def get_blob(b)
+      store.get_blob(b)
+    end
+
+    def add_blob(b)
+      store.add_blob(b)
+    end
 
     # === DB Management
-    def get_config(k); store.get_config(k); end
-    def add_config(k, v); store.add_config(k, v); end
-    def reset_database; store.reset; init_ident; end
+    def get_config(k)
+      store.get_config(k)
+    end
+
+    def add_config(k, v)
+      store.add_config(k, v)
+    end
+
+    def reset_database
+      store.reset
+      init_ident
+    end
 
     private
 

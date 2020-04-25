@@ -27,7 +27,7 @@
 
 require_relative "lib/pigeon"
 require "pry"
-files = %w(a.gif b.gif c.gif)
+files = %w[a.gif b.gif c.gif]
 body = { "what" => "A simple bundle with a few blobs" }
 db = Pigeon::Database.new(path: "new.db")
 db.add_message("description", body)

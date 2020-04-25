@@ -27,7 +27,7 @@ module Pigeon
     def sign(string)
       hex = @signing_key.sign(string)
       b64 = Helpers.b32_encode(hex)
-      return b64 + SIG_FOOTER
+      b64 + SIG_FOOTER
     end
   end
 end

@@ -102,7 +102,7 @@ RSpec.describe Pigeon::Lexer do
     [:BODY_END],
     [:SIGNATURE, "BBE732XXZ33XTCW1CRA9RG13FQ0FVMR61SAHD621VH8C64B4WA8C86JSTTAHG4CSGNBJJ7YSAVRF3YEBX6GTEB6RRWGDA84VJZPMR3R.sig.ed25519"],
     [:MESSAGE_END],
-  ]
+  ].freeze
 
   MESSAGE_LINES = [
     "author @VG44QCHKA38E7754RQ5DAFBMMD2CCZQRZ8BR2J4MRHHGVTHGW670.ed25519",
@@ -131,7 +131,7 @@ RSpec.describe Pigeon::Lexer do
   it "tokenizes a bundle" do
     bundle = File.read("./spec/fixtures/normal/gossip.pgn")
     tokens = Pigeon::Lexer.tokenize(bundle)
-    EXPECTED_TOKENS1.each_with_index do |item, i|
+    EXPECTED_TOKENS1.each_with_index do |_item, i|
       expect(tokens[i]).to eq(EXPECTED_TOKENS1[i])
     end
   end
@@ -139,7 +139,7 @@ RSpec.describe Pigeon::Lexer do
   it "tokenizes a single message" do
     string = message.render
     tokens = Pigeon::Lexer.tokenize(string)
-    hash = tokens.reduce({ BODY: {} }) do |h, token|
+    hash = tokens.each_with_object({ BODY: {} }) do |token, h|
       case token.first
       when :HEADER_END, :BODY_END, :MESSAGE_END
         h
@@ -148,7 +148,6 @@ RSpec.describe Pigeon::Lexer do
       else
         h[token.first] = token.last
       end
-      h
     end
 
     expect(hash[:AUTHOR]).to eq(message.author.multihash)

@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-
 require_relative "../lib/pigeon"
 require "thor"
 
@@ -7,13 +6,13 @@ def db
   if File.file?(Pigeon::PIGEON_DB_PATH)
     $db ||= Pigeon::Database.new
   else
-    STDERR.puts("You must first run `pigeon-cli identity new`.")
+    warn("You must first run `pigeon-cli identity new`.")
     exit 1
   end
 end
 
 def bail(msg)
-  $stderr.puts msg
+  warn msg
   exit 1
 end
 
@@ -55,7 +54,7 @@ module Pigeon
     desc "set", "Copy arbitrary binary data into the database"
 
     def set(data = "")
-      blob = (data != "") ? data : STDIN.read
+      blob = data != "" ? data : STDIN.read
       puts db.add_blob(blob)
     end
 
@@ -102,7 +101,7 @@ module Pigeon
     desc "append", "Add a key/value pair to the current DRAFT"
 
     def append(key, raw_value = "")
-      v = (raw_value != "") ? raw_value : STDIN.read
+      v = raw_value != "" ? raw_value : STDIN.read
       if db.get_draft
         db.update_draft(key, v)
         puts db.get_draft.render_as_draft

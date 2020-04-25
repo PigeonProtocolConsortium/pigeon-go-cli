@@ -9,7 +9,7 @@ module Pigeon
     end
 
     def multihash
-      tpl = self.render
+      tpl = render
       digest = Digest::SHA256.digest(tpl)
       sha256 = Helpers.b32_encode(digest)
       "#{MESSAGE_SIGIL}#{sha256}#{BLOB_FOOTER}"
@@ -23,6 +23,7 @@ module Pigeon
                    lipmaa:,
                    signature:)
       raise MISSING_BODY if body.empty?
+
       @author = author
       @body = body
       @depth = depth

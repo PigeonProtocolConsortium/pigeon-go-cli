@@ -18,8 +18,8 @@ RSpec.describe Pigeon::Message do
              db.add_message("a", { "b" => db.add_blob("three") })]
     normal = (1..10)
       .to_a
-      .map do |n| { "foo" => ["bar", "123", SecureRandom.uuid].sample } end
-      .map do |d| db.add_message(SecureRandom.uuid, d) end
+      .map { |_n| { "foo" => ["bar", "123", SecureRandom.uuid].sample } }
+      .map { |d| db.add_message(SecureRandom.uuid, d) }
 
     blobs + normal
   end
@@ -51,7 +51,7 @@ RSpec.describe Pigeon::Message do
       db.add_blob(File.read("b.gif")) => db.add_blob(File.read("c.gif")),
     })
     db.export_bundle("./spec/fixtures/has_blobs")
-    STDERR.puts("The directory structure is not correct.")
+    warn("The directory structure is not correct.")
     exit(1)
     db.import_bundle("./spec/fixtures/has_blobs")
     expect(db.all_messages.count).to eq(0)

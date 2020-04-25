@@ -47,15 +47,17 @@ module Pigeon
       write do
         a = store.fetch(CONF_NS)
         raise "FIX SAVED DRAFTS" if value.instance_variable_get(:@db)
+
         a[key] = value
       end
     end
 
     def add_blob(data)
       size = data.bytesize
-      if (size > BLOB_BYTE_LIMIT)
+      if size > BLOB_BYTE_LIMIT
         raise "Blob size limit is #{BLOB_BYTE_LIMIT} bytes. Got #{size}"
       end
+
       raw_digest = Digest::SHA256.digest(data)
       b32_hash = Helpers.b32_encode(raw_digest)
       multihash = [BLOB_SIGIL, b32_hash, BLOB_FOOTER].join("")
@@ -66,16 +68,15 @@ module Pigeon
     def get_blob(blob_multihash)
       path = File.join(Helpers.hash2file_path(blob_multihash))
       path = File.join(PIGEON_BLOB_PATH, path)
-      if File.file?(path)
-        File.read(path)
-      else
-        nil
-      end
+      File.read(path) if File.file?(path)
     end
 
     # `nil` means "none"
     def get_message_count_for(mhash)
-      raise "Expected string, got #{mhash.class}" unless mhash.is_a?(String) # Delete later
+      unless mhash.is_a?(String)
+        raise "Expected string, got #{mhash.class}"
+      end # Delete later
+
       read { store[COUNT_INDEX_NS][mhash] || 0 }
     end
 
@@ -85,18 +86,21 @@ module Pigeon
         depth = -1
         last = ""
         # TODO: This loop may become unresponsive.
-        until (last == nil) || (depth > 99999)
-          last = self.get_message_by_depth(author, depth += 1)
+        until last.nil? || (depth > 99_999)
+          last = get_message_by_depth(author, depth += 1)
           all.push(last) if last
         end
-        return all
+        all
       else
         read { store["messages"].keys }
       end
     end
 
     def get_message_by_depth(multihash, depth)
-      raise "Expected string, got #{multihash.class}" unless multihash.is_a?(String) # Delete later
+      unless multihash.is_a?(String)
+        raise "Expected string, got #{multihash.class}"
+      end # Delete later
+
       # Map<[multihash(str), depth(int)], Signature>
       key = [multihash, depth].join(".")
       read { store[MESSAGE_BY_DEPTH_NS][key] }
@@ -108,12 +112,10 @@ module Pigeon
 
     def insert_message(msg)
       write do
-        if store[MESG_NS].fetch(msg.multihash, false)
-          return msg
-        end
+        return msg if store[MESG_NS].fetch(msg.multihash, false)
 
         if store[BLCK_NS].member?(msg.author.multihash)
-          STDERR.puts("Blocked peer: #{msg.author.multihash}")
+          warn("Blocked peer: #{msg.author.multihash}")
           return msg
         end
 
@@ -178,8 +180,16 @@ module Pigeon
       store.transaction(is_read_only) { yield }
     end
 
-    def write(&blk); transaction(false, &blk); end
-    def read(&blk); transaction(true, &blk); end
-    def on_disk?; File.file?(path); end
+    def write(&blk)
+      transaction(false, &blk)
+    end
+
+    def read(&blk)
+      transaction(true, &blk)
+    end
+
+    def on_disk?
+      File.file?(path)
+    end
   end
 end

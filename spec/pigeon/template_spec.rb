@@ -1,7 +1,7 @@
 require "spec_helper"
 
 RSpec.describe Pigeon::MessageSerializer do
-  SHIM_ATTRS = [:author, :body, :kind, :depth, :prev, :signature, :lipmaa]
+  SHIM_ATTRS = %i[author body kind depth prev signature lipmaa].freeze
   MessageShim = Struct.new(*SHIM_ATTRS)
   TOP_HALF = ["author FAKE_AUTHOR",
               "\nkind FAKE_KIND",

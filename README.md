@@ -91,7 +91,8 @@ TODO
  - [X] Check block list before ingesting bundles.
  - [X] Need a way of importing / exporting a feeds blobs. (see "Bundle Brainstorming" below)
  - [X] Need a way of adding peers messages / gossip to bundles. (see "Bundle Brainstorming" below)
- - [ ] Rename `who_am_i` as `get_who_am_i` to follow VERB + NOUN convention.
+ - [X] Rename `who_am_i` as `get_who_am_i` to follow VERB + NOUN convention.
+ - [ ] Find that non-deterministic runaway loop in the test suite.
  - [ ] Update README.md / tutorial.rb (user manual for `Pigeon::Database`).
  - [ ] Update spec document CLI usage examples to reflect API changes in 2020.
  - [ ] Publish to RubyGems

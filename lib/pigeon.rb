@@ -208,7 +208,12 @@ module Pigeon
     end
 
     def self.mkdir_p(path)
-      FileUtils.makedirs(path) unless Dir.exists?(path)
+      if Dir.exists?(path)
+        FileUtils.makedirs(path)
+      else
+      end
+    rescue => x
+      binding.pry
     end
 
     def self.write_to_disk(base_path, mhash, data)

@@ -110,8 +110,10 @@ module Pigeon
         .flatten
         .uniq
         .map do |mhash|
-        blob_path = File.join(file_path, Helpers.hash2file_path(mhash))
-        Helpers.write_to_disk(blob_path, mhash, get_blob(mhash))
+        hash2filepath = Helpers.hash2file_path(mhash)
+        blob_path = File.join(file_path, hash2filepath)
+        blob = get_blob(mhash)
+        Helpers.write_to_disk(blob_path, mhash, blob) if blob
       end
 
       # Render messages for all peers.

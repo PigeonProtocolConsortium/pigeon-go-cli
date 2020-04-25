@@ -226,7 +226,6 @@ module Pigeon
         path
       end
       full_path = File.join(dir, file_name)
-      raise "HERE!" if dir.include?(".")
       unless File.file?(full_path)
         FileUtils.makedirs(dir)
         File.write(full_path, data)

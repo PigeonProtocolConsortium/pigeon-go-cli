@@ -136,14 +136,8 @@ module Pigeon
         .flatten
         .uniq
         .map do |mhash|
-        hash2filepath = Helpers.hash2file_path(mhash)
-        blob_path = File.join(file_path, hash2filepath)
         blob = get_blob(mhash)
-        puts "=== EXPORT"
-        puts "    blob_path: #{blob_path}"
-        puts "    mhash: #{mhash}"
-        puts "    blob: #{blob.length} bytes"
-        Helpers.write_to_disk(blob_path, mhash, blob)
+        Helpers.write_to_disk(file_path, mhash, blob)
       end
 
       # Render messages for all peers.

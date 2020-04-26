@@ -36,16 +36,28 @@ db = Pigeon::Database.new(path: "pigeon.db")
 
 An optional `path:` argument can be passed to `Pigeon::Database.new`. This arg will default to `pigeon.db` within the local directory if not provided. We recommend this default as it will allow you to use the [command line interface](cli_tutorial.md) more effectively.
 
-If at any point you with to start the tutorial over, you can reset your local database with the following command:
+If at any point you wish to start the tutorial over, you can reset your local database with the following command:
 
 ```ruby
 db.reset_database
 ```
 
- - Don't share this file (use bundles instead!)
- - Where do blobs live?
+One note about the `pigeon.db` file before moving to the next section: Do not share the `pigeon.db` file with anyone. Doing so will compromise the tamper-resistant properties of Pigeon and allow bad actors to forge messages in your name. Use `bundles` to safely share data with remote peers (covered later).
 
 ## Working with Drafts
+
+```
+  ###   #####   ###   ####   ####   #####  ####          #   #  #####  ####   #####
+ #   #    #    #   #  #   #  #   #  #       #  #         #   #  #      #   #  #
+ #        #    #   #  #   #  #   #  #       #  #         #   #  #      #   #  #
+  ###     #    #   #  ####   ####   ####    #  #         #####  ####   ####   ####
+     #    #    #   #  #      #      #       #  #         #   #  #      # #    #
+ #   #    #    #   #  #      #      #       #  #         #   #  #      #  #   #
+  ###     #     ###   #      #      #####  ####          #   #  #####  #   #  #####
+```
+A `message` is the basic building block of a Pigeon database.
+
+Since messages are often built
 new_draft
 delete_current_draft
 update_draft
@@ -76,6 +88,7 @@ get_message_count_for
 ## Attaching Files to Messages
 add_blob
 get_blob
+ * Blobs are stored
 
 ## File Based Communication via Bundles
 export_bundle

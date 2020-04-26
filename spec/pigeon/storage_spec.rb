@@ -12,17 +12,17 @@ RSpec.describe Pigeon::Storage do
   end
 
   it "sets a config" do
-    db.add_config("FOO", "BAR")
-    value = db.get_config("FOO")
+    db._add_config("FOO", "BAR")
+    value = db._get_config("FOO")
     expect(value).to eq("BAR")
-    db.add_config("FOO", nil)
-    value = db.get_config("FOO")
+    db._add_config("FOO", nil)
+    value = db._get_config("FOO")
     expect(value).to eq(nil)
   end
 
   it "manages configs" do
-    db.add_config("FOO", "BAR")
-    value = db.get_config("FOO")
+    db._add_config("FOO", "BAR")
+    value = db._get_config("FOO")
     expect(value).to eq("BAR")
   end
 

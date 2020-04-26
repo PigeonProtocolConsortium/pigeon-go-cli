@@ -39,11 +39,11 @@ module Pigeon
       read { store[BLCK_NS].to_a }
     end
 
-    def get_config(key)
+    def _get_config(key)
       read { store[CONF_NS][key] }
     end
 
-    def add_config(key, value)
+    def _add_config(key, value)
       write do
         a = store.fetch(CONF_NS)
         raise "FIX SAVED DRAFTS" if value.instance_variable_get(:@db)

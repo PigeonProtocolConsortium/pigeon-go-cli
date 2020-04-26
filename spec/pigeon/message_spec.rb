@@ -107,7 +107,7 @@ RSpec.describe Pigeon::Message do
 
   it "verifies accuracy of signatures" do
     # === Initial setup
-    secret = db.get_config(Pigeon::SEED_CONFIG_KEY)
+    secret = db._get_config(Pigeon::SEED_CONFIG_KEY)
     expect(secret).to be_kind_of(String)
     message = templated_message
     plaintext = template.render_without_signature

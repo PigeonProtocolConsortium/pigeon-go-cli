@@ -82,23 +82,23 @@ module Pigeon
 
     # === DRAFTS
     def delete_current_draft
-      add_config(CURRENT_DRAFT, nil)
+      _add_config(CURRENT_DRAFT, nil)
     end
 
     def new_draft(kind:, body: {})
-      old = get_config(CURRENT_DRAFT)
+      old = _get_config(CURRENT_DRAFT)
       raise "PUBLISH OR RESET CURRENT DRAFT (#{old.kind}) FIRST" if old
 
       _replace_draft(Draft.new(kind: kind, body: body))
     end
 
     def _replace_draft(draft)
-      add_config(CURRENT_DRAFT, draft)
+      _add_config(CURRENT_DRAFT, draft)
       draft
     end
 
     def get_draft
-      draft = store.get_config(CURRENT_DRAFT)
+      draft = store._get_config(CURRENT_DRAFT)
       unless draft
         raise "THERE IS NO DRAFT. CREATE ONE FIRST."
       end
@@ -110,7 +110,7 @@ module Pigeon
     end
 
     def delete_current_draft
-      add_config(CURRENT_DRAFT, nil)
+      _add_config(CURRENT_DRAFT, nil)
     end
 
     # Author a new message.
@@ -169,12 +169,12 @@ module Pigeon
     end
 
     # === DB Management
-    def get_config(k)
-      store.get_config(k)
+    def _get_config(k)
+      store._get_config(k)
     end
 
-    def add_config(k, v)
-      store.add_config(k, v)
+    def _add_config(k, v)
+      store._add_config(k, v)
     end
 
     def reset_database
@@ -187,12 +187,12 @@ module Pigeon
     attr_reader :store
 
     def init_ident
-      secret = get_config(SEED_CONFIG_KEY)
+      secret = _get_config(SEED_CONFIG_KEY)
       if secret
         @who_am_i = LocalIdentity.new(secret)
       else
         new_seed = SecureRandom.random_bytes(Ed25519::KEY_SIZE)
-        add_config(SEED_CONFIG_KEY, new_seed)
+        _add_config(SEED_CONFIG_KEY, new_seed)
         @who_am_i = LocalIdentity.new(new_seed)
       end
     end

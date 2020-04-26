@@ -17,16 +17,31 @@ This document will teach you how to:
 
 This guide assumes you are familiar with Ruby and the Pigeon Protocol. For an introduction to the protocol, see our protocol specification [here](https://tildegit.org/PigeonProtocolConsortium/protocol_spec).
 
+## Installation
+
+Installation steps change over time. Please see [README.md](README.md) for the most up-to-date information.
+
 ## Creating a Database Object
+
+When building Pigeon-based applications, a `Pigeon::Database` object controls nearly all interactions with the database.
+For the rest of the tutorial we will use the variable name `db` to refer to the current database.
+
+You can create your own database with the following steps:
 
 ```ruby
 require_relative "pigeon"
 db = Pigeon::Database.new(path: "pigeon.db")
 # => #<Pigeon::Database:0x000055a1ecca45e8>
 ```
-reset_database
-add_config
-get_config
+
+An optional `path:` argument can be passed to `Pigeon::Database.new`. This arg will default to `pigeon.db` within the local directory if not provided. We recommend this default as it will allow you to use the [command line interface](cli_tutorial.md) more effectively.
+
+If at any point you with to start the tutorial over, you can reset your local database with the following command:
+
+```ruby
+db.reset_database
+```
+
  - Don't share this file (use bundles instead!)
  - Where do blobs live?
 

@@ -124,7 +124,7 @@ module Pigeon
       end
     end
 
-    def message_saved?(multihash)
+    def have_message?(multihash)
       read { store[MESG_NS].fetch(multihash, false) }
     end
 

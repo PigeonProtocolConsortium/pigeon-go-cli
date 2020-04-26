@@ -15,7 +15,7 @@ A [Pigeon Protocol](https://tildegit.org/PigeonProtocolConsortium/protocol_spec)
  * Current windows support is unknown (and unlikely to work in current state). Please report bugs.
  * Not published to RubyGems yet (see installation instructions below)
  * Single threaded use is assumed and is intended for a single user per OS process. It makes many design tradeoffs around that use case.
- * Bundling operations need performance tuning. Optimizations are planned, help is welcome.
+ * Bundling operations need performance tuning. Optimizations are planned and help is welcome.
 
 # Build From Source
 
@@ -70,7 +70,7 @@ TODO
 
 # Idea Bin
 
- - [ ] Map/reduce plugin support for custom indices?
+ - [ ] Ability to add map/reduce plugins to support custom indices?
  - [ ] Ability to add a blob in one swoop using File objects and `Message#[]=`, maybe?
  - [ ] Bundling via [Optar](http://ronja.twibright.com/optar/) or [Colorsafe](https://github.com/colorsafe/colorsafe)
 

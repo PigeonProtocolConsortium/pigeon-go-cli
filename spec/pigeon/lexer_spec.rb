@@ -122,7 +122,7 @@ RSpec.describe Pigeon::Lexer do
   end
 
   let(:message) do
-    db.reset_draft
+    db.delete_current_draft
     db.new_draft(kind: "unit_test")
     db.update_draft("foo", "bar")
     db.publish_draft

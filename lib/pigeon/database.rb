@@ -37,8 +37,8 @@ module Pigeon
       store.all_messages(mhash)
     end
 
-    def message_saved?(multihash)
-      store.message_saved?(multihash)
+    def have_message?(multihash)
+      store.have_message?(multihash)
     end
 
     def _save_message(msg_obj)
@@ -81,7 +81,7 @@ module Pigeon
     end
 
     # === DRAFTS
-    def reset_draft
+    def delete_current_draft
       add_config(CURRENT_DRAFT, nil)
     end
 
@@ -89,10 +89,10 @@ module Pigeon
       old = get_config(CURRENT_DRAFT)
       raise "PUBLISH OR RESET CURRENT DRAFT (#{old.kind}) FIRST" if old
 
-      save_draft(Draft.new(kind: kind, body: body))
+      _replace_draft(Draft.new(kind: kind, body: body))
     end
 
-    def save_draft(draft)
+    def _replace_draft(draft)
       add_config(CURRENT_DRAFT, draft)
       draft
     end
@@ -109,7 +109,7 @@ module Pigeon
       Helpers.update_draft(self, k, v)
     end
 
-    def reset_draft
+    def delete_current_draft
       add_config(CURRENT_DRAFT, nil)
     end
 

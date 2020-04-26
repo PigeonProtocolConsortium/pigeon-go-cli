@@ -8,7 +8,7 @@ RSpec.describe Pigeon::Draft do
   end
 
   let(:message) do
-    db.reset_draft
+    db.delete_current_draft
     db.new_draft(kind: "unit_test")
     logo = File.read("./logo.png")
     db.update_draft("a", "bar")
@@ -35,7 +35,7 @@ RSpec.describe Pigeon::Draft do
   end
 
   it "creates a new message" do
-    db.reset_draft
+    db.delete_current_draft
     db.new_draft(kind: "unit_test")
     hash = db.add_blob(File.read("./logo.png"))
     expectations = {

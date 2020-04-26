@@ -169,14 +169,14 @@ module Pigeon
       draft.signature = author.sign(unsigned)
       tokens = Lexer.tokenize_unsigned(unsigned, draft.signature)
       message = Parser.parse(db, tokens)[0]
-      db.reset_draft
+      db.delete_current_draft
       message
     end
 
     def self.update_draft(db, key, value)
       draft = db.get_draft
       draft[key] = value
-      db.save_draft(draft)
+      db._replace_draft(draft)
       return draft.body[key]
     end
 
@@ -187,7 +187,7 @@ module Pigeon
       author = msg.author
       signature = msg.signature
 
-      return db.read_message(msg_hash) if db.message_saved?(msg_hash)
+      return db.read_message(msg_hash) if db.have_message?(msg_hash)
 
       if key_count > 64
         msg = MSG_SIZE_ERROR % key_count

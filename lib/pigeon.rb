@@ -212,8 +212,6 @@ module Pigeon
         FileUtils.makedirs(path)
       else
       end
-    rescue => x
-      binding.pry
     end
 
     def self.write_to_disk(base_path, mhash, data)

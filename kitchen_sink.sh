@@ -82,7 +82,7 @@ echo "=== Dump the bundle"
 ./bin/pigeon-cli bundle create
 cat bundle/gossip.pgn
 echo "=== end bundle dump. Ingesting bundle..."
-./bin/pigeon-cli bundle ingest bundle/gossip.pgn
+./bin/pigeon-cli bundle ingest bundle
 
 echo "=== find a message"
 ./bin/pigeon-cli message find $(./bin/pigeon-cli message last)

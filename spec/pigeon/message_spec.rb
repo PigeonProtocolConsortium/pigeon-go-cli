@@ -1,4 +1,5 @@
 require "spec_helper"
+require "timeout"
 
 RSpec.describe Pigeon::Message do
   def reset_draft(params)
@@ -158,6 +159,19 @@ RSpec.describe Pigeon::Message do
       db.reset_draft
       db.new_draft(kind: kind)
       boom = -> { db.publish_draft.render }
+      expect(boom).to raise_error(Pigeon::Lexer::LexError)
+    end
+  end
+
+  # This was originally a bug nooted during development
+  # That caused a runaway loop in the tokenizer.
+  it "handles this key: '\\nVUx0hC3'" do
+    db.reset_draft
+    db.new_draft(kind: "unit_test")
+    db.update_draft("\nVUx0hC3", "n")
+    db.update_draft("n", "\nVUx0hC3")
+    Timeout::timeout(1) do
+      boom = -> { Pigeon::Lexer.tokenize(db.publish_draft.render) }
       expect(boom).to raise_error(Pigeon::Lexer::LexError)
     end
   end

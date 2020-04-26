@@ -155,8 +155,6 @@ module Pigeon
         [b, c].map do |d|
           set.add(d) if Helpers.blob_multihash?(d)
         end
-      end.map do |multihash|
-        binding.pry unless store.have_blob?(multihash)
       end
       Pigeon::Parser.parse(self, tokens)
     end

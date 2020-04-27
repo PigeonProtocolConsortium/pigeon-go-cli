@@ -4,6 +4,8 @@
 
 A [Pigeon Protocol](https://tildegit.org/PigeonProtocolConsortium/protocol_spec) client written in Ruby.
 
+Email `contact` at `vaporsoft.xyz` to ask questions or get involved. Your feedback is solicited and appreciated. Seriously, send us an email! We look forward to hearing from you.
+
 # Features
 
  * CLI and API available (link to quick start for both here)
@@ -44,8 +46,12 @@ TODO
 
 # Current Status
 
- - [ ] BUG: Keys that start with a carriage return (`\n`) freeze tokenizer.
+ - [X] Create a contact email for project outsiders (and maybe a developer email list?)
+ - [ ] Update protocol spec
  - [ ] Update README.md
+ - [ ] Update Ruby API docs
+ - [ ] Update CLI docs.
+ - [ ] BUG: Keys that start with a carriage return (`\n`) freeze tokenizer.
  - [ ] Write tutorial.rb (user manual for `Pigeon::Database`).
  - [ ] Convert literals to constants, remove unused locals, reduce duplication, run linter.
  - [ ] 100% class / module documentation
@@ -73,27 +79,3 @@ TODO
  - [ ] Ability to add map/reduce plugins to support custom indices?
  - [ ] Ability to add a blob in one swoop using File objects and `Message#[]=`, maybe?
  - [ ] Bundling via [Optar](http://ronja.twibright.com/optar/) or [Colorsafe](https://github.com/colorsafe/colorsafe)
-
-# New Bundle Format
-
-We have a bundle format that works, but it only exports messages.
-
-We need a bundle format that may optionally include blobs as well.
-
-Here's how we will support that:
-
-1. Create a `bundle_X/` directory. The name is arbitrary and can be defined by the user.
-2. In the root directory of `bundle_x/`, a single `messages.pgn` file contains all messages.
-  * All messages are expected to be sorted by depth
-  * Messages from multiple authors may be included in a single bundle, but the messages must appear in the correct order with regards to the `depth` field.
-3. Blobs are stored in a very specific hierarchy to maintain FAT compatibility:
-    * `blobs/bundle/7Z2CSZK/MB1RE5G/6SKXRZ6/3ZGCNP8/VVEM3K0/XFMYKET/RDQSM5W.BSG`
-
-Additional notes:
-
- * It is recommended to compress bundles (ex: *.zip files) but these concerns are not handled by the protocol currently.
-
-# Unanswered Questions
-
- * PEER MESSAGES: I want to add a `--depth` option to bundle exports that would only return messages after the `nth` sequence number. It would not make sense to apply `--depth` to all peer messages in the bundle. It would not be practical to expect the user to provide a `--depth` for every peer every time a bundle is generated.
-   * Create a new `received_on` index that records the local user's `depth` at the time of ingestion?

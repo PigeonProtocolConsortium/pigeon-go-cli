@@ -42,7 +42,7 @@ See `kitchen_sink.sh` examples.
 
 # Usage: Ruby Lib
 
-TODO
+[Docs available here](ruby_tutorial.md)
 
 # Current Status
 

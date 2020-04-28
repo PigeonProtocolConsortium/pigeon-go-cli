@@ -1,4 +1,4 @@
-# Ruby API Follow Along Tutorial
+# INCOMPLETE: Ruby API Follow Along Tutorial
 
 ## Introduction and Intended Audience
 
@@ -57,41 +57,57 @@ One note about the `pigeon.db` file before moving to the next section: Do not sh
 ```
 A `message` is the basic building block of a Pigeon database.
 
-Since messages are often built
-new_draft
-delete_current_draft
-update_draft
-get_draft
-publish_draft
+```
+db.new_draft
+db.delete_current_draft
+db.update_draft
+```
 
 ## Turning Drafts Into Messages
 
+```
+db.get_draft
+db.publish_draft
+```
 ## Working With Messages
-add_message
-all_messages
-read_message
-have_message?
+
+```
+db.add_message
+db.all_messages
+db.read_message
+db.have_message?
+```
 
 ## Working with Peers
-who_am_i
-add_peer
-all_peers
-remove_peer
-block_peer
-all_blocks
-peer_blocked?
+
+```
+db.who_am_i
+db.add_peer
+db.all_peers
+db.remove_peer
+db.block_peer
+db.all_blocks
+db.peer_blocked?
+```
 
 ## Querying the Database
-get_message_by_depth
-get_message_count_for
+
+```
+db.get_message_by_depth
+db.get_message_count_for
+```
 
 ## Attaching Files to Messages
-add_blob
-get_blob
- * Blobs are stored
+
+```
+db.add_blob(binary_string)
+db.get_blob(multihash)
+```
 
 ## File Based Communication via Bundles
-export_bundle
-import_bundle
 
+```
+db.export_bundle
+db.import_bundle
+```
 

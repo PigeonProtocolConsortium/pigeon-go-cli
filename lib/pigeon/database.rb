@@ -87,7 +87,7 @@ module Pigeon
 
     def new_draft(kind:, body: {})
       old = _get_config(CURRENT_DRAFT)
-      raise "PUBLISH OR RESET CURRENT DRAFT (#{old.kind}) FIRST" if old
+      raise "PUBLISH OR RESET CURRENT DRAFT (#{old.kind}) FIRST (call db.delete_current_draft)" if old
 
       _replace_draft(Draft.new(kind: kind, body: body))
     end
@@ -100,7 +100,7 @@ module Pigeon
     def get_draft
       draft = store._get_config(CURRENT_DRAFT)
       unless draft
-        raise "THERE IS NO DRAFT. CREATE ONE FIRST."
+        raise "THERE IS NO DRAFT. CREATE ONE FIRST. Call db.new_draft(kind, body)"
       end
       draft
     end

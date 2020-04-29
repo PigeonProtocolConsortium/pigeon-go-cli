@@ -7,3 +7,4 @@ pigeon.bundle
 *.gem
 bundle/
 pigeon.db
+.vscode

@@ -1,4 +1,4 @@
-# INCOMPLETE: Ruby API Follow Along Tutorial
+# Ruby API Follow Along Tutorial
 
 ## Introduction and Intended Audience
 
@@ -13,9 +13,26 @@ This document will teach you how to:
  * Manage and query existing messages.
  * Replicate a database among peers.
  * Go beyond simple text messages and attach files to messages.
- * Communicate with remote databases using bundle files.
+ * Communicate with remote databases using "bundles".
 
 This guide assumes you are familiar with Ruby and the Pigeon Protocol. For an introduction to the protocol, see our protocol specification [here](https://tildegit.org/PigeonProtocolConsortium/protocol_spec).
+
+Pigeon strive to have a "natural" API rather than a simple one. We will cover the API methods listed below. These are the only methods you will need to know to build a pigeon-based application:
+
+
+**BLOB METHODS:** `#add_blob`,`#get_blob`
+
+**BUNDLE METHODS:** `#export_bundle`, `#import_bundle`
+
+**DRAFT METHODS:**  `#publish_draft`, `#delete_current_draft`, `#get_draft`, `#new_draft`, `#update_draft`
+
+**HELPER METHODS:** `#who_am_i`, `#get_message_by_depth`, `#get_message_count_for`, `#reset_database`
+
+**MESSAGE METHODS:** `#add_message`, `#all_messages`, `#read_message`, `#have_message`
+
+**PEER METHODS:** `#all_peers`, `#add_peer`, `#remove_peer`, `#all_blocks`, `#block_peer`, `#peer_blocked`
+
+Once you understand the methods listed above, you will have everything you need to start writing Pigeon-based applications. Please let us know what you build! Send an email to `contact` at `vaporsoft.xyz` with your progress.
 
 ## Installation
 
@@ -29,7 +46,7 @@ For the rest of the tutorial we will use the variable name `db` to refer to the 
 You can create your own database with the following steps:
 
 ```ruby
-require_relative "pigeon"
+require "pigeon"
 db = Pigeon::Database.new(path: "pigeon.db")
 # => #<Pigeon::Database:0x000055a1ecca45e8>
 ```
@@ -42,19 +59,19 @@ If at any point you wish to start the tutorial over, you can reset your local da
 db.reset_database
 ```
 
-One note about the `pigeon.db` file before moving to the next section: Do not share the `pigeon.db` file with anyone. Doing so will compromise the tamper-resistant properties of Pigeon and allow bad actors to forge messages in your name. Use `bundles` to safely share data with remote peers (covered later).
+One note about the `pigeon.db` file before moving to the next section: Do not share the `pigeon.db` file with anyone. Doing so will compromise the tamper-resistant properties of Pigeon and allow bad actors to forge messages using your name. Use `bundles` to safely share data with remote peers (covered later).
 
 ## Working with Drafts
 
 A `message` is the basic building block of a Pigeon database. As mentioned in the [protocol spec](https://tildegit.org/PigeonProtocolConsortium/protocol_spec), there are three parts to a message:
 
  * A header containing a `kind` field (similar to an email subject line) plus some additional meta data used by protocol clients.
- * A body containing user definable header fields.
+ * A body containing user definable key / value pairs.
  * A footer containing a Crockford Base32 encoded ED25119 signature to prevent forgery.
 
 As a convenience, the Pigeon Ruby client allows developers to keep zero or one "draft" messages. A draft message is a log message that has not been signed and has not been committed to the database. Think of it as your own personal scratchpad.
 
-A draft is not part of the protocol spec. It is a convinience provided to users of this library. You could absolutely write messages by hand, calculate their signatures, convert everything to Base32 and manually add them to the database. This would be extremely tedious, however, so the draft functionality was added for convenience.
+A draft is not part of the protocol spec. It is a convenience provided to users of this library. You could absolutely write messages by hand, calculate their signatures, convert everything to Base32 and manually add them to the database. This would be extremely tedious, however, so the draft functionality was added for convenience.
 
 Let's see if we have a draft to work with:
 
@@ -70,17 +87,17 @@ db.delete_current_draft
 # => nil
 ```
 
-Now I can create a new draft. I am going to create a new `garden_diary` for a fictitious gardening app. In my gardening app, I expect every `garden_diary` message to have a `message_text` entry in its body. We can add that now, also.
+Now I can create a new draft. I am going to create a new `garden_diary` for a fictitious gardening app. In my gardening app, I expect every `garden_diary` message to have a `message_text` entry in its body. We can add that now.
 
 ```ruby
 db.new_draft(kind: "garden_diary", body: {"message_text" => "Tomato plant looking healthy."})
 # => #<Pigeon::Draft:0x000056160b63da68 @author="NONE", @body={"message_text"=>"\"Tomato plant looking healthy.\""}, @depth=-1, @kind="garden_diary", @lipmaa="NONE", @prev="NONE", @signature="NONE">
 ```
 
-A couple notes here:
+A few notes about this draft message:
 
- * `"garden_diary` is the message `kind`. This is definable by application developers and helps determine the type of message we are dealing with. A fictitious diary app might have other entries such as `"status_update"` or `"photo_entry"`. It really just depends on the application you are building.
- * Notice that my hash used string keys for the `"message_text"` body entry. You can only use strings for key / value pairs (no symbols or numbers). Later on we will learn how to attach files to messages.
+ * `"garden_diary` is the message `kind`. This is definable by application developers and helps determine the type of message we are dealing with. A fictitious diary app might have other entries such as `"status_update"` or `"photo_entry"`. It depends on the application you are building.
+ * Notice that my hash used string keys for the `"message_text"` body entry. You can only use strings for key / value pairs (no `:symbols` or numbers). Later on we will learn how to attach files to messages.
  * The `body:` part is optional. I could have called `db.new_draft(kind: "garden_diary")` and added key / value pairs to the body later.
 
 Oops! Speaking of adding entries to a draft's body, it looks like I forgot something. In my fictitious gardening app, a `garden_diary` entry doesn't just have a `"message_text"`, it also has a `"current_mood"` entry. Luckily, it is easy to add keys to unpublished drafts. Let's add the key now:
@@ -97,7 +114,7 @@ db.get_draft
 # => => #<Pigeon::Draft:0x000056160b3e6be8 @author="NONE", @body={"message_text"=>"\"Tomato plant looking healthy.\"", "current_mood"=>"\"Feeling great\""}, @depth=-1, @kind="garden_diary", @lipmaa="NONE", @prev="NONE", @signature="NONE">
 ```
 
-I can see the status of my current draft message using `db.get_draft`. It's not very human readable though. To get a more human readable version, I can use the `render_as_draft` method on a `Draft` object:
+I can see the status of my current draft message using `db.get_draft`. It returns a `Pigeon::Draft` object, whish is not very human readable. To get a more human readable version, I can use the `render_as_draft` method on a `Draft` object:
 
 ```ruby
 human_readable_string = db.get_draft.render_as_draft
@@ -113,7 +130,7 @@ puts human_readable_string
 #     current_mood:"Feeling great"
 ```
 
-Some interesting things about the message we just rendered:
+Some interesting things about the draft we just rendered:
 
  * Unlike a message, a draft has no signature (yet).
  * The `author`, `kind`, `prev`, `depth`, `lipmaa` properties are all set to `"DRAFT"`. Real values will be populated when we finally publish the draft.
@@ -294,24 +311,85 @@ db.peer_blocked?("@753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G.ed25519"
 
 ## Querying the Database
 
-I stopped here. The remainder of the file is incomplete and will be completed later.
+The client offers some simple query capabilities and indexes. More will be added at a later date. Please email `contact` at `vaporsoft.xyz` if you are interested in helping.
 
+### Fetch a Message by Feed Identity + Message Depth
+
+```ruby
+my_peer = "@MF312A76JV8S1XWCHV1XR6ANRDMPAT2G5K8PZTGKWV354PR82CD0.ed25519"
+db.get_message_by_depth(my_peer, 1)
+# => "%6JD96QB2EQ30EN3DMHH50NXMR0RZ2GMH43P2DZB3HN6PE6NFE9A0.sha256"
 ```
-db.get_message_by_depth
-db.get_message_count_for
+
+### Fetch Total Number of Messages in a Feed
+
+```ruby
+db.get_message_count_for(my_peer)
+# => 23
 ```
 
 ## Attaching Files to Messages
 
-```
-db.add_blob(binary_string)
-db.get_blob(multihash)
+Pigeon supports file attachments in the form of [blobs](https://en.wikipedia.org/wiki/Binary_large_object).
+
+Once you have added a blob to your local database, it can be attached to messages using the special blob multihash string.
+
+```ruby
+binary_data = File.read("kitty_cat.gif")
+db.add_blob(binary_data)
+# => "&FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG.sha256"
 ```
 
-## File Based Communication via Bundles
+Creating a blob returns a blob multihash (`&FV0...MRG.sha256`) which can be attached to a message in the form of keys or values:
+
+```ruby
+the_blob_from_before = "&FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG.sha256"
+msg = db.add_message("photo", {"my_cat_picture" => "&FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG.sha256"})
+puts msg.render
+# => author @MF312A76JV8S1XWCHV1XR6ANRDMPAT2G5K8PZTGKWV354PR82CD0.ed25519
+#    kind photo
+#    prev %ZV85NQS8B1BWQN7YAME1GB0G6XS2AVN610RQTME507DN5ASP2S6G.sha256
+#    depth 3
+#    lipmaa 2
+#
+#    my_cat_picture:&FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG.sha256
+#
+#    signature JSPJJQJRVBVGV52K2058AR2KFQCWSZ8M8W6Q6PB93R2T3SJ031AYX1X74KCW06HHVQ9Y6NDATGE6NH3W59QY35M58YDQC5WEA1ASW08.sig.ed25519
 
 ```
-db.export_bundle
-db.import_bundle
+
+If you want to retrieve a blob later, you can pass the blob multihash to `db#get_blob`. The client will return it as binary data.
+
+```ruby
+db.get_blob("&FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG.sha256")
+# => "GIF89aX\u0000\u001F\u0000\xD58\u0000\u0000\u0000\u0000...
+```
+
+## Communication with Peers via "Bundles"
+
+Eventually, you will want to share your log messages with a peer, either as a form of communication or for the sake of creating redundant backups.
+
+All data transfer operations in Pigeon are file based. To export data from your local database, one must create a "bundle", which is a file directory with a very specific layout. Think of bundles as a specialized archive format that a Pigeon-compliant database can easily ingest. The bundle mechanism will **package all blobs and messages into a single exportable directory structure automatically**. As long as your peer's client is compliant with the Pigeon spec, they will be replicated onto the peer's machine upon import.
+
+Pigeon does not specify transport or compression concerns, but any reliable file transfer method is possible.
+
+In the example below, I will create a bundle called `"bundle_for_my_peer"`.
+
+```ruby
+db.export_bundle("bundle_for_my_peer")
+```
+
+After running this command, a directory with the name `bundle_for_my_peer` will appear in the current directory. I can send this directory to my peer using any reliable file transfer method.
+
+Examples of possible file transfer mechanisms:
+
+ * Host the directory on an HTTP / FTP server.
+ * Apply ZIP compression and put it onto optical media (such as a CD-R)
+ * Move the bundle onto a USB thumb drive with or without compression.
+
+If you wish to ingest a peer's message, you can perform the operation in reverse:
+
+```ruby
+db.import_bundle("a_bundle_my_peer_gave_me")
 ```
 

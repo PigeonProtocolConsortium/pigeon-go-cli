@@ -8,7 +8,7 @@ Email `contact` at `vaporsoft.xyz` to ask questions or get involved. Your feedba
 
 # Features
 
- * CLI and API available (link to quick start for both here)
+ * CLI (docs via `pigeon-cli help`) and Ruby API available ([docs here](ruby_tutorial.md))
  * Minimal dependencies - only outside deps are `thor` (for CLI) and `ed25519` (for signatures).
  * Thoroughly unit tested.
 
@@ -16,12 +16,12 @@ Email `contact` at `vaporsoft.xyz` to ask questions or get involved. Your feedba
 
  * Current windows support is unknown (and unlikely to work in current state). Please report bugs.
  * Not published to RubyGems yet (see installation instructions below)
- * Single threaded use is assumed and is intended for a single user per OS process. It makes many design tradeoffs around that use case.
+ * Single threaded use is assumed. Built for a single user per OS process. Many design tradeoffs were made around that use case.
  * Bundling operations need performance tuning. Optimizations are planned and help is welcome.
 
 # Build From Source
 
-We are not yet on Rubygems. The gem will be released after we are fully compliant with the spec and have high test coverage stats.
+We are not yet on Rubygems. The gem will be released after we are fully compliant with the spec.
 
 In the meantime:
 
@@ -47,15 +47,12 @@ See `kitchen_sink.sh` examples.
 # Current Status
 
  - [X] Create a contact email for project outsiders (and maybe a developer email list?)
- - [ ] Update protocol spec
- - [ ] Update README.md
- - [ ] Update Ruby API docs
- - [ ] Update CLI docs.
+ - [X] Update README.md
+ - [X] Update Ruby API docs
+ - [ ] Update spec document CLI usage examples to reflect API changes in 2020.
  - [ ] BUG: Keys that start with a carriage return (`\n`) freeze tokenizer.
- - [ ] Write tutorial.rb (user manual for `Pigeon::Database`).
  - [ ] Convert literals to constants, remove unused locals, reduce duplication, run linter.
  - [ ] 100% class / module documentation
- - [ ] Update spec document CLI usage examples to reflect API changes in 2020.
  - [ ] Publish to RubyGems
 
 # Optimizations

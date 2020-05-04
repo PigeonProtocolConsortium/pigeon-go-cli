@@ -49,6 +49,7 @@ See `kitchen_sink.sh` examples.
  - [X] Create a contact email for project outsiders (and maybe a developer email list?)
  - [X] Update README.md
  - [X] Update Ruby API docs
+ - [ ] Oops, `lipmaa` field needs to be a hash, not an integer!
  - [ ] Update spec document CLI usage examples to reflect API changes in 2020.
  - [ ] BUG: Keys that start with a carriage return (`\n`) freeze tokenizer.
  - [ ] Convert literals to constants, remove unused locals, reduce duplication, run linter.

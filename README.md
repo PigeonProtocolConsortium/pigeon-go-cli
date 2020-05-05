@@ -50,10 +50,12 @@ See `kitchen_sink.sh` examples.
  - [X] Update README.md
  - [X] Update Ruby API docs
  - [ ] Oops, `lipmaa` field needs to be a hash, not an integer!
+ - [ ] Update Dev docs in protocol spec to reflect changes to `lipmaa` header.
  - [ ] Update spec document CLI usage examples to reflect API changes in 2020.
  - [ ] BUG: Keys that start with a carriage return (`\n`) freeze tokenizer.
  - [ ] Convert literals to constants, remove unused locals, reduce duplication, run linter.
  - [ ] 100% class / module documentation
+ - [ ] Run a [terminology extraction tool](https://www.visualthesaurus.com/vocabgrabber/#) on the documentation and write a glossary of terms.
  - [ ] Publish to RubyGems
 
 # Optimizations

@@ -80,7 +80,7 @@ echo "=== Sign draft #2"
 
 echo "=== Dump the bundle"
 ./bin/pigeon-cli bundle create
-cat bundle/gossip.pgn
+cat bundle/messages.pgn
 echo "=== end bundle dump. Ingesting bundle..."
 ./bin/pigeon-cli bundle ingest bundle
 

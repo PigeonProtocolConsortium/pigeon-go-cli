@@ -145,11 +145,11 @@ module Pigeon
         .map(&:render)
         .join(BUNDLE_MESSAGE_SEPARATOR)
 
-      File.write(File.join(file_path, "gossip.pgn"), content + CR)
+      File.write(File.join(file_path, "messages.pgn"), content + CR)
     end
 
     def import_bundle(file_path = DEFAULT_BUNDLE_PATH)
-      bundle = File.read(File.join(file_path, "gossip.pgn"))
+      bundle = File.read(File.join(file_path, "messages.pgn"))
       tokens = Pigeon::Lexer.tokenize(bundle)
       blobs = tokens.each_with_object(Set.new) do |(_a, b, c), set|
         [b, c].map do |d|

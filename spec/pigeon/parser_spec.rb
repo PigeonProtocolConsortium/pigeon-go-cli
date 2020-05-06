@@ -6,7 +6,7 @@ RSpec.describe Pigeon::Lexer do
     db.reset_database
     db
   end
-  let(:example_bundle) { File.read("./spec/fixtures/normal/gossip.pgn") }
+  let(:example_bundle) { File.read("./spec/fixtures/normal/messages.pgn") }
   let(:tokens) { Pigeon::Lexer.tokenize(example_bundle) }
 
   BAD_TOKENS = [

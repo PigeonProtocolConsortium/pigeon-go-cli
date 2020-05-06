@@ -1,6 +1,5 @@
 coverage/
 .pgn/
-*.pgn
 doc/
 *scratchpad*
 pigeon.bundle

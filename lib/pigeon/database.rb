@@ -152,12 +152,14 @@ module Pigeon
       bundle = File.read(File.join(file_path, "messages.pgn"))
       tokens = Pigeon::Lexer.tokenize(bundle)
       messages = Pigeon::Parser.parse(self, tokens)
+
       messages
         .map(&:collect_blobs)
         .flatten
         .uniq
-        .reject { |x| have_blob?(x) }
-        .map { |x| binding.pry }
+        .map do |x|
+        binding.pry if x.start_with?("&622PRNJ7")
+      end
       messages
     end
 

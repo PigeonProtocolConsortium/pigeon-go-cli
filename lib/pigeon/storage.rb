@@ -66,9 +66,9 @@ module Pigeon
     end
 
     def get_blob(blob_multihash)
-      path = File.join(Helpers.hash2file_path(blob_multihash))
-      path = File.join(PIGEON_BLOB_PATH, path)
-      File.read(path) if File.file?(path)
+      path1 = File.join(Helpers.hash2file_path(blob_multihash))
+      path2 = File.join(PIGEON_BLOB_PATH, path1)
+      File.read(path2) if File.file?(path2)
     end
 
     # `nil` means "none"

@@ -151,12 +151,14 @@ module Pigeon
     def import_bundle(file_path = DEFAULT_BUNDLE_PATH)
       bundle = File.read(File.join(file_path, "messages.pgn"))
       tokens = Pigeon::Lexer.tokenize(bundle)
-      blobs = tokens.each_with_object(Set.new) do |(_a, b, c), set|
-        [b, c].map do |d|
-          set.add(d) if Helpers.blob_multihash?(d)
-        end
-      end
-      Pigeon::Parser.parse(self, tokens)
+      messages = Pigeon::Parser.parse(self, tokens)
+      messages
+        .map(&:collect_blobs)
+        .flatten
+        .uniq
+        .reject { |x| have_blob?(x) }
+        .map { |x| binding.pry }
+      messages
     end
 
     # === BLOBS
@@ -166,6 +168,10 @@ module Pigeon
 
     def add_blob(b)
       store.add_blob(b)
+    end
+
+    def have_blob?(b)
+      store.have_blob?(b)
     end
 
     # === DB Management

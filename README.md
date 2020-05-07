@@ -49,10 +49,8 @@ See `kitchen_sink.sh` examples.
  - [X] Create a contact email for project outsiders (and maybe a developer email list?)
  - [X] Update README.md
  - [X] Update Ruby API docs
- - [ ] Make location of blob folder configurable
- - [ ] Update blobs spec to clear out blob folder every time it runs.
- - [ ] Filter messages from blocked users importing bundles.
- - [ ] Filter blobs from blocked users when importing bundles.
+ - [X] Update blobs spec to clear out blob folder every time it runs.
+ - [ ] Make location of blob folder configurable?
  - [ ] Oops, `lipmaa` field needs to be a hash, not an integer!
  - [ ] Update Dev docs in protocol spec to reflect changes to `lipmaa` header.
  - [ ] Update spec document CLI usage examples to reflect API changes in 2020.

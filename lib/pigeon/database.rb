@@ -157,8 +157,14 @@ module Pigeon
         .map(&:collect_blobs)
         .flatten
         .uniq
-        .map do |x|
-        binding.pry if x.start_with?("&622PRNJ7")
+        .map do |mhash|
+        rel_path = Helpers.hash2file_path(mhash)
+        from = File.join([file_path] + rel_path)
+        to = File.join([PIGEON_BLOB_PATH] + rel_path)
+        if (File.file?(from) && !File.file?(to))
+          data = File.read(from)
+          Helpers.write_to_disk(PIGEON_BLOB_PATH, mhash, data)
+        end
       end
       messages
     end

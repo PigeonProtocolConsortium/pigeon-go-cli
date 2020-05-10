@@ -50,8 +50,9 @@ See `kitchen_sink.sh` examples.
  - [X] Update README.md
  - [X] Update Ruby API docs
  - [X] Update blobs spec to clear out blob folder every time it runs.
- - [ ] Make location of blob folder configurable?
  - [ ] Oops, `lipmaa` field needs to be a hash, not an integer!
+ - [ ] Change draft and message templates to render headers in this order: `author`, `prev`, `lipmaa`, `kind`, `depth`.
+ - [ ] Make location of blob folder configurable?
  - [ ] Update Dev docs in protocol spec to reflect changes to `lipmaa` header.
  - [ ] Update spec document CLI usage examples to reflect API changes in 2020.
  - [ ] BUG: Keys that start with a carriage return (`\n`) freeze tokenizer.

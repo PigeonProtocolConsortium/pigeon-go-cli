@@ -64,7 +64,7 @@ module Pigeon
     SEPERATOR = /\n/
     AUTHOR = /author #{FEED_VALUE}\n/
     DEPTH = /depth #{NUMERIC}\n/
-    LIPMAA = /lipmaa #{NUMERIC}\n/
+    LIPMAA = /prev (#{MESG_VALUE}|#{NULL_VALUE})\n/
     PREV = /prev (#{MESG_VALUE}|#{NULL_VALUE})\n/
     KIND = /kind #{ALPHANUMERICISH}\n/
     BODY_ENTRY = /#{ALPHANUMERICISH}:#{ANY_VALUE}\n/

@@ -109,7 +109,12 @@ module Pigeon
           po3 = m
         end
       end
-      return n - po3
+      result = n - po3
+      if result == n - 1
+        return nil
+      else
+        return result
+      end
     end
 
     # http://www.crockford.com/wrmg/base32.html
@@ -163,7 +168,12 @@ module Pigeon
       draft.author = author
       draft.depth = depth
       draft.prev = db.get_message_by_depth(mhash, depth - 1)
-      draft.lipmaa = Helpers.lipmaa(depth)
+      lipmaa = Helpers.lipmaa(depth)
+      if lipmaa && draft.prev
+        draft.lipmaa = db.get_message_by_depth(mhash, lipmaa)
+      else
+        draft.lipmaa = NOTHING
+      end
 
       unsigned = template.render_without_signature
       draft.signature = author.sign(unsigned)
@@ -199,7 +209,7 @@ module Pigeon
       # TODO: Re-visit this. Our current verification method
       # is probably too strict and won't allow for partial
       # verification of feeds.
-      assert("lipmaa", Helpers.lipmaa(msg.depth), msg.lipmaa)
+      assert("lipmaa", msg.lipmaa, Helpers.lipmaa(msg.depth))
       assert("prev", msg.prev, expected_prev)
       tpl = msg.template.render_without_signature
       Helpers.verify_string(author, signature, tpl)

@@ -26,7 +26,7 @@ module Pigeon
       depth = message.depth
       kind = message.kind
       prev = message.prev || NOTHING
-      lipmaa = message.lipmaa
+      lipmaa = message.lipmaa || NOTHING
       signature = message.signature
 
       ERB.new(template).result(binding)

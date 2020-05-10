@@ -13,6 +13,7 @@ module Pigeon
       @scanner = StringScanner.new(bundle_string)
       @tokens = []
       @state = HEADER
+      @last_good = :START
     end
 
     def tokenize
@@ -75,13 +76,14 @@ module Pigeon
     class LexError < StandardError; end
 
     def flunk!(why)
-      raise LexError, "Syntax error at #{scanner.pos}. #{why}"
+      raise LexError, "Syntax error @ #{scanner.pos} after #{@last_good}: #{why}"
     end
 
     # This might be a mistake or uneccessary. NN 20 MAR 2020
     def maybe_end_message!
       if tokens.last.last != :MESSAGE_END
         @tokens << [:MESSAGE_END]
+        @last_good = :MESSAGE_END
       end
     end
 
@@ -89,36 +91,42 @@ module Pigeon
       if scanner.scan(AUTHOR)
         author = scanner.matched.chomp.gsub("author ", "")
         @tokens << [:AUTHOR, author]
+        @last_good = :AUTHOR
         return
       end
 
       if scanner.scan(DEPTH)
         depth = scanner.matched.chomp.gsub("depth ", "").to_i
         @tokens << [:DEPTH, depth]
+        @last_good = :DEPTH
         return
       end
 
       if scanner.scan(LIPMAA)
         depth = scanner.matched.chomp.gsub("lipmaa ", "").to_i
         @tokens << [:LIPMAA, depth]
+        @last_good = :LIPMAA
         return
       end
 
       if scanner.scan(PREV)
         prev = scanner.matched.chomp.gsub("prev ", "")
         @tokens << [:PREV, prev]
+        @last_good = :PREV
         return
       end
 
       if scanner.scan(KIND)
         kind = scanner.matched.chomp.gsub("kind ", "")
         @tokens << [:KIND, kind]
+        @last_good = :KIND
         return
       end
 
       if scanner.scan(SEPERATOR)
         @state = BODY
         @tokens << [:HEADER_END]
+        @last_good = :HEADER_SEPERATOR
         return
       end
 
@@ -129,12 +137,14 @@ module Pigeon
       if scanner.scan(BODY_ENTRY)
         key, value = scanner.matched.chomp.split(":")
         @tokens << [:BODY_ENTRY, key, value]
+        @last_good = :A_BODY_ENTRY
         return
       end
 
       if scanner.scan(SEPERATOR)
         @state = FOOTER
         @tokens << [:BODY_END]
+        @last_good = :BODY_SEPERATOR
         return
       end
 
@@ -148,12 +158,14 @@ module Pigeon
       if scanner.scan(FOOTER_ENTRY)
         sig = scanner.matched.strip.gsub("signature ", "")
         @tokens << [:SIGNATURE, sig]
+        @last_good = :FOOTER_ENTRY
         return
       end
 
       if scanner.scan(SEPERATOR)
         @state = HEADER
         maybe_end_message!
+        @last_good = :FOOTER_SEPERATOR
         return
       end
 

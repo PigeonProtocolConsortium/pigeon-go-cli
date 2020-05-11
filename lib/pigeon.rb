@@ -211,7 +211,7 @@ module Pigeon
       # TODO: Re-visit this. Our current verification method
       # is probably too strict and won't allow for partial
       # verification of feeds.
-      assert("lipmaa", msg.lipmaa, Helpers.lipmaa(msg.depth))
+      assert("lipmaa", msg.lipmaa, Helpers.lipmaa(msg.depth) || NOTHING)
       assert("prev", msg.prev, expected_prev)
       tpl = msg.template.render_without_signature
       Helpers.verify_string(author, signature, tpl)

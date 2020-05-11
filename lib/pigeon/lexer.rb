@@ -75,8 +75,9 @@ module Pigeon
 
     class LexError < StandardError; end
 
-    def flunk!(why)
-      raise LexError, "Syntax error @ #{scanner.pos} after #{@last_good}: #{why}"
+    def flunk!(where)
+      msg = "Syntax error: #{scanner.pos} under #{@last_good} field in #{where}"
+      raise LexError, msg
     end
 
     # This might be a mistake or uneccessary. NN 20 MAR 2020
@@ -103,7 +104,7 @@ module Pigeon
       end
 
       if scanner.scan(LIPMAA)
-        depth = scanner.matched.chomp.gsub("lipmaa ", "").to_i
+        depth = scanner.matched.chomp.gsub("lipmaa ", "")
         @tokens << [:LIPMAA, depth]
         @last_good = :LIPMAA
         return
@@ -130,7 +131,7 @@ module Pigeon
         return
       end
 
-      flunk!("Failed to read header field.")
+      flunk!(:HEADER)
     end
 
     def do_body
@@ -148,7 +149,7 @@ module Pigeon
         return
       end
 
-      flunk!("Failed to read body field.")
+      flunk!(:BODY)
     end
 
     def do_footer

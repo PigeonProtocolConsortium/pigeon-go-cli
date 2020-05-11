@@ -208,10 +208,13 @@ module Pigeon
       count = db.get_message_count_for(author.multihash)
       expected_prev = db.get_message_by_depth(author.multihash, count - 1) || Pigeon::NOTHING
       assert("depth", count, msg.depth)
-      # TODO: Re-visit this. Our current verification method
-      # is probably too strict and won't allow for partial
-      # verification of feeds.
-      assert("lipmaa", msg.lipmaa, Helpers.lipmaa(msg.depth) || NOTHING)
+      expected_lpma = Helpers.lipmaa(msg.depth)
+      if expected_lpma
+        real = db.get_message_by_depth(author.multihash, expected_lpma)
+        assert("lipmaa", msg.lipmaa, real)
+      else
+        assert("lipmaa", msg.lipmaa, NOTHING)
+      end
       assert("prev", msg.prev, expected_prev)
       tpl = msg.template.render_without_signature
       Helpers.verify_string(author, signature, tpl)

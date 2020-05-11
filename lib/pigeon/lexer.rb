@@ -76,7 +76,7 @@ module Pigeon
     class LexError < StandardError; end
 
     def flunk!(where)
-      msg = "Syntax error: #{scanner.pos} under #{@last_good} field in #{where}"
+      msg = "Syntax error pos #{scanner.pos} by #{@last_good} field in #{where}"
       raise LexError, msg
     end
 

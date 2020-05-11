@@ -161,13 +161,13 @@ RSpec.describe Pigeon::Lexer do
   it "catches syntax errors" do
     e = Pigeon::Lexer::LexError
     err_map = {
-      0 => "Syntax error at 0. Failed to read header field.",
-      1 => "Syntax error at 69. Failed to read header field.",
-      2 => "Syntax error at 84. Failed to read header field.",
-      3 => "Syntax error at 94. Failed to read header field.",
-      4 => "Syntax error at 102. Failed to read header field.",
-      5 => "Syntax error at 103. Failed to read body field.",
-      6 => "Syntax error at 113. Failed to read body field.",
+      0 => "Syntax error pos 0 by START field in HEADER",
+      1 => "Syntax error pos 69 by AUTHOR field in HEADER",
+      2 => "Syntax error pos 84 by KIND field in HEADER",
+      3 => "Syntax error pos 94 by PREV field in HEADER",
+      4 => "Syntax error pos 102 by DEPTH field in HEADER",
+      5 => "Syntax error pos 103 by HEADER_SEPERATOR field in BODY",
+      6 => "Syntax error pos 113 by A_BODY_ENTRY field in BODY",
       7 => "Parse error at 114. Double carriage return not found.",
     }
     (0..7).to_a.map do |n|

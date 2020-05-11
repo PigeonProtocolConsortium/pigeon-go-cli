@@ -170,9 +170,9 @@ module Pigeon
       draft.author = author
       draft.depth = depth
       draft.prev = db.get_message_by_depth(mhash, depth - 1)
-      lipmaa = Helpers.lipmaa(depth)
-      if lipmaa && draft.prev
-        draft.lipmaa = db.get_message_by_depth(mhash, lipmaa)
+      lpma = Helpers.lipmaa(depth)
+      if lpma && draft.prev
+        draft.lipmaa = db.get_message_by_depth(mhash, lpma)
       else
         draft.lipmaa = NOTHING
       end

@@ -89,7 +89,9 @@ module Pigeon
       # The original lipmaa function returns -1 for 0
       # but that does not mesh well with our serialization
       # scheme. Comments welcome on this one.
-      return 0 if n < 1 # Prevent -1, division by zero etc..
+      if n < 1 # Prevent -1, division by zero etc..
+        return nil
+      end
 
       m, po3, x = 1, 3, n
       # find k such that (3^k - 1)/2 >= n

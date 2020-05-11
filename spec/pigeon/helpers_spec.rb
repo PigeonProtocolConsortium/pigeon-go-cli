@@ -1,20 +1,19 @@
 RSpec.describe Pigeon::Helpers do
   it "creates lipmalinks" do
     [
-      [-1, 0],
-      [0, 0],
-      [1, 0],
-      [2, 1],
-      [3, 2],
+      [-1, nil],
+      [0, nil],
+      [1, nil],
+      [2, nil],
+      [3, nil],
       [4, 1],
-      [5, 4],
-      [6, 5],
-      [7, 6],
+      [5, nil],
+      [6, nil],
+      [7, nil],
       [8, 4],
       [13, 4],
-    ].map do |(input, expected)|
-      actual = Pigeon::Helpers.lipmaa(input)
-      expect(actual).to eq(expected)
+    ].each do |(input, expected)|
+      expect(Pigeon::Helpers.lipmaa(input)).to eq(expected)
     end
   end
 

@@ -137,7 +137,7 @@ RSpec.describe Pigeon::Message do
       [:KIND, "invalid"],
       [:PREV, "NONE"],
       [:DEPTH, 10],
-      [:LIPMAA, Pigeon::Helpers.lipmaa(10)],
+      [:LIPMAA, "%4PE7S4XCCAYPQ42S98K730CEW6ME5HRWJKHHEGYVYPFHSJWXEY1G.sha256"],
       [:HEADER_END],
       [:BODY_ENTRY, "duplicate", "This key is a duplicate."],
       [:SIGNATURE, "DN7yPTE-m433ND3jBL4oM23XGxBKafjq0Dp9ArBQa_TIGU7DmCxTumieuPBN-NKxlx_0N7-c5zjLb5XXVHYPCQ==.sig.ed25519"],

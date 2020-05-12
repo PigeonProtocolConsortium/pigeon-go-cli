@@ -2,6 +2,8 @@ require "spec_helper"
 
 RSpec.describe Pigeon::Message do
   before(:each) do
+    puts "WARNING: This test deletes the blob dir! Fix ASAP"
+    `rm -rf #{Pigeon::PIGEON_BLOB_PATH}`
     p = Pigeon::DEFAULT_BUNDLE_PATH
     File.delete(p) if File.file?(p)
   end
@@ -46,8 +48,6 @@ RSpec.describe Pigeon::Message do
   end
 
   it "ingests a bundle's blobs" do
-    puts "WARNING: This test deletes the blob dir! Fix ASAP"
-    `rm -rf #{Pigeon::PIGEON_BLOB_PATH}`
     db.reset_database
     blobs = [
       "&622PRNJ7C0S05XR2AHDPKWMG051B1QW5SXMN2RQHF2AND6J8VGPG.sha256",

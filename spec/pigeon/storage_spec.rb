@@ -47,13 +47,6 @@ RSpec.describe Pigeon::Storage do
     expect(db.all_blocks.count).to eq(1)
   end
 
-  it "finds all authored by a particular feed" do
-    ingested_messages = db.import_bundle("./spec/fixtures/normal")
-    author = ingested_messages.first.author.multihash
-    actual_messages = db.all_messages(author)
-    search_results = db.all_messages(author)
-  end
-
   it "finds all messages" do
     msgs = [
       db.add_message("strings", {

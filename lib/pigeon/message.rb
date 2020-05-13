@@ -29,9 +29,6 @@ module Pigeon
       @depth = depth
       @kind = kind
       @prev = prev || Pigeon::NOTHING
-      unless lipmaa.is_a?(String)
-        raise "Bad lipmaa value: #{lipmaa}"
-      end
       @lipmaa = lipmaa
       @signature = signature
     end

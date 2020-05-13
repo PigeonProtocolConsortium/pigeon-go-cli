@@ -266,12 +266,6 @@ module Pigeon
         return b32_decode(string[1..].gsub(FOOTERS_REGEX, ""))
       end
     end
-
-    def self.blob_multihash?(unknown)
-      (unknown.is_a?(String) &&
-       unknown.length == 60 &&
-       (unknown[0] == BLOB_SIGIL))
-    end
   end
 end
 

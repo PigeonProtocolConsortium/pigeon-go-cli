@@ -73,10 +73,6 @@ module Pigeon
 
     # `nil` means "none"
     def get_message_count_for(mhash)
-      unless mhash.is_a?(String)
-        raise "Expected string, got #{mhash.class}"
-      end # Delete later
-
       read { store[COUNT_INDEX_NS][mhash] || 0 }
     end
 
@@ -97,10 +93,6 @@ module Pigeon
     end
 
     def get_message_by_depth(multihash, depth)
-      unless multihash.is_a?(String)
-        raise "Expected string, got #{multihash.class}"
-      end # Delete later
-
       # Map<[multihash(str), depth(int)], Signature>
       key = [multihash, depth].join(".")
       read { store[MESSAGE_BY_DEPTH_NS][key] }

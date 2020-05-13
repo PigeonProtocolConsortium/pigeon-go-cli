@@ -46,18 +46,14 @@ See `kitchen_sink.sh` examples.
 
 # Current Status
 
- - [X] Create a contact email for project outsiders (and maybe a developer email list?)
- - [X] Update README.md
- - [X] Update Ruby API docs
- - [X] Update blobs spec to clear out blob folder every time it runs.
- - [ ] Oops, `lipmaa` field needs to be a hash, not an integer!
- - [ ] Change `@`, `%`, `&` to `feed.`, `mesg.`, `blob.`, respectively. Better readability, easier onboarding, URL friendly.
- - [ ] Change draft and message templates to render headers in this order: `author`, `prev`, `lipmaa`, `depth`, `kind`.
- - [ ] Make location of blob folder configurable?
- - [ ] Update Dev docs in protocol spec to reflect changes to `lipmaa` header.
- - [ ] Update spec document CLI usage examples to reflect API changes in 2020.
+ - [X] Oops, `lipmaa` field needs to be a hash, not an integer!
  - [ ] BUG: Keys that start with a carriage return (`\n`) freeze tokenizer.
  - [ ] Convert literals to constants, remove unused locals, reduce duplication, run linter.
+ - [ ] Change message templates to render headers in this order: `author`, `prev`, `lipmaa`, `depth`, `kind`.
+ - [ ] Make location of blob folder configurable?
+ - [ ] Change `@`, `%`, `&` to `feed.`, `mesg.`, `blob.`, respectively. Better readability, easier onboarding, URL friendly.
+ - [ ] Update Dev docs in protocol spec to reflect changes to `lipmaa` header.
+ - [ ] Update spec document CLI usage examples to reflect API changes in 2020.
  - [ ] 100% class / module documentation
  - [ ] Run a [terminology extraction tool](https://www.visualthesaurus.com/vocabgrabber/#) on the documentation and write a glossary of terms.
  - [ ] Publish to RubyGems

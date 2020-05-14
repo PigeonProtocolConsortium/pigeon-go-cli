@@ -47,7 +47,6 @@ See `kitchen_sink.sh` examples.
 # Current Status
 
  - [ ] Change message templates to render headers in this order: `author`, `prev`, `lipmaa`, `depth`, `kind`.
- - [ ] Make location of blob folder configurable?
  - [ ] Change `@`, `%`, `&` to `feed.`, `mesg.`, `blob.`, respectively. Better readability, easier onboarding, URL friendly.
  - [ ] Update Dev docs in protocol spec to reflect changes to `lipmaa` header.
  - [ ] Update spec document CLI usage examples to reflect API changes in 2020.

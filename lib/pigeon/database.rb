@@ -161,10 +161,10 @@ module Pigeon
         .map do |mhash|
         rel_path = Helpers.hash2file_path(mhash)
         from = File.join([file_path] + rel_path)
-        to = File.join([PIGEON_BLOB_PATH] + rel_path)
+        to = File.join([DEFAULT_BLOB_DIR] + rel_path)
         if (File.file?(from) && !File.file?(to))
           data = File.read(from)
-          Helpers.write_to_disk(PIGEON_BLOB_PATH, mhash, data)
+          Helpers.write_to_disk(DEFAULT_BLOB_DIR, mhash, data)
         end
       end
       messages

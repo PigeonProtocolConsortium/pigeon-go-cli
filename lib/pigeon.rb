@@ -10,7 +10,7 @@ module Pigeon
 
   PIGEON_DB_PATH = File.join("pigeon.db")
   DEFAULT_BUNDLE_PATH = File.join(Dir.pwd, "bundle")
-  PIGEON_BLOB_PATH = File.join(Dir.home, "pigeon_sha256")
+  DEFAULT_BLOB_DIR = File.join(Dir.home, "pigeon_sha256")
   MESSAGE_FILE = "messages.pgn"
   # MESSAGE TEMPLATE CONSTANTS:
   HEADER_TPL = "author <%= author %>\nkind <%= kind %>\nprev <%= prev %>\ndepth <%= depth %>\nlipmaa <%= lipmaa %>\n\n"

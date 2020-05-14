@@ -67,7 +67,7 @@ module Pigeon
 
     def get_blob(blob_multihash)
       path1 = File.join(Helpers.hash2file_path(blob_multihash))
-      path2 = File.join(PIGEON_BLOB_PATH, path1)
+      path2 = File.join(DEFAULT_BLOB_DIR, path1)
       File.read(path2) if File.file?(path2)
     end
 
@@ -125,14 +125,14 @@ module Pigeon
     end
 
     def have_blob?(multihash)
-      path = File.join(PIGEON_BLOB_PATH, Helpers.hash2file_path(multihash))
+      path = File.join(DEFAULT_BLOB_DIR, Helpers.hash2file_path(multihash))
       File.file?(path)
     end
 
     private
 
     def write_to_disk(mhash, data)
-      Helpers.write_to_disk(PIGEON_BLOB_PATH, mhash, data)
+      Helpers.write_to_disk(DEFAULT_BLOB_DIR, mhash, data)
     end
 
     def bootstrap
@@ -144,7 +144,7 @@ module Pigeon
         store[MESSAGE_BY_DEPTH_NS] ||= {}
         store[PEER_NS] ||= Set.new
       end
-      Helpers.mkdir_p(PIGEON_BLOB_PATH)
+      Helpers.mkdir_p(DEFAULT_BLOB_DIR)
       store
     end
 

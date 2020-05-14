@@ -14,10 +14,12 @@ module Pigeon
       @tokens = []
       @state = HEADER
       @last_good = :START
+      @loops = 0
     end
 
     def tokenize
       until scanner.eos?
+        safety_check
         case @state
         when HEADER then do_header
         when BODY then do_body
@@ -30,6 +32,7 @@ module Pigeon
 
     def tokenize_unsigned(signature)
       until scanner.eos?
+        safety_check
         case @state
         when HEADER then do_header
         when BODY then do_body
@@ -41,6 +44,14 @@ module Pigeon
     end
 
     private
+
+    def safety_check
+      if @loops > 1000
+        raise "RUNAWAY LOOP DETECTED"
+      else
+        @loops += 1
+      end
+    end
 
     attr_reader :bundle_string, :scanner, :tokens
     # TODO: Change all the `{40,90}` values in ::Lexer to real values
@@ -167,6 +178,7 @@ module Pigeon
         @state = HEADER
         maybe_end_message!
         @last_good = :FOOTER_SEPERATOR
+        @loops = 0
         return
       end
 

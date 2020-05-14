@@ -9,7 +9,7 @@ module Pigeon
     end
 
     def initialize(bundle_string)
-      @bundle_string = bundle_string + "\n"
+      @bundle_string = bundle_string
       @scanner = StringScanner.new(bundle_string)
       @tokens = []
       @state = HEADER

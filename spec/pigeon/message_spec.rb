@@ -167,14 +167,13 @@ RSpec.describe Pigeon::Message do
   # This was originally a bug nooted during development
   # That caused a runaway loop in the tokenizer.
   it "handles this key: '\\nVUx0hC3'" do
-    pending("Known bug- will fix after writing docs.")
     db.delete_current_draft
     db.new_draft(kind: "unit_test")
     db.update_draft("\nVUx0hC3", "n")
     db.update_draft("n", "\nVUx0hC3")
     Timeout::timeout(0.5) do
       boom = -> { Pigeon::Lexer.tokenize(db.publish_draft.render) }
-      expect(boom).to raise_error(Pigeon::Lexer::LexError)
+      expect(boom).to raise_error("RUNAWAY LOOP DETECTED")
     end
   end
 

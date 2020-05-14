@@ -47,7 +47,7 @@ module Pigeon
 
     def safety_check
       if @loops > 1000
-        raise "RUNAWAY LOOP DETECTED"
+        raise RUNAWAY_LOOP
       else
         @loops += 1
       end
@@ -86,8 +86,11 @@ module Pigeon
 
     class LexError < StandardError; end
 
+    SYNTAX_ERROR = "Syntax error pos %s by %s field in %s"
+    FOOTER_ERROR = "Parse error at %s. Double carriage return not found."
+
     def flunk!(where)
-      msg = "Syntax error pos #{scanner.pos} by #{@last_good} field in #{where}"
+      msg = SYNTAX_ERROR % [scanner.pos, @last_good, where]
       raise LexError, msg
     end
 
@@ -182,7 +185,7 @@ module Pigeon
         return
       end
 
-      raise LexError, "Parse error at #{scanner.pos}. Double carriage return not found."
+      raise LexError, FOOTER_ERROR % scanner.pos
     end
   end
 end

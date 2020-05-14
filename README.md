@@ -46,9 +46,6 @@ See `kitchen_sink.sh` examples.
 
 # Current Status
 
- - [X] Oops, `lipmaa` field needs to be a hash, not an integer!
- - [ ] BUG: Keys that start with a carriage return (`\n`) freeze tokenizer.
- - [ ] Convert literals to constants, remove unused locals, reduce duplication, run linter.
  - [ ] Change message templates to render headers in this order: `author`, `prev`, `lipmaa`, `depth`, `kind`.
  - [ ] Make location of blob folder configurable?
  - [ ] Change `@`, `%`, `&` to `feed.`, `mesg.`, `blob.`, respectively. Better readability, easier onboarding, URL friendly.

@@ -29,7 +29,7 @@ RSpec.describe Pigeon::Message do
   it "creates a bundle" do
     expected_bundle = create_fake_messages.map(&:render).join("\n\n") + "\n"
     db.export_bundle
-    actual_bundle = File.read(File.join(Pigeon::DEFAULT_BUNDLE_PATH, "messages.pgn"))
+    actual_bundle = File.read(File.join(Pigeon::DEFAULT_BUNDLE_PATH, Pigeon::MESSAGE_FILE))
     expect(expected_bundle).to eq(actual_bundle)
   end
 

@@ -11,6 +11,7 @@ module Pigeon
   PIGEON_DB_PATH = File.join("pigeon.db")
   DEFAULT_BUNDLE_PATH = File.join(Dir.pwd, "bundle")
   PIGEON_BLOB_PATH = File.join(Dir.home, "pigeon_sha256")
+  MESSAGE_FILE = "messages.pgn"
   # MESSAGE TEMPLATE CONSTANTS:
   HEADER_TPL = "author <%= author %>\nkind <%= kind %>\nprev <%= prev %>\ndepth <%= depth %>\nlipmaa <%= lipmaa %>\n\n"
   BODY_TPL = "<% body.to_a.each do |k, v| %><%= k %>:<%= v %><%= \"\\n\" %><% end %>\n"
@@ -49,6 +50,9 @@ module Pigeon
   NO_DRAFT_FOUND = "NO DRAFT FOUND"
   STRING_KEYS_ONLY = "String keys only"
   MISSING_BODY = "BODY CANT BE EMPTY"
+  STILL_HAVE_DRAFT = "RESET DRAFT (%s) FIRST (db.delete_current_draft)"
+  MISSING_DRAFT = "NO DRAFT. CREATE ONE FIRST. Call db.new_draft(kind, body)"
+  RUNAWAY_LOOP = "RUNAWAY LOOP DETECTED"
 
   # Constants for internal use only:
   FOOTERS_REGEX = Regexp.new("#{SIG_FOOTER}|#{IDENTITY_FOOTER}")

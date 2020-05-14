@@ -32,8 +32,7 @@ RSpec.describe Pigeon::Message do
 
   it "discards a draft after signing" do
     db.publish_draft(draft)
-    err = "THERE IS NO DRAFT. CREATE ONE FIRST. Call db.new_draft(kind, body)"
-    expect { db.get_draft }.to raise_error(err)
+    expect { db.get_draft }.to raise_error(Pigeon::MISSING_DRAFT)
   end
 
   it "creates a single message" do

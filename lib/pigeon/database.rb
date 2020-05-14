@@ -87,8 +87,9 @@ module Pigeon
 
     def new_draft(kind:, body: {})
       old = _get_config(CURRENT_DRAFT)
-      raise "PUBLISH OR RESET CURRENT DRAFT (#{old.kind}) FIRST (call db.delete_current_draft)" if old
-
+      if old
+        raise STILL_HAVE_DRAFT % old.kind
+      end
       _replace_draft(Draft.new(kind: kind, body: body))
     end
 
@@ -100,7 +101,7 @@ module Pigeon
     def get_draft
       draft = store._get_config(CURRENT_DRAFT)
       unless draft
-        raise "THERE IS NO DRAFT. CREATE ONE FIRST. Call db.new_draft(kind, body)"
+        raise MISSING_DRAFT
       end
       draft
     end
@@ -145,11 +146,11 @@ module Pigeon
         .map(&:render)
         .join(BUNDLE_MESSAGE_SEPARATOR)
 
-      File.write(File.join(file_path, "messages.pgn"), content + CR)
+      File.write(File.join(file_path, MESSAGE_FILE), content + CR)
     end
 
     def import_bundle(file_path = DEFAULT_BUNDLE_PATH)
-      bundle = File.read(File.join(file_path, "messages.pgn"))
+      bundle = File.read(File.join(file_path, MESSAGE_FILE))
       tokens = Pigeon::Lexer.tokenize(bundle)
       messages = Pigeon::Parser.parse(self, tokens)
 

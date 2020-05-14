@@ -2,9 +2,9 @@ module Pigeon
   class Parser
     class DuplicateKeyError < StandardError; end
 
-    def self.parse(db, tokens)
-      raise "NO!" unless db.is_a?(Pigeon::Database)
+    DUPE_KEYS = "Found duplicate keys: %s"
 
+    def self.parse(db, tokens)
       new(db, tokens).parse
     end
 
@@ -49,7 +49,7 @@ module Pigeon
 
     def set(key, value, hash = @scratchpad)
       if hash[key]
-        raise DuplicateKeyError, "Found duplicate keys: #{key}"
+        raise DuplicateKeyError, (DUPE_KEYS % key)
       else
         hash[key] = value
       end

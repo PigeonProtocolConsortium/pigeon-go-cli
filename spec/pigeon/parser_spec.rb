@@ -19,7 +19,7 @@ RSpec.describe Pigeon::Lexer do
     [:BODY_ENTRY, "duplicate", "Pigeon does not allow duplicate keys."],
     [:BODY_ENTRY, "duplicate", "This key is a duplicate."],
     [:SIGNATURE, "DN7yPTE-m433ND3jBL4oM23XGxBKafjq0Dp9ArBQa_TIGU7DmCxTumieuPBN-NKxlx_0N7-c5zjLb5XXVHYPCQ==.sig.ed25519"],
-    [:MESSAGE_END],
+    [:MESSAGE_DELIM],
   ].freeze
 
   it "parses tokens" do

@@ -140,7 +140,7 @@ RSpec.describe Pigeon::Message do
       [:HEADER_END],
       [:BODY_ENTRY, "duplicate", "This key is a duplicate."],
       [:SIGNATURE, "DN7yPTE-m433ND3jBL4oM23XGxBKafjq0Dp9ArBQa_TIGU7DmCxTumieuPBN-NKxlx_0N7-c5zjLb5XXVHYPCQ==.sig.ed25519"],
-      [:MESSAGE_END],
+      [:MESSAGE_DELIM],
     ]
     e = Pigeon::Helpers::VerificationError
     m = "Expected field `depth` to equal 0, got: 10"

@@ -96,51 +96,51 @@ module Pigeon
 
     # This might be a mistake or uneccessary. NN 20 MAR 2020
     def maybe_end_message!
-      if tokens.last.last != :MESSAGE_END
-        @tokens << [:MESSAGE_END]
-        @last_good = :MESSAGE_END
+      if tokens.last.last != :MESSAGE_DELIM
+        @tokens << [:MESSAGE_DELIM, scanner.pos]
+        @last_good = :MESSAGE_DELIM
       end
     end
 
     def do_header
       if scanner.scan(AUTHOR)
         author = scanner.matched.chomp.gsub("author ", "")
-        @tokens << [:AUTHOR, author]
+        @tokens << [:AUTHOR, author, scanner.pos]
         @last_good = :AUTHOR
         return
       end
 
       if scanner.scan(DEPTH)
         depth = scanner.matched.chomp.gsub("depth ", "").to_i
-        @tokens << [:DEPTH, depth]
+        @tokens << [:DEPTH, depth, scanner.pos]
         @last_good = :DEPTH
         return
       end
 
       if scanner.scan(LIPMAA)
         depth = scanner.matched.chomp.gsub("lipmaa ", "")
-        @tokens << [:LIPMAA, depth]
+        @tokens << [:LIPMAA, depth, scanner.pos]
         @last_good = :LIPMAA
         return
       end
 
       if scanner.scan(PREV)
         prev = scanner.matched.chomp.gsub("prev ", "")
-        @tokens << [:PREV, prev]
+        @tokens << [:PREV, prev, scanner.pos]
         @last_good = :PREV
         return
       end
 
       if scanner.scan(KIND)
         kind = scanner.matched.chomp.gsub("kind ", "")
-        @tokens << [:KIND, kind]
+        @tokens << [:KIND, kind, scanner.pos]
         @last_good = :KIND
         return
       end
 
       if scanner.scan(SEPERATOR)
         @state = BODY
-        @tokens << [:HEADER_END]
+        @tokens << [:HEADER_END, scanner.pos]
         @last_good = :HEADER_SEPERATOR
         return
       end
@@ -151,14 +151,14 @@ module Pigeon
     def do_body
       if scanner.scan(BODY_ENTRY)
         key, value = scanner.matched.chomp.split(":")
-        @tokens << [:BODY_ENTRY, key, value]
+        @tokens << [:BODY_ENTRY, key, value, scanner.pos]
         @last_good = :A_BODY_ENTRY
         return
       end
 
       if scanner.scan(SEPERATOR)
         @state = FOOTER
-        @tokens << [:BODY_END]
+        @tokens << [:BODY_END, scanner.pos]
         @last_good = :BODY_SEPERATOR
         return
       end
@@ -172,7 +172,7 @@ module Pigeon
 
       if scanner.scan(FOOTER_ENTRY)
         sig = scanner.matched.strip.gsub("signature ", "")
-        @tokens << [:SIGNATURE, sig]
+        @tokens << [:SIGNATURE, sig, scanner.pos]
         @last_good = :FOOTER_ENTRY
         return
       end

@@ -94,7 +94,6 @@ module Pigeon
       raise LexError, msg
     end
 
-    # This might be a mistake or uneccessary. NN 20 MAR 2020
     def maybe_end_message!
       if tokens.last.last != :MESSAGE_DELIM
         @tokens << [:MESSAGE_DELIM, scanner.pos]
@@ -102,46 +101,66 @@ module Pigeon
       end
     end
 
+    CANONICAL_ORDERING = {
+      # Current Key => Allowed previous keys
+      AUTHOR: [:FOOTER_SEPERATOR, :START],
+      DEPTH: [:AUTHOR],
+      KIND: [:DEPTH],
+      LIPMAA: [:KIND],
+      PREV: [:LIPMAA],
+      HEADER_SEPERATOR: [:PREV],
+    }
+
+    def check_header_order(current)
+      expected = CANONICAL_ORDERING.fetch(current)
+      if expected.include?(@last_good)
+        @last_good = current
+      else
+        msg = "BAD HEADER ORDERING. Expected: #{expected.join(" OR ")}. Got: #{current}"
+        raise msg
+      end
+    end
+
     def do_header
       if scanner.scan(AUTHOR)
         author = scanner.matched.chomp.gsub("author ", "")
         @tokens << [:AUTHOR, author, scanner.pos]
-        @last_good = :AUTHOR
+        check_header_order(:AUTHOR)
         return
       end
 
       if scanner.scan(DEPTH)
         depth = scanner.matched.chomp.gsub("depth ", "").to_i
         @tokens << [:DEPTH, depth, scanner.pos]
-        @last_good = :DEPTH
+        check_header_order(:DEPTH)
         return
       end
 
       if scanner.scan(LIPMAA)
         depth = scanner.matched.chomp.gsub("lipmaa ", "")
         @tokens << [:LIPMAA, depth, scanner.pos]
-        @last_good = :LIPMAA
+        check_header_order(:LIPMAA)
         return
       end
 
       if scanner.scan(PREV)
         prev = scanner.matched.chomp.gsub("prev ", "")
         @tokens << [:PREV, prev, scanner.pos]
-        @last_good = :PREV
+        check_header_order(:PREV)
         return
       end
 
       if scanner.scan(KIND)
         kind = scanner.matched.chomp.gsub("kind ", "")
         @tokens << [:KIND, kind, scanner.pos]
-        @last_good = :KIND
+        check_header_order(:KIND)
         return
       end
 
       if scanner.scan(SEPERATOR)
         @state = BODY
         @tokens << [:HEADER_END, scanner.pos]
-        @last_good = :HEADER_SEPERATOR
+        check_header_order(:HEADER_SEPERATOR)
         return
       end
 

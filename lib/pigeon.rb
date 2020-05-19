@@ -13,7 +13,13 @@ module Pigeon
   DEFAULT_BLOB_DIR = File.join(Dir.home, "pigeon_sha256")
   MESSAGE_FILE = "messages.pgn"
   # MESSAGE TEMPLATE CONSTANTS:
-  HEADER_TPL = "author <%= author %>\nkind <%= kind %>\nprev <%= prev %>\ndepth <%= depth %>\nlipmaa <%= lipmaa %>\n\n"
+  HEADER_TPL = [
+    "author <%= author %>",
+    "depth <%= depth %>",
+    "kind <%= kind %>",
+    "lipmaa <%= lipmaa %>\n\n",
+    "prev <%= prev %>",
+  ].join("\n")
   BODY_TPL = "<% body.to_a.each do |k, v| %><%= k %>:<%= v %><%= \"\\n\" %><% end %>\n"
   FOOTER_TPL = "signature <%= signature %>"
   COMPLETE_TPL = [HEADER_TPL, BODY_TPL, FOOTER_TPL].join("")

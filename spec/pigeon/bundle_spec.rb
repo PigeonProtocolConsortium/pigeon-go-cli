@@ -2,7 +2,6 @@ require "spec_helper"
 
 RSpec.describe Pigeon::Message do
   before(:each) do
-    puts "WARNING: This test deletes the blob dir! Fix ASAP"
     `rm -rf #{Pigeon::DEFAULT_BLOB_DIR}`
     p = Pigeon::DEFAULT_BUNDLE_PATH
     File.delete(p) if File.file?(p)

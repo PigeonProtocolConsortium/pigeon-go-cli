@@ -17,8 +17,9 @@ module Pigeon
     "author <%= author %>",
     "depth <%= depth %>",
     "kind <%= kind %>",
-    "lipmaa <%= lipmaa %>\n\n",
+    "lipmaa <%= lipmaa %>",
     "prev <%= prev %>",
+    "\n",
   ].join("\n")
   BODY_TPL = "<% body.to_a.each do |k, v| %><%= k %>:<%= v %><%= \"\\n\" %><% end %>\n"
   FOOTER_TPL = "signature <%= signature %>"

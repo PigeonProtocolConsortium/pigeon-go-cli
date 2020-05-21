@@ -1,7 +1,6 @@
 require "spec_helper"
 
 RSpec.describe Pigeon::Lexer do
-  NORMAL_PATH = "./spec/fixtures/normal/"
   EXPECTED_TOKENS1 = [
     [:AUTHOR, "@3DWXGXHXCB02WV1TEA47J43HHTTBNMM496ANME7FZ2SYPGA9KTZG.ed25519", 69],
     [:DEPTH, 0, 77],
@@ -58,18 +57,6 @@ RSpec.describe Pigeon::Lexer do
     db.new_draft(kind: "unit_test")
     db.update_draft("foo", "bar")
     db.publish_draft
-  end
-
-  def regenerate_examples
-    db.add_message("unit_test1", { "foo" => "bar" })
-    db.add_message("unit_test2", { "bar" => "baz" })
-    db.add_message("unit_test3", { "cats" => "meow" })
-    db.export_bundle(NORMAL_PATH)
-    full_path = NORMAL_PATH + Pigeon::MESSAGE_FILE
-    bundle = File.read(full_path)
-    tokens = Pigeon::Lexer.tokenize(bundle)
-    puts "=== CHANGE THE TOP VALUE TO THIS ==="
-    puts "EXPECTED_TOKENS1 = #{tokens.inspect}"
   end
 
   it "tokenizes a bundle" do

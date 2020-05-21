@@ -40,9 +40,9 @@ RSpec.describe Pigeon::Message do
 
   it "does not ingest messages from blocked peers" do
     db.reset_database
-    antagonist = "@PZ1R38E146JX8H6ZMQ6F2EFA2FSCGX7BEF2W79S665Z9NT2VYNKG.ed25519"
+    antagonist = "@YDVX7JWTVNRFEVYC8E8DS9MVWW9KB66F1XQYMNB2FQ6QBPXKAQX0.ed25519"
     db.block_peer(antagonist)
-    db.import_bundle("./spec/fixtures/x")
+    db.import_bundle(BLOCKED_PEER_FIXTURE_PATH)
     expect(db.all_messages.count).to eq(0)
   end
 
@@ -53,7 +53,7 @@ RSpec.describe Pigeon::Message do
       "&FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG.sha256",
       "&YPF11E5N9JFVB6KB1N1WDVVT9DXMCHE0XJWBZHT2CQ29S5SEPCSG.sha256",
     ]
-    db.import_bundle("./spec/fixtures/has_blobs")
+    db.import_bundle(HAS_BLOB_PATH)
     expect(db.all_messages.count).to eq(3)
     blobs.map do |h|
       expect(db.have_blob?(h)).to be true

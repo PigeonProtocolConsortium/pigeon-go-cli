@@ -3,12 +3,14 @@ require "spec_helper"
 RSpec.describe Pigeon::MessageSerializer do
   SHIM_ATTRS = %i[author body kind depth prev signature lipmaa].freeze
   MessageShim = Struct.new(*SHIM_ATTRS)
-  TOP_HALF = ["author FAKE_AUTHOR",
-              "\nkind FAKE_KIND",
-              "\nprev NONE",
-              "\ndepth 23",
-              "\nlipmaa 22",
-              "\n\nfoo:\"bar\"\n\n"].join("")
+  TOP_HALF = [
+    "author FAKE_AUTHOR",
+    "\ndepth 23",
+    "\nkind FAKE_KIND",
+    "\nlipmaa 22",
+    "\nprev NONE",
+    "\n\nfoo:\"bar\"\n\n",
+  ].join("")
   BOTTOM_HALF = "signature XYZ.sig.sha256"
   EXPECTED_DRAFT = TOP_HALF + BOTTOM_HALF
 

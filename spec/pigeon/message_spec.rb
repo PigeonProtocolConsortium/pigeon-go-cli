@@ -47,10 +47,10 @@ RSpec.describe Pigeon::Message do
     actual = message.render
     expected = [
       "author __AUTHOR__",
-      "kind unit_test",
-      "prev NONE",
       "depth 0",
+      "kind unit_test",
       "lipmaa NONE",
+      "prev NONE",
       "",
       "a:\"bar\"",
       "b:&CHHABX8Q9D9Q0BY2BBZ6FA7SMAFNE9GGMSDTZVZZC9TK2N9F15QG.sha256",

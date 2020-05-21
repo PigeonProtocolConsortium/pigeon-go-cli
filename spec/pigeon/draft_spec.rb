@@ -18,10 +18,10 @@ RSpec.describe Pigeon::Draft do
 
   MSG = [
     "author DRAFT",
-    "kind unit_test",
-    "prev DRAFT",
     "depth DRAFT",
+    "kind unit_test",
     "lipmaa DRAFT",
+    "prev DRAFT",
     "\na:\"bar\"",
     "b:&CHHABX8Q9D9Q0BY2BBZ6FA7SMAFNE9GGMSDTZVZZC9TK2N9F15QG.sha256",
     "\n",

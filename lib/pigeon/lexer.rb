@@ -58,9 +58,9 @@ module Pigeon
     # TODO: Create regexes using string and Regexp.new() for cleaner regexes.
     NUMERIC = /\d{1,7}/
     NULL_VALUE = /NONE/
-    FEED_VALUE = /@.{52}\.ed25519/
-    MESG_VALUE = /%.{52}\.sha256/
-    BLOB_VALUE = /&.{52}\.sha256/
+    FEED_VALUE = /FEED.{52}/
+    MESG_VALUE = /TEXT.{52}/
+    BLOB_VALUE = /FILE.{52}/
     STRG_VALUE = /".{1,128}"/
     # If you need other characters (but not spaces) submit an issue.
     ALPHANUMERICISH = /[a-zA-Z0-9_\-=\.\@\&]{1,90}/

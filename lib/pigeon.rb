@@ -44,12 +44,11 @@ module Pigeon
 
   # ^ Internal namespaces for PStore keys
 
-  BLOB_SIGIL = "&"
-  MESSAGE_SIGIL = "%"
-  IDENTITY_SIGIL = "@"
+  BLOB_SIGIL = "FILE."
+  MESSAGE_SIGIL = "TEXT."
+  IDENTITY_SIGIL = "TEXT."
   STRING_SIGIL = "\""
   IDENTITY_FOOTER = ".ed25519"
-  BLOB_FOOTER = ".sha256"
   SIG_FOOTER = ".sig.ed25519"
 
   # Error messages

@@ -132,11 +132,11 @@ RSpec.describe Pigeon::Message do
 
   it "crashes on forged fields" do
     tokens = [
-      [:AUTHOR, "@DYdgK1KUInVtG3lS45hA1HZ-jTuvfLKsxDpXPFCve04=.ed25519"],
+      [:AUTHOR, "FEED.G1YEXWJXCCAYPQ42S98K730CEW6ME5HRWJKHHEGYVYPFHS4S7EP4"],
       [:KIND, "invalid"],
       [:PREV, "NONE"],
       [:DEPTH, 10],
-      [:LIPMAA, "%4PE7S4XCCAYPQ42S98K730CEW6ME5HRWJKHHEGYVYPFHSJWXEY1G.sha256"],
+      [:LIPMAA, "TEXT.4PE7S4XCCAYPQ42S98K730CEW6ME5HRWJKHHEGYVYPFHSJWXEY1G"],
       [:HEADER_END],
       [:BODY_ENTRY, "duplicate", "This key is a duplicate."],
       [:SIGNATURE, "DN7yPTE-m433ND3jBL4oM23XGxBKafjq0Dp9ArBQa_TIGU7DmCxTumieuPBN-NKxlx_0N7-c5zjLb5XXVHYPCQ==.sig.ed25519"],

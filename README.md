@@ -46,8 +46,7 @@ See `kitchen_sink.sh` examples.
 
 # Current Status
 
- - [ ] Enforce canonical header ordering: `author`, `prev`, `lipmaa`, `depth`, `kind`.
- - [ ] Change `@`, `%`, `&` to `feed.`, `mesg.`, `blob.`, respectively. Better readability, easier onboarding, URL friendly.
+ - [ ] Change `@`, `%`, `&` to `feed.`, `text.`, `file.`, respectively. Better readability, easier onboarding, URL friendly.
  - [ ] Update Dev docs in protocol spec to reflect changes to `lipmaa` header.
  - [ ] Update spec document CLI usage examples to reflect API changes in 2020.
  - [ ] 100% class / module documentation

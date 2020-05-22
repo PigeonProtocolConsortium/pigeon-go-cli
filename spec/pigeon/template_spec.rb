@@ -11,7 +11,7 @@ RSpec.describe Pigeon::MessageSerializer do
     "\nprev NONE",
     "\n\nfoo:\"bar\"\n\n",
   ].join("")
-  BOTTOM_HALF = "signature XYZ.sig.sha256"
+  BOTTOM_HALF = "signature XYZ"
   EXPECTED_DRAFT = TOP_HALF + BOTTOM_HALF
 
   class FakeLocalIdentity
@@ -27,7 +27,7 @@ RSpec.describe Pigeon::MessageSerializer do
       kind: "FAKE_KIND",
       depth: 23,
       prev: nil,
-      signature: "XYZ.sig.sha256",
+      signature: "XYZ",
       lipmaa: 22,
     }.values
     message = MessageShim.new(*params)

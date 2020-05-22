@@ -10,7 +10,7 @@ RSpec.describe Pigeon::Lexer do
   let(:tokens) { Pigeon::Lexer.tokenize(example_bundle) }
 
   BAD_TOKENS = [
-    [:AUTHOR, "@DYdgK1KUInVtG3lS45hA1HZ-jTuvfLKsxDpXPFCve04=.ed25519"],
+    [:AUTHOR, "TEXT.DYdgK1KUInVtG3lS45hA1HZ-jTuvfLKsxDpXPFCve04=.ed25519"],
     [:KIND, "invalid"],
     [:PREV, "NONE"],
     [:DEPTH, 0],

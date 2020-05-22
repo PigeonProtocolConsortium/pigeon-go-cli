@@ -40,7 +40,7 @@ RSpec.describe Pigeon::Message do
 
   it "does not ingest messages from blocked peers" do
     db.reset_database
-    antagonist = "@YDVX7JWTVNRFEVYC8E8DS9MVWW9KB66F1XQYMNB2FQ6QBPXKAQX0.ed25519"
+    antagonist = "TEXT.YDVX7JWTVNRFEVYC8E8DS9MVWW9KB66F1XQYMNB2FQ6QBPXKAQX0.ed25519"
     db.block_peer(antagonist)
     db.import_bundle(BLOCKED_PEER_FIXTURE_PATH)
     expect(db.all_messages.count).to eq(0)
@@ -49,9 +49,9 @@ RSpec.describe Pigeon::Message do
   it "ingests a bundle's blobs" do
     db.reset_database
     blobs = [
-      "&622PRNJ7C0S05XR2AHDPKWMG051B1QW5SXMN2RQHF2AND6J8VGPG.sha256",
-      "&FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG.sha256",
-      "&YPF11E5N9JFVB6KB1N1WDVVT9DXMCHE0XJWBZHT2CQ29S5SEPCSG.sha256",
+      "FILE.622PRNJ7C0S05XR2AHDPKWMG051B1QW5SXMN2RQHF2AND6J8VGPG",
+      "FILE.FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG",
+      "FILE.YPF11E5N9JFVB6KB1N1WDVVT9DXMCHE0XJWBZHT2CQ29S5SEPCSG",
     ]
     db.import_bundle(HAS_BLOB_PATH)
     expect(db.all_messages.count).to eq(3)

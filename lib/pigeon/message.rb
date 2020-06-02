@@ -12,7 +12,7 @@ module Pigeon
       tpl = render
       digest = Digest::SHA256.digest(tpl)
       sha256 = Helpers.b32_encode(digest)
-      "#{MESSAGE_SIGIL}#{sha256}#{BLOB_FOOTER}"
+      "#{MESSAGE_SIGIL}#{sha256}"
     end
 
     def initialize(author:,

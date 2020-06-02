@@ -23,7 +23,7 @@ RSpec.describe Pigeon::Draft do
     "lipmaa DRAFT",
     "prev DRAFT",
     "\na:\"bar\"",
-    "b:&CHHABX8Q9D9Q0BY2BBZ6FA7SMAFNE9GGMSDTZVZZC9TK2N9F15QG.sha256",
+    "b:FILE.CHHABX8Q9D9Q0BY2BBZ6FA7SMAFNE9GGMSDTZVZZC9TK2N9F15QG",
     "\n",
   ].join("\n")
 
@@ -40,10 +40,7 @@ RSpec.describe Pigeon::Draft do
     hash = db.add_blob(File.read("./logo.png"))
     expectations = {
       kind: "unit_test",
-      body: {
-        "a" => "bar".to_json,
-        "b" => hash,
-      },
+      body: { "a" => "bar".to_json, "b" => hash },
     }
     db.update_draft("a", "bar")
     db.update_draft("b", hash)

@@ -21,13 +21,12 @@ module Pigeon
       bytes = @signing_key.verify_key.to_bytes
       b64 = Helpers.b32_encode(bytes)
 
-      @multihash ||= [IDENTITY_SIGIL, b64, IDENTITY_FOOTER].join("")
+      @multihash ||= [IDENTITY_SIGIL, b64].join("")
     end
 
     def sign(string)
       hex = @signing_key.sign(string)
-      b64 = Helpers.b32_encode(hex)
-      b64 + SIG_FOOTER
+      Helpers.b32_encode(hex)
     end
   end
 end

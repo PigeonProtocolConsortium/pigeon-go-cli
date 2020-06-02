@@ -58,7 +58,7 @@ module Pigeon
     # TODO: Create regexes using string and Regexp.new() for cleaner regexes.
     NUMERIC = /\d{1,7}/
     NULL_VALUE = /NONE/
-    FEED_VALUE = /FEED.{52}/
+    FEED_VALUE = /USER.{52}/
     MESG_VALUE = /TEXT.{52}/
     BLOB_VALUE = /FILE.{52}/
     STRG_VALUE = /".{1,128}"/
@@ -80,7 +80,7 @@ module Pigeon
     PREV = /prev (#{MESG_VALUE}|#{NULL_VALUE})\n/
     KIND = /kind #{ALPHANUMERICISH}\n/
     BODY_ENTRY = /#{ALPHANUMERICISH}:#{ANY_VALUE}\n/
-    FOOTER_ENTRY = /signature .*{103}\.sig\.ed25519\n?/
+    FOOTER_ENTRY = /signature .*{103}\n?/
 
     LEXER_STATES = [HEADER = :header, BODY = :body, FOOTER = :footer]
 

@@ -42,7 +42,6 @@ RSpec.describe Pigeon::Message do
     expect(message.depth).to eq(0)
     expect(message.kind).to eq("unit_test")
     expect(message.prev).to eq(Pigeon::NOTHING)
-    expect(message.signature.include?(Pigeon::SIG_FOOTER)).to eq(true)
     expect(message.signature.length).to be > 99
     actual = message.render
     expected = [
@@ -124,8 +123,8 @@ RSpec.describe Pigeon::Message do
     combinations = [[key1, sig1], [key1, sig2], [key2, sig1], [key2, sig2]]
     combinations.map { |(key, sig)| key.verify_key.verify(sig, plaintext) }
 
-    sig1_b64 = Pigeon::Helpers.b32_encode(sig1) + Pigeon::SIG_FOOTER
-    sig2_b64 = Pigeon::Helpers.b32_encode(sig2) + Pigeon::SIG_FOOTER
+    sig1_b64 = Pigeon::Helpers.b32_encode(sig1)
+    sig2_b64 = Pigeon::Helpers.b32_encode(sig2)
     expect(message.signature).to eq(sig1_b64)
     expect(message.signature).to eq(sig2_b64)
   end
@@ -139,7 +138,7 @@ RSpec.describe Pigeon::Message do
       [:LIPMAA, "TEXT.4PE7S4XCCAYPQ42S98K730CEW6ME5HRWJKHHEGYVYPFHSJWXEY1G"],
       [:HEADER_END],
       [:BODY_ENTRY, "duplicate", "This key is a duplicate."],
-      [:SIGNATURE, "DN7yPTE-m433ND3jBL4oM23XGxBKafjq0Dp9ArBQa_TIGU7DmCxTumieuPBN-NKxlx_0N7-c5zjLb5XXVHYPCQ==.sig.ed25519"],
+      [:SIGNATURE, "DN7yPTE-m433ND3jBL4oM23XGxBKafjq0Dp9ArBQa_TIGU7DmCxTumieuPBN-NKxlx_0N7-c5zjLb5XXVHYPCQ=="],
       [:MESSAGE_DELIM],
     ]
     e = Pigeon::Helpers::VerificationError

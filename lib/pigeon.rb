@@ -46,10 +46,8 @@ module Pigeon
 
   BLOB_SIGIL = "FILE."
   MESSAGE_SIGIL = "TEXT."
-  IDENTITY_SIGIL = "TEXT."
+  IDENTITY_SIGIL = "USER."
   STRING_SIGIL = "\""
-  IDENTITY_FOOTER = ".ed25519"
-  SIG_FOOTER = ".sig.ed25519"
 
   # Error messages
   PREV_REQUIRES_SAVE = "Can't fetch `prev` on unsaved messages"
@@ -61,8 +59,6 @@ module Pigeon
   RUNAWAY_LOOP = "RUNAWAY LOOP DETECTED"
 
   # Constants for internal use only:
-  FOOTERS_REGEX = Regexp.new("#{SIG_FOOTER}|#{IDENTITY_FOOTER}")
-  SIG_RANGE = (SIG_FOOTER.length * -1)..-1
   BLOB_BYTE_LIMIT = 360_000
 
   class Helpers
@@ -270,11 +266,8 @@ module Pigeon
     end
 
     def self.decode_multihash(string)
-      if string[SIG_RANGE] == SIG_FOOTER
-        return b32_decode(string.gsub(SIG_FOOTER, ""))
-      else
-        return b32_decode(string[1..].gsub(FOOTERS_REGEX, ""))
-      end
+      # "FEED.", "FILE.", "USER." etc..
+      return b32_decode(string[5..])
     end
   end
 end

@@ -23,7 +23,7 @@ module Pigeon
     def []=(key, value)
       raise STRING_KEYS_ONLY unless key.is_a?(String)
 
-      case value[0]
+      case value[0..4]
       when BLOB_SIGIL, MESSAGE_SIGIL, IDENTITY_SIGIL, STRING_SIGIL
         body[key] = value
       else

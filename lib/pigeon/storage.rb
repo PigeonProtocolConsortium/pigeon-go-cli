@@ -60,7 +60,7 @@ module Pigeon
 
       raw_digest = Digest::SHA256.digest(data)
       b32_hash = Helpers.b32_encode(raw_digest)
-      multihash = [BLOB_SIGIL, b32_hash, BLOB_FOOTER].join("")
+      multihash = "#{BLOB_SIGIL}#{b32_hash}"
       write_to_disk(multihash, data)
       multihash
     end

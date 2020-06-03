@@ -86,7 +86,7 @@ RSpec.describe Pigeon::Lexer do
     expect(hash[:DEPTH]).to eq(message.depth)
     expect(hash[:KIND]).to eq(message.kind)
     expect(hash[:PREV]).to eq Pigeon::NOTHING
-    expect(hash[:SIGNATURE]).to eq(messagenature)
+    expect(hash[:SIGNATURE]).to eq(message.signature)
   end
 
   it "catches syntax errors" do

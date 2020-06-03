@@ -266,8 +266,12 @@ module Pigeon
     end
 
     def self.decode_multihash(string)
-      # "FEED.", "FILE.", "USER." etc..
-      return b32_decode(string[5..])
+      case string[0..4]
+      when BLOB_SIGIL, MESSAGE_SIGIL, IDENTITY_SIGIL
+        return b32_decode(string[5..])
+      else
+        return b32_decode(string)
+      end
     end
   end
 end

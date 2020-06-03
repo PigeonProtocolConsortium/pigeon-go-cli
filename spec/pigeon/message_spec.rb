@@ -52,7 +52,7 @@ RSpec.describe Pigeon::Message do
       "prev NONE",
       "",
       "a:\"bar\"",
-      "b:&CHHABX8Q9D9Q0BY2BBZ6FA7SMAFNE9GGMSDTZVZZC9TK2N9F15QG.sha256",
+      "b:FILE.CHHABX8Q9D9Q0BY2BBZ6FA7SMAFNE9GGMSDTZVZZC9TK2N9F15QG",
       "",
       "signature __SIGNATURE__",
     ].join("\n")

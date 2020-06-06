@@ -22,12 +22,11 @@ module Pigeon
 
     def []=(key, value)
       raise STRING_KEYS_ONLY unless key.is_a?(String)
-
       case value[0..4]
-      when BLOB_SIGIL, MESSAGE_SIGIL, IDENTITY_SIGIL, STRING_SIGIL
+      when BLOB_SIGIL, MESSAGE_SIGIL, IDENTITY_SIGIL
         body[key] = value
       else
-        body[key] = value.inspect
+        body[key] = value.start_with?(STRING_SIGIL) ? value : value.inspect
       end
     end
 

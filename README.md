@@ -46,6 +46,7 @@ See `kitchen_sink.sh` examples.
 
 # Current Status
 
+ - [ ] CLI is wrapping `FILE.` and `FEED.` multihahshes in "string quotes". Why?
  - [ ] Update Dev docs in protocol spec to reflect changes to `lipmaa` header.
  - [ ] Update spec document CLI usage examples to reflect API changes in 2020.
  - [ ] 100% class / module documentation

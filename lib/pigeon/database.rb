@@ -147,6 +147,9 @@ module Pigeon
         .join(BUNDLE_MESSAGE_SEPARATOR)
 
       File.write(File.join(file_path, MESSAGE_FILE), content + CR)
+    rescue => w
+      require "pry"
+      binding.pry
     end
 
     def import_bundle(file_path = DEFAULT_BUNDLE_PATH)

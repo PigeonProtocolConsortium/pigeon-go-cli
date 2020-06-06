@@ -229,9 +229,8 @@ module Pigeon
     end
 
     def self.mkdir_p(path)
-      if Dir.exists?(path)
+      if !Dir.exists?(path)
         FileUtils.makedirs(path)
-      else
       end
     end
 

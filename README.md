@@ -19,20 +19,20 @@ Email `contact` at `vaporsoft.xyz` to ask questions or get involved. Your feedba
  * Single threaded use is assumed. Built for a single user per OS process. Many design tradeoffs were made around that use case.
  * Bundling operations need performance tuning. Optimizations are planned and help is welcome.
 
-# Build From Source
+# Installation
 
-We are not yet on Rubygems. The gem will be released after we are fully compliant with the spec.
-
-In the meantime:
+Add this to you Gemfile:
 
 ```
-git clone https://tildegit.org/PigeonProtocolConsortium/pigeon_ruby.git
-cd pigeon_ruby
-gem build pigeon.gemspec
-gem install pigeon-0.1.1.gem
-pigeon-cli identity new # Should work. Raise issue if not.
-pigeon-cli status
-pigeon-cli help
+gem "pigeon",
+  git: "https://tildegit.org/PigeonProtocolConsortium/pigeon_ruby",
+  tag: "v0.2.0"
+```
+
+Then run
+
+```
+bundle install
 ```
 
 # Usage: CLI
@@ -72,9 +72,7 @@ See `kitchen_sink.sh` examples.
 # Idea Bin
 
  - [ ] Ability to add map/reduce plugins to support custom indices?
- - [ ] Ability to add a blob in one swoop using File objects and `Message#[]=`, maybe?
  - [ ] Bundling via [Optar](http://ronja.twibright.com/optar/) or [Colorsafe](https://github.com/colorsafe/colorsafe)
-
  - [ ] Ability to add map/reduce plugins to support custom indices?
  - [ ] Ability to add a blob in one swoop using File objects and `Message#[]=`, maybe?
  - [ ] Bundling via [Optar](http://ronja.twibright.com/optar/) or [Colorsafe](https://github.com/colorsafe/colorsafe)

@@ -181,30 +181,30 @@ In the next section, we will learn more about messages.
 Drafts can be helpful when you are building a message incrementally and need a place to temporarily store things between application restarts.
 What about when you have all the information you need and want to publish immediately?
 
-In those cases, you can call `db.add_message` and your message will be published to your database immediately. No intermediate steps:
+In those cases, you can call `db.add_message` and your message will be published to your database immediately:
 
 ```ruby
 message = db.add_message("garden_entry", {"message_text" => "The basil is just OK", "current_mood" => "content"})
-# => #<Pigeon::Message:0x000056160b5cb558
-#  @author=#<Pigeon::RemoteIdentity:0x000056160b5cb5a8 @multihash="@753...T6G.ed25519">,
+# => #<Pigeon::Message:0x00005653352af998
+#  @author=#<Pigeon::RemoteIdentity:0x00005653352afa38 @multihash="USER.6DQ4RRNBKJ2T4EY5E1GZYYX6X6SZXV1W0GNH1HA4KGKA5KZ2Y2DG">,
 #  @body={"message_text"=>"\"The basil is just OK\"", "current_mood"=>"\"content\""},
 #  @depth=1,
 #  @kind="garden_entry",
-#  @lipmaa=0,
-#  @prev="%EM7...260.sha256",
-#  @signature="J59...238.sig.ed25519">
+#  @lipmaa="NONE",
+#  @prev="TEXT.NPNQZAP9CB79GP8J0SN52F38EBJ9WV370HX6MVZD3XB804TVQQB0",
+#  @signature="95E...J3G">
 
 puts message.render
-# =>  author @753...T6G.ed25519
-#     kind garden_entry
-#     prev %EM7...260.sha256
-#     depth 1
-#     lipmaa 0
+# author USER.6DQ4RRNBKJ2T4EY5E1GZYYX6X6SZXV1W0GNH1HA4KGKA5KZ2Y2DG
+# depth 1
+# kind garden_entry
+# lipmaa NONE
+# prev TEXT.NPNQZAP9CB79GP8J0SN52F38EBJ9WV370HX6MVZD3XB804TVQQB0
 #
-#     message_text:"The basil is just OK"
-#     current_mood:"content"
+# message_text:"The basil is just OK"
+# current_mood:"content"
 #
-#     signature J59...238.sig.ed25519
+# signature 95E...J3G
 ```
 
 We should now have 2 messages in the local database.
@@ -212,7 +212,7 @@ Let's take a look using the `db.all_messages` method:
 
 ```ruby
 db.all_messages
-# => ["%EM749647YHD3CBEC19TJJ7YME7BDXJ2KZ38ZZKS6E3VA0JHAM260.sha256", "%0HTM1H6ETBMKCPP5JMN2XEM060RYQHJ8P5KY09WRPTTVZ20N3EFG.sha256"]
+# => ["TEXT.NPN...QB0", "TEXT.444...92G"]
 ```
 
 The `#all_messages` method returns an array containing every message multihash in the database. We can then pass the multihash to the `db.read_message` method to retrieve the corresponding `Pigeon::Message` object.
@@ -220,33 +220,33 @@ The `#all_messages` method returns an array containing every message multihash i
 Let's look at the old log message we created from a draft previously:
 
 ```ruby
-old_message = db.read_message("%EM749647YHD3CBEC19TJJ7YME7BDXJ2KZ38ZZKS6E3VA0JHAM260.sha256")
-# => #<Pigeon::Message:0x000056160b35f580
-#  @author=#<Pigeon::RemoteIdentity:0x000056160b35ee50 @multihash="@753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G.ed25519">,
-#  @body={"message_text"=>"\"Tomato plant looking healthy.\"", "current_mood"=>"\"Feeling great\""},
-#  @depth=0,
-#  @kind="garden_diary",
-#  @lipmaa=0,
-#  @prev="NONE",
-#  @signature="2ZHC8TX3P2SQVQTMFYXTAT4S02RN43JNZNECRJDA7QMSJNE5G7NV7GTRK3PGFHFY9MBE1Q95BCKBSJH4V0PTX6945A34Z1CARTGH230.sig.ed25519">
+old_message = db.read_message("TEXT.444CC4NFHGQDQEZ6B6HSEPNZAZ80RSQF8TCAX8QR9NBR5T0XX92G")
+# => #<Pigeon::Message:0x0000565335384f08
+#  @author=#<Pigeon::RemoteIdentity:0x0000565335384da0 @multihash="USER.6DQ4RRNBKJ2T4EY5E1GZYYX6X6SZXV1W0GNH1HA4KGKA5KZ2Y2DG">,
+#  @body={"message_text"=>"\"The basil is just OK\"", "current_mood"=>"\"content\""},
+#  @depth=1,
+#  @kind="garden_entry",
+#  @lipmaa="NONE",
+#  @prev="TEXT.NPNQZAP9CB79GP8J0SN52F38EBJ9WV370HX6MVZD3XB804TVQQB0",
+#  @signature="95E...J3G">
 
 puts old_message.render
-# author @753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G.ed25519
-# kind garden_diary
-# prev NONE
-# depth 0
-# lipmaa 0
-#
-# message_text:"Tomato plant looking healthy."
-# current_mood:"Feeling great"
-#
-# signature 2ZHC8TX3P2SQVQTMFYXTAT4S02RN43JNZNECRJDA7QMSJNE5G7NV7GTRK3PGFHFY9MBE1Q95BCKBSJH4V0PTX6945A34Z1CARTGH230.sig.ed25519
+# author USER.6DQ4RRNBKJ2T4EY5E1GZYYX6X6SZXV1W0GNH1HA4KGKA5KZ2Y2DG
+# depth 1
+# kind garden_entry
+# lipmaa NONE
+# prev TEXT.NPNQZAP9CB79GP8J0SN52F38EBJ9WV370HX6MVZD3XB804TVQQB0
+
+# message_text:"The basil is just OK"
+# current_mood:"content"
+
+# signature 95E...J3G
 ```
 
 Additionally, there is a `have_message?` helper that let's us know if we have a message in the local DB. It will return a `Pigeon::Message` (if found) or `false`:
 
-```
-db.have_message?("%AAAM1H6ETBBBCPP5JMN2XEM060RYQCCCP5KY09WRPTTVZ20N3FFF.sha256")
+```ruby
+db.have_message?("TEXT.QPNQGRBREXN4CB49RFZ8SQGXD98Z46FS08QH5ZATT6NE2HACC40X")
 # => false
 ```
 

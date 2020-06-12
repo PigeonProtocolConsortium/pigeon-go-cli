@@ -12,13 +12,12 @@ This document will teach you how to:
  * Build messages using drafts.
  * Manage and query existing messages.
  * Replicate a database among peers.
- * Go beyond simple text messages and attach files to messages.
+ * Attach binary files to messages.
  * Communicate with remote databases using "bundles".
 
 This guide assumes you are familiar with Ruby and the Pigeon Protocol. For an introduction to the protocol, see our protocol specification [here](https://tildegit.org/PigeonProtocolConsortium/protocol_spec).
 
-Pigeon strive to have a "natural" API rather than a simple one. We will cover the API methods listed below. These are the only methods you will need to know to build a pigeon-based application:
-
+Below is a list of all methods needed to run a Pigeon node. Pigeon strives to have a _natural_ API rather than a simple one, which means you may not need to know every single method to operate a node successfully.
 
 **BLOB METHODS:** `#add_blob`,`#get_blob`
 
@@ -32,7 +31,7 @@ Pigeon strive to have a "natural" API rather than a simple one. We will cover th
 
 **PEER METHODS:** `#all_peers`, `#add_peer`, `#remove_peer`, `#all_blocks`, `#block_peer`, `#peer_blocked`
 
-Once you understand the methods listed above, you will have everything you need to start writing Pigeon-based applications. Please let us know what you build! Send an email to `contact` at `vaporsoft.xyz` with your progress.
+**Note to application developers:** Please let us know what you build! Send an email to `contact` at `vaporsoft.xyz` with your progress.
 
 ## Installation
 
@@ -77,63 +76,68 @@ Let's see if we have a draft to work with:
 
 ```ruby
 db.get_draft
-# => #<Pigeon::Draft:0x000056160b2e64a0 @author="NONE", @body={"a"=>"\"bar\"", "b"=>"&CH...QG.sha256"}, @depth=-1, @kind="unit_test", @lipmaa="NONE", @prev="NONE", @signature="NONE">
+RuntimeError: NO DRAFT. CREATE ONE FIRST. Call db.new_draft(kind:, body:)
+from lib/pigeon/database.rb:104:in `get_draft'
 ```
 
-It appears that my database has a draft. I don't actually remember what this draft was, so I will just delete it before proceeding.
+We do not have a draft yet. We need to create one:
 
 ```ruby
-db.delete_current_draft
-# => nil
+db.new_draft(kind: "garden_diary", body: {"message_text"=>"Tomato plant looking healthy."})
+=> #<Pigeon::Draft:0x00005603ed399b48 @author="NONE",
+#    @body={"greeting"=>"\"Hello, world!\""}, @depth=-1, @kind="example123",
+#    @lipmaa="NONE", @prev="NONE", @signature="NONE">
 ```
 
-Now I can create a new draft. I am going to create a new `garden_diary` for a fictitious gardening app. In my gardening app, I expect every `garden_diary` message to have a `message_text` entry in its body. We can add that now.
+The command above creates a new draft entry of kind `garden_entry` with on key/value pair in the body. We can view the draft at any time via `#get_draft`:
 
 ```ruby
-db.new_draft(kind: "garden_diary", body: {"message_text" => "Tomato plant looking healthy."})
-# => #<Pigeon::Draft:0x000056160b63da68 @author="NONE", @body={"message_text"=>"\"Tomato plant looking healthy.\""}, @depth=-1, @kind="garden_diary", @lipmaa="NONE", @prev="NONE", @signature="NONE">
+db.get_draft
+# => #<Pigeon::Draft:0x00005603ed81e830 @author="NONE",
+#      @body={"greeting"=>"\"Hello, world!\""}, @depth=-1,
+#      @kind="example123", @lipmaa="NONE", @prev="NONE",
+#      @signature="NONE">
 ```
 
-A few notes about this draft message:
-
- * `"garden_diary` is the message `kind`. This is definable by application developers and helps determine the type of message we are dealing with. A fictitious diary app might have other entries such as `"status_update"` or `"photo_entry"`. It depends on the application you are building.
- * Notice that my hash used string keys for the `"message_text"` body entry. You can only use strings for key / value pairs (no `:symbols` or numbers). Later on we will learn how to attach files to messages.
- * The `body:` part is optional. I could have called `db.new_draft(kind: "garden_diary")` and added key / value pairs to the body later.
-
-Oops! Speaking of adding entries to a draft's body, it looks like I forgot something. In my fictitious gardening app, a `garden_diary` entry doesn't just have a `"message_text"`, it also has a `"current_mood"` entry. Luckily, it is easy to add keys to unpublished drafts. Let's add the key now:
+Since the draft has not been published to the feed, its contents are mutable. We can add a new key/value pair to the message body with the following command:
 
 ```ruby
 db.update_draft("current_mood", "Feeling great")
 # => "\"Feeling great\""
 ```
 
-OK, I think our draft message is looking better. Let's take a look:
+A few notes about this draft message:
 
-```ruby
-db.get_draft
-# => => #<Pigeon::Draft:0x000056160b3e6be8 @author="NONE", @body={"message_text"=>"\"Tomato plant looking healthy.\"", "current_mood"=>"\"Feeling great\""}, @depth=-1, @kind="garden_diary", @lipmaa="NONE", @prev="NONE", @signature="NONE">
-```
+ * `"garden_diary` is the message `kind`. This is definable by application developers and helps determine the type of message we are dealing with. A fictitious diary app might have other entries such as `"status_update"` or `"photo_entry"`. It depends on the application you are building.
+ * I used string keys for the `"message_text"` body entry rather than symbols or numbers. This is because you can only use strings for key / value pairs (no `:symbols` or numbers). Later on we will learn how to attach files to messages.
+ * The `body:` part is optional. I could have called `db.new_draft(kind: "garden_diary")` and added key / value pairs to the body later.
 
-I can see the status of my current draft message using `db.get_draft`. It returns a `Pigeon::Draft` object, whish is not very human readable. To get a more human readable version, I can use the `render_as_draft` method on a `Draft` object:
+Let's take a final look at our draft message. To get a more human readable version, I can use the `render_as_draft` method on a `Draft` object:
 
 ```ruby
 human_readable_string = db.get_draft.render_as_draft
 # => "author DRAFT\nkind garden_dia...."
 puts human_readable_string
-# =>  author DRAFT
-#     kind garden_diary
-#     prev DRAFT
-#     depth DRAFT
-#     lipmaa DRAFT
+# => author DRAFT
+#    depth DRAFT
+#    kind example123
+#    lipmaa DRAFT
+#    prev DRAFT
 #
-#     message_text:"Tomato plant looking healthy."
-#     current_mood:"Feeling great"
+#    greeting:"Hello, world!"
+#    current_mood:"Feeling great"
 ```
 
 Some interesting things about the draft we just rendered:
 
  * Unlike a message, a draft has no signature (yet).
  * The `author`, `kind`, `prev`, `depth`, `lipmaa` properties are all set to `"DRAFT"`. Real values will be populated when we finally publish the draft.
+
+If we want to start over, we can delete a draft via `delete_current_draft`:
+```ruby
+db.delete_current_draft
+# => nil
+```
 
 ## Turning Drafts Into Messages
 
@@ -142,33 +146,33 @@ Since we did that in the last step, I will go ahead and publish the message:
 
 ```
 my_message = db.publish_draft
-# => #<Pigeon::Message:0x000056160b50dd00
-#  @author=#<Pigeon::RemoteIdentity:0x000056160b50dd78 @multihash="@753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G.ed25519">,
-#  @body={"message_text"=>"\"Tomato plant looking healthy.\"", "current_mood"=>"\"Feeling great\""},
-#  @depth=0,
-#  @kind="garden_diary",
-#  @lipmaa=0,
-#  @prev="NONE",
-#  @signature="2ZHC8TX3P2SQVQTMFYXTAT4S02RN43JNZNECRJDA7QMSJNE5G7NV7GTRK3PGFHFY9MBE1Q95BCKBSJH4V0PTX6945A34Z1CARTGH230.sig.ed25519">
+=> #<Pigeon::Message:0x000055a751032c28
+ @author=#<Pigeon::RemoteIdentity:0x000055a751032cf0 @multihash="USER.6DQ4RRNBKJ2T4EY5E1GZYYX6X6SZXV1W0GNH1HA4KGKA5KZ2Y2DG">,
+ @body={"greeting"=>"\"Hello, world!\"", "current_mood"=>"\"Feeling great\""},
+ @depth=0,
+ @kind="garden_diary",
+ @lipmaa="NONE",
+ @prev="NONE",
+ @signature="QNY...208">
 ```
 
 Let's look at our new message in a human-readable way:
 
 ```ruby
 puts my_message.render
-# =>  author @753...T6G.ed25519
-#     kind garden_diary
-#     prev NONE
-#     depth 0
-#     lipmaa 0
+# author USER.6DQ4RRNBKJ2T4EY5E1GZYYX6X6SZXV1W0GNH1HA4KGKA5KZ2Y2DG
+# depth 0
+# kind example123
+# lipmaa NONE
+# prev NONE
 #
-#     message_text:"Tomato plant looking healthy."
-#     current_mood:"Feeling great"
+# greeting:"Hello, world!"
+# current_mood:"Feeling great"
 #
-#     signature 2ZH...230.sig.ed25519
+# signature QNY...208
 ```
 
-We see that unlike our draft, the message has a signature. The header fields are also populated.
+Unlike our draft, the message has a signature. The header fields are also populated.
 
 In the next section, we will learn more about messages.
 

@@ -55,7 +55,7 @@ module Pigeon
   STRING_KEYS_ONLY = "String keys only"
   MISSING_BODY = "BODY CANT BE EMPTY"
   STILL_HAVE_DRAFT = "RESET DRAFT (%s) FIRST (db.delete_current_draft)"
-  MISSING_DRAFT = "NO DRAFT. CREATE ONE FIRST. Call db.new_draft(kind, body)"
+  MISSING_DRAFT = "NO DRAFT. CREATE ONE FIRST. Call db.new_draft(kind:, body:)"
   RUNAWAY_LOOP = "RUNAWAY LOOP DETECTED"
 
   # Constants for internal use only:

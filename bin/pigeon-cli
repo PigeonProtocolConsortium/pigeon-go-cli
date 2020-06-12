@@ -101,7 +101,7 @@ module Pigeon
     desc "append", "Add a key/value pair to the current DRAFT"
 
     def append(key, raw_value = "")
-      v = raw_value != "" ? raw_value : STDIN.read
+      v = raw_value != "" ? raw_value : STDIN.read.chomp
       if db.get_draft
         db.update_draft(key, v)
         puts db.get_draft.render_as_draft
@@ -191,10 +191,10 @@ module Pigeon
     desc "identity SUBCOMMAND ...ARGS", "Manage `.pgn` identity"
     subcommand "identity", Identity
 
-    desc "message SUBCOMMAND ...ARGS", "Manage blob storage"
+    desc "message SUBCOMMAND ...ARGS", "Manage text-based messages"
     subcommand "message", PigeonMessage
 
-    desc "peer SUBCOMMAND ...ARGS", "Manage blob storage"
+    desc "peer SUBCOMMAND ...ARGS", "Manage blob (file) storage"
     subcommand "peer", Peer
   end
 end

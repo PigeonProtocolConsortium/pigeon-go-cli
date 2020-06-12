@@ -14,12 +14,12 @@ Email `contact` at `vaporsoft.xyz` to ask questions or get involved. Your feedba
 
 # Caveats
 
- * Current windows support is unknown (and unlikely to work in current state). Please report bugs.
- * Not published to RubyGems yet (see installation instructions below)
+ * Implementation is assumed to be stable, but does not have much production use.
+ * Windows support is unknown (and unlikely to work in current state). Please report bugs.
  * Single threaded use is assumed. Built for a single user per OS process. Many design tradeoffs were made around that use case.
  * Bundling operations need performance tuning. Optimizations are planned and help is welcome.
 
-# Installation
+# Installation - Bundler (Easy)
 
 Add this to you Gemfile:
 
@@ -46,23 +46,16 @@ See `kitchen_sink.sh` examples.
 
 # Current Status
 
- - [ ] CLI is wrapping `FILE.` and `FEED.` multihahshes in "string quotes". Why?
- - [ ] Update Dev docs in protocol spec to reflect changes to `lipmaa` header.
  - [ ] Update spec document CLI usage examples to reflect API changes in 2020.
+ - [ ] Ability to unblock someone.
+ - [ ] Ability to delete a key from a draft.
+ - [ ] Update Dev docs in protocol spec to reflect changes to `lipmaa` header.
  - [ ] 100% class / module documentation
  - [ ] Run a [terminology extraction tool](https://www.visualthesaurus.com/vocabgrabber/#) on the documentation and write a glossary of terms.
- - [ ] Publish to RubyGems
+ - [ ] Ability to list all blocked users.
+ - [ ] Ability to unblock a user.
 
-# Optimizations
-
- - [ ] add parsers and validators for all CLI inputs
- - [ ] Make the switch to LevelDB, RocksDB, [UNQLite](https://unqlite.org/features.html) or similar (currently using Ruby PStore).
- - [ ] Reduce whole darn repo into single module to aide portability. `::Helpers` module is OK.
- - [ ] Update the bundles.md document once `bundle consume` works.
- - [ ] Performance benchmarks (Do this second to last!)
- - [ ] Performance tuning (Do this last!)
-
-# New Features / Road Map
+# "Nice to Have"
 
  - [ ] Support partial verification via `lipmaa` property.
  - [ ] Add `--since=`/`--until=` args to `bundle create` for sending partial / "slice" bundles.

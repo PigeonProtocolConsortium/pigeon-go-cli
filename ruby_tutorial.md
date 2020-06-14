@@ -39,7 +39,7 @@ Installation steps change over time. Please see [README.md](README.md) for the m
 
 ## Creating a Database Object
 
-When building Pigeon-based applications, a `Pigeon::Database` object controls nearly all interactions with the database.
+When building Pigeon-based applications, a `Pigeon::Database` object controls all interactions with the database.
 For the rest of the tutorial we will use the variable name `db` to refer to the current database.
 
 You can create your own database with the following steps:
@@ -72,6 +72,8 @@ As a convenience, the Pigeon Ruby client allows developers to keep zero or one "
 
 A draft is not part of the protocol spec. It is a convenience provided to users of this library. You could absolutely write messages by hand, calculate their signatures, convert everything to Base32 and manually add them to the database. This would be extremely tedious, however, so the draft functionality was added for convenience.
 
+The examples below will center around the creation of a fictitious gardening journal app, a use case that Pigeon is well suited for.
+
 Let's see if we have a draft to work with:
 
 ```ruby
@@ -89,7 +91,7 @@ db.new_draft(kind: "garden_diary", body: {"message_text"=>"Tomato plant looking 
 #    @lipmaa="NONE", @prev="NONE", @signature="NONE">
 ```
 
-The command above creates a new draft entry of kind `garden_entry` with on key/value pair in the body. We can view the draft at any time via `#get_draft`:
+The command above creates a new draft entry of kind `garden_entry` with one key/value pair in the body. We can view the draft at any time via `#get_draft`:
 
 ```ruby
 db.get_draft
@@ -120,7 +122,7 @@ human_readable_string = db.get_draft.render_as_draft
 puts human_readable_string
 # => author DRAFT
 #    depth DRAFT
-#    kind example123
+#    kind garden_diary
 #    lipmaa DRAFT
 #    prev DRAFT
 #
@@ -134,10 +136,13 @@ Some interesting things about the draft we just rendered:
  * The `author`, `kind`, `prev`, `depth`, `lipmaa` properties are all set to `"DRAFT"`. Real values will be populated when we finally publish the draft.
 
 If we want to start over, we can delete a draft via `delete_current_draft`:
+
 ```ruby
 db.delete_current_draft
 # => nil
 ```
+
+Let's not do this, though. Instead, we will publish this draft in the next section.
 
 ## Turning Drafts Into Messages
 
@@ -162,7 +167,7 @@ Let's look at our new message in a human-readable way:
 puts my_message.render
 # author USER.6DQ4RRNBKJ2T4EY5E1GZYYX6X6SZXV1W0GNH1HA4KGKA5KZ2Y2DG
 # depth 0
-# kind example123
+# kind garden_diary
 # lipmaa NONE
 # prev NONE
 #
@@ -252,34 +257,38 @@ db.have_message?("TEXT.QPNQGRBREXN4CB49RFZ8SQGXD98Z46FS08QH5ZATT6NE2HACC40X")
 
 ## Working with Peers
 
-Building a gardening diary is not very fun unless there is a way of sharing your work. Pigeon supports data transfer through the use of peers.
+Building a gardening diary is not very fun unless there is a way of sharing your work. Pigeon supports data transfer through the use of peers. When a peer adds you to their local machine, they begin replicating your database on their machine, thereby giving them access to your diary entries and also creating a redundant backup.
 
-Every Pigeon database (including ours) has a unique identifier to identify itself.
+As we learned in the last section, Pigeon messages have a unique ID ("multihash"). Every message starts with the word "FILE." and is followed by a base32 string of digits and letters. Much like messages, every Pigeon database has a unique identifier to identify itself. A database's multihash starts with the word "USER.". Like a message multihash, it is a long string of base32 characters:
 
-Let's call `db.who_am_i` to find out what our database multihash is:
+```
+USER.58844MCNB7ZF7HVKYFRBR7R7E75T8YXP4JBR267AS09RNMHEG3EG
+```
+
+We can call `db.who_am_i` to determine our local database multihash:
 
 ```ruby
 me = db.who_am_i
 # => #<Pigeon::LocalIdentity:0x000056160b5ca658
-#  @multihash="@753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G.ed25519",
+#  @multihash="USER.753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G",
 #  @seed="REDACTED",
 #  @signing_key=#<Ed25519::SigningKey:REDACTED>>
 ```
 
-Calling `db.who_am_i` returned a `Pigeon::LocalIdentity`. To get results in a more copy/pastable format, call `#multihash` on the `LocalIdentity`:
+Calling `db.who_am_i` returned a `Pigeon::LocalIdentity`. To get results in a more copy/pastable format, call `#multihash` on the `LocalIdentity` object:
 
 ```ruby
-me.multihash
-# => "@753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G.ed25519"
+puts me.multihash
+# USER.753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G
 ```
 
 You can send this string to all your friends so they can add you as a peer to their respective databases.
 Let's add a friend to our database now.
-My friend has informed me her Pigeon identity is `"@753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G.ed25519"`:
+My friend has informed me her Pigeon identity is `"USER.753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G"`:
 
 ```ruby
-db.add_peer("@753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G.ed25519")
-# => "@753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G.ed25519"
+db.add_peer("USER.753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G")
+# => "USER.753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G"
 ```
 
 My client will now keep a local copy of my friend's DB on disk at all times. Since Pigeon is an offline-only protocol, she will need to mail me an SD Card with her files. We will cover this later in the "Bundles" section.
@@ -288,14 +297,14 @@ If you ever lose track of who your peers are, you can call `db.all_peers` to get
 
 ```ruby
 db.all_peers
-# => ["@753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G.ed25519"]
+# => ["USER.753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G"]
 ```
 
 You can also remove peers if you no longer need to replicate their messages:
 
 ```ruby
-db.remove_peer("@753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G.ed25519")
-# => "@753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G.ed25519"
+db.remove_peer("USER.753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G")
+# => "USER.753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G"
 db.all_peers
 # => []
 ```
@@ -303,13 +312,13 @@ db.all_peers
 It is also possible to block peers as needed via `db.block_peer`. `block_peer` is _not_ the same as `remove_peer`. Blocking a peer will prevent gossip from flowing through your database. All of their messages will be ignored and none of your peers will be able to retrieve their messages through you via gossip:
 
 ```ruby
-db.block_peer("@753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G.ed25519")
-# => "@753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G.ed25519"
+db.block_peer("USER.753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G")
+# => "USER.753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G"
 
 db.all_blocks
-# => ["@753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G.ed25519"]
+# => ["USER.753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G"]
 
-db.peer_blocked?("@753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G.ed25519")
+db.peer_blocked?("USER.753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G")
 # => true
 ```
 
@@ -320,7 +329,7 @@ The client offers some simple query capabilities and indexes. More will be added
 ### Fetch a Message by Feed Identity + Message Depth
 
 ```ruby
-my_peer = "@MF312A76JV8S1XWCHV1XR6ANRDMPAT2G5K8PZTGKWV354PR82CD0.ed25519"
+my_peer = "USER.MF312A76JV8S1XWCHV1XR6ANRDMPAT2G5K8PZTGKWV354PR82CD0"
 db.get_message_by_depth(my_peer, 1)
 # => "%6JD96QB2EQ30EN3DMHH50NXMR0RZ2GMH43P2DZB3HN6PE6NFE9A0.sha256"
 ```
@@ -350,16 +359,7 @@ Creating a blob returns a blob multihash (`&FV0...MRG.sha256`) which can be atta
 the_blob_from_before = "&FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG.sha256"
 msg = db.add_message("photo", {"my_cat_picture" => "&FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG.sha256"})
 puts msg.render
-# => author @MF312A76JV8S1XWCHV1XR6ANRDMPAT2G5K8PZTGKWV354PR82CD0.ed25519
-#    kind photo
-#    prev %ZV85NQS8B1BWQN7YAME1GB0G6XS2AVN610RQTME507DN5ASP2S6G.sha256
-#    depth 3
-#    lipmaa 2
-#
-#    my_cat_picture:&FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG.sha256
-#
-#    signature JSPJJQJRVBVGV52K2058AR2KFQCWSZ8M8W6Q6PB93R2T3SJ031AYX1X74KCW06HHVQ9Y6NDATGE6NH3W59QY35M58YDQC5WEA1ASW08.sig.ed25519
-
+# UPDATE THIS!!!
 ```
 
 If you want to retrieve a blob later, you can pass the blob multihash to `db#get_blob`. The client will return it as binary data.

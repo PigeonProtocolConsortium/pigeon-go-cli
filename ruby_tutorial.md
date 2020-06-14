@@ -257,9 +257,12 @@ db.have_message?("TEXT.QPNQGRBREXN4CB49RFZ8SQGXD98Z46FS08QH5ZATT6NE2HACC40X")
 
 ## Working with Peers
 
+---
+STOPPED HERE.
+
 Building a gardening diary is not very fun unless there is a way of sharing your work. Pigeon supports data transfer through the use of peers. When a peer adds you to their local machine, they begin replicating your database on their machine, thereby giving them access to your diary entries and also creating a redundant backup.
 
-As we learned in the last section, Pigeon messages have a unique ID ("multihash"). Every message starts with the word "FILE." and is followed by a base32 string of digits and letters. Much like messages, every Pigeon database has a unique identifier to identify itself. A database's multihash starts with the word "USER.". Like a message multihash, it is a long string of base32 characters:
+As we learned in the last section, Pigeon messages have a unique ID ("multihash"). Every message starts with the word "TEXT." and is followed by a base32 string of digits and letters. Much like messages, every Pigeon database has a unique identifier to identify itself. A database's multihash starts with the word "USER.". Like a message multihash, it is a long string of base32 characters:
 
 ```
 USER.58844MCNB7ZF7HVKYFRBR7R7E75T8YXP4JBR267AS09RNMHEG3EG
@@ -269,17 +272,14 @@ We can call `db.who_am_i` to determine our local database multihash:
 
 ```ruby
 me = db.who_am_i
-# => #<Pigeon::LocalIdentity:0x000056160b5ca658
-#  @multihash="USER.753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G",
-#  @seed="REDACTED",
-#  @signing_key=#<Ed25519::SigningKey:REDACTED>>
+# => #<Pigeon::LocalIdentity:0x0000558496ad4bf0 @seed="___", @signing_key=#<Ed25519::SigningKey:0x0000558496ad4bc8>>
 ```
 
-Calling `db.who_am_i` returned a `Pigeon::LocalIdentity`. To get results in a more copy/pastable format, call `#multihash` on the `LocalIdentity` object:
+`db.who_am_i` returns a `Pigeon::LocalIdentity` rather than a string (which is what we want). To get results in a more copy/pastable format, call `#multihash` on the `LocalIdentity` object:
 
 ```ruby
 puts me.multihash
-# USER.753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G
+# USER.6DQ4RRNBKJ2T4EY5E1GZYYX6X6SZXV1W0GNH1HA4KGKA5KZ2Y2DG
 ```
 
 You can send this string to all your friends so they can add you as a peer to their respective databases.
@@ -291,7 +291,7 @@ db.add_peer("USER.753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G")
 # => "USER.753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G"
 ```
 
-My client will now keep a local copy of my friend's DB on disk at all times. Since Pigeon is an offline-only protocol, she will need to mail me an SD Card with her files. We will cover this later in the "Bundles" section.
+My client will now keep a local copy of my friend's DB on disk at all times, assuming I have received a "bundle" for the user. Since Pigeon is an offline-only protocol, she will need to mail me an SD Card with her files. We will cover this later in the "Bundles" section.
 
 If you ever lose track of who your peers are, you can call `db.all_peers` to get a list:
 
@@ -309,7 +309,7 @@ db.all_peers
 # => []
 ```
 
-It is also possible to block peers as needed via `db.block_peer`. `block_peer` is _not_ the same as `remove_peer`. Blocking a peer will prevent gossip from flowing through your database. All of their messages will be ignored and none of your peers will be able to retrieve their messages through you via gossip:
+It is also possible to block peers as needed via `db.block_peer`. `block_peer` is _not_ the same as `remove_peer`. Blocking a peer will prevent gossip from flowing through your database. All of their messages will be ignored and none of your peers will be able to retrieve their messages through you via gossip. When you block a peer, you are essentially imposing an embargo against them. Bundles from blocked peers will neither be imported nor exported under any circumstance.
 
 ```ruby
 db.block_peer("USER.753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G")

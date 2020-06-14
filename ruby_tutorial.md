@@ -324,7 +324,7 @@ db.peer_blocked?("USER.753FT97S1FD3SRYPTVPQQ64F7HCEAZMWVBKG0C2MYMS5MJ3SBT6G")
 
 ## Querying the Database
 
-The client offers some simple query capabilities and indexes. More will be added at a later date. Please email `contact` at `vaporsoft.xyz` if you are interested in helping.
+The client offers minimal query capabilities and indexes. More will be added at a later date. Please email `contact` at `vaporsoft.xyz` if you are interested in helping. Feature requests are welcome.
 
 ### Fetch a Message by Feed Identity + Message Depth
 
@@ -343,29 +343,42 @@ db.get_message_count_for(my_peer)
 
 ## Attaching Files to Messages
 
-Pigeon supports file attachments in the form of [blobs](https://en.wikipedia.org/wiki/Binary_large_object).
+There are limits to the usefulness (and size) of text content for a Pigeon message. When building a gardening diary app, a user will eventually want to attach garden photos to their entries.
 
-Once you have added a blob to your local database, it can be attached to messages using the special blob multihash string.
+Pigeon supports message file attachments in the form of [blobs](https://en.wikipedia.org/wiki/Binary_large_object).
+
+Once you have added a blob to your local database, it can be attached to messages using the special blob multihash string. Passing arbitrary binary data as a string via `db.add_blob(binary_data)` will do two things:
+
+1. Store the file in your local database (unless we already have a copy)
+2. Return a 57 character blob multihash, which can be used to reference the file inside of a message.
 
 ```ruby
 binary_data = File.read("kitty_cat.gif")
 db.add_blob(binary_data)
-# => "&FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG.sha256"
+# => "FILE.FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG"
 ```
 
 Creating a blob returns a blob multihash (`&FV0...MRG.sha256`) which can be attached to a message in the form of keys or values:
 
 ```ruby
-the_blob_from_before = "&FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG.sha256"
-msg = db.add_message("photo", {"my_cat_picture" => "&FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG.sha256"})
+the_blob_from_before = "FILE.FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG"
+msg = db.add_message("photo", {"my_cat_picture" => "FILE.FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG"})
 puts msg.render
-# UPDATE THIS!!!
+# author USER.6DQ4RRNBKJ2T4EY5E1GZYYX6X6SZXV1W0GNH1HA4KGKA5KZ2Y2DG
+# depth 2
+# kind photo
+# lipmaa NONE
+# prev TEXT.444CC4NFHGQDQEZ6B6HSEPNZAZ80RSQF8TCAX8QR9NBR5T0XX92G
+#
+# my_cat_picture:FILE.FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG
+#
+# signature WT96XNJ6T006YS51ZDVPT1A7DJW2E4BTBZF66WHHWMKEP35MZ0YD30C32M8WQ85VK19SQFK47MXPEDMWW1GC0RV5XPYHT6WNDMGZM1R
 ```
 
 If you want to retrieve a blob later, you can pass the blob multihash to `db#get_blob`. The client will return it as binary data.
 
 ```ruby
-db.get_blob("&FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG.sha256")
+db.get_blob("FILE.FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG")
 # => "GIF89aX\u0000\u001F\u0000\xD58\u0000\u0000\u0000\u0000...
 ```
 

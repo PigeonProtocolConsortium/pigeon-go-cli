@@ -386,9 +386,12 @@ db.get_blob("FILE.FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG")
 
 Eventually, you will want to share your log messages with a peer, either as a form of communication or for the sake of creating redundant backups.
 
-All data transfer operations in Pigeon are file based. To export data from your local database, one must create a "bundle", which is a file directory with a very specific layout. Think of bundles as a specialized archive format that a Pigeon-compliant database can easily ingest. The bundle mechanism will **package all blobs and messages into a single exportable directory structure automatically**. As long as your peer's client is compliant with the Pigeon spec, they will be replicated onto the peer's machine upon import.
+All data transfer operations in Pigeon are file based. To export data from your local database, one must create a "bundle", which is a file directory with a very specific layout. You can take this directory structure and burn it to a DVD-R, Zip and email, host on an HTTP server, seed it as a torrent, etc..
 
-Pigeon does not specify transport or compression concerns, but any reliable file transfer method is possible.
+Think of bundles as a specialized archive format that a Pigeon-compliant database can easily ingest. The bundle mechanism will **package all blobs and messages into a single exportable directory structure automatically**. As long as your peer's client is compliant with the Pigeon spec, they will be replicated onto the peer's machine upon import.
+
+
+Pigeon does not specify transport or compression concerns, but any reliable file transfer method is possible. For example, applying GZip compression to a bundle is a great idea, but the spec itself does not dictate how to do this. This is particularly true for network-related concerns. The Pigeon spec will never reference network transport in the spec.
 
 In the example below, I will create a bundle called `"bundle_for_my_peer"`.
 
@@ -410,3 +413,13 @@ If you wish to ingest a peer's message, you can perform the operation in reverse
 db.import_bundle("a_bundle_my_peer_gave_me")
 ```
 
+# Wrapping Up
+
+That's all there is to the protocol spec. In summary:
+
+ * Messages are the core building block of Pigeon databases.
+ * Messages can have file attachments via "blobs"
+ * Messages can reference other users via "USER.****" multihashes
+ * Messages are replicated onto peer machines via "following"
+ * Messages can be avoided via "blocking"
+ * Messages are shared between machines by passing around a disk directory structure known as a "bundle".

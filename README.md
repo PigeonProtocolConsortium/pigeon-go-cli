@@ -2,28 +2,39 @@
 
 A single executable to manage a Pigeon node.
 
- - [ ] Finish [learning how Cobra works](WIP)
- - [ ] Rename all CLI usages to `VERB NOUN --ADJECTIVE`.
- - [ ] pigeon show help
- - [ ] pigeon show version
- - [ ] pigeon-cli create identity
- - [ ] pigeon-cli show identity
- - [ ] pigeon show blob
- - [ ] pigeon blob set -> Pipe
- - [ ] pigeon blob set -> Path
- - [ ] pigeon create bundle
- - [ ] pigeon ingest bundle
- - [ ] pigeon-cli draft append
- - [ ] pigeon-cli draft create
- - [ ] pigeon-cli draft show
- - [ ] pigeon-cli draft sign
- - [ ] pigeon-cli message find
- - [ ] pigeon-cli message find-all
- - [ ] pigeon-cli message last
- - [ ] pigeon-cli peer add
- - [ ] pigeon-cli peer all
- - [ ] pigeon-cli peer all-blocked
- - [ ] pigeon-cli peer block
- - [ ] pigeon-cli peer remove
- - [ ] pigeon-cli peer remove
- - [ ] pigeon-cli peer unblock
+TODO:
+
+ - [ ] Get a real coverage tool going.
+ - [ ] Finish all the things below:
+
+ |Done?|Verb        |Noun    | Flag / arg 1  | Flag 2    |
+ |-----|------------|--------|---------------|-----------|
+ |     |block       |peer    | user mhash    |           |
+ |     |create      |blob    | file Path     |           |
+ |     |create      |blob    | pipe          |           |
+ |     |create      |bundle  |               |           |
+ |     |create      |draft   |               |           |
+ |     |create      |identity|               |           |
+ |     |find        |message | --all         |           |
+ |     |find        |message | --last        |           |
+ |     |follow      |peer    | user mhash    |           |
+ |     |ingest      |bundle  |               |           |
+ |     |show        |blob    |               |           |
+ |     |show        |draft   |               |           |
+ |     |show        |identity|               |           |
+ |     |show        |message | message mhash |           |
+ |     |show        |peers   |               |           |
+ |     |show        |peers   | --blocked     |           |
+ |     |sign        |draft   |               |           |
+ |     |unblock     |peer    | user mhash    |           |
+ |     |unfollow    |peer    |               |           |
+ |     |update      |draft   | --key=?       | --value=? |
+ |  X  |help        |        |               |           |
+ |  X  |version     |        |               |           |
+
+
+
+
+
+
+

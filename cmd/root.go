@@ -14,7 +14,7 @@ var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "pigeon",
+	Use:   "pigeon-cli",
 	Short: "An off-grid, serverless, peer-to-peer protocol for building software that works on poor internet connections, or entirely offline.",
 	Long: `Pigeon enables offline and off-grid computer systems to exchange messages
  in a way that is delay tolerant, tamper resistant and easily transmitted

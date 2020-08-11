@@ -12,26 +12,26 @@ Don't use the Go version yet. If you want sommething stable, there is a [Ruby ve
 
  |Done?|Verb        |Noun    | Flag / arg 1  | Flag 2    |
  |-----|------------|--------|---------------|-----------|
- |     |block       |peer    | user mhash    |           |
- |     |create      |blob    | file Path     |           |
- |     |create      |blob    | pipe          |           |
- |     |create      |bundle  |               |           |
- |     |create      |draft   |               |           |
  |     |create      |identity|               |           |
- |     |find        |message | --all         |           |
- |     |find        |message | --last        |           |
- |     |follow      |peer    | user mhash    |           |
- |     |ingest      |bundle  |               |           |
+ |     |show        |identity|               |           |
+ |     |create      |draft   |               |           |
  |     |show        |blob    |               |           |
  |     |show        |draft   |               |           |
- |     |show        |identity|               |           |
+ |     |create      |blob    | file path     |           |
+ |     |create      |blob    | pipe          |           |
+ |     |update      |draft   | --key=?       | --value=? |
+ |     |publish     |draft   |               |           |
+ |     |follow      |peer    | user mhash    |           |
+ |     |unblock     |peer    | user mhash    |           |
+ |     |block       |peer    | user mhash    |           |
+ |     |create      |bundle  |               |           |
+ |     |find        |message | --all         |           |
+ |     |find        |message | --last        |           |
+ |     |ingest      |bundle  |               |           |
  |     |show        |message | message mhash |           |
  |     |show        |peers   |               |           |
  |     |show        |peers   | --blocked     |           |
- |     |sign        |draft   |               |           |
- |     |unblock     |peer    | user mhash    |           |
  |     |unfollow    |peer    |               |           |
- |     |update      |draft   | --key=?       | --value=? |
  |  X  |help        |        |               |           |
  |  X  |version     |        |               |           |
 

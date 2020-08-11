@@ -2,9 +2,12 @@
 
 A single executable to manage a Pigeon node.
 
-TODO:
+# Project Status
 
- - [ ] Get a real coverage tool going.
+Don't use the Go version yet. If you want sommething stable, there is a [Ruby version that is feature complete](https://tildegit.org/PigeonProtocolConsortium/Pigeon-Ruby).
+
+# TODO
+
  - [ ] Finish all the things below:
 
  |Done?|Verb        |Noun    | Flag / arg 1  | Flag 2    |
@@ -32,9 +35,22 @@ TODO:
  |  X  |help        |        |               |           |
  |  X  |version     |        |               |           |
 
+# Run Tests
 
+Without coverage:
 
+```
+go test ./cmd
+```
 
+With coverage:
 
+```
+go test ./cmd -coverprofile cp.out
+```
 
+# Build Project
 
+```
+go build --o=pigeon-cli
+```

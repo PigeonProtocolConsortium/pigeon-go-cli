@@ -53,14 +53,19 @@ var tests = []testCase{
 	},
 }
 
-func TestGetNthBase32Char(t *testing.T) {
-	fmt.Println("What we want:")
-	fmt.Println(tests[1].encoded)
-	hmm := tests[1].decoded
-	count := 10 // (len(hmm) * 8) / 5
-	for i := 0; i < count; i++ {
-		result := GetNthBase32Char(uint16(i), hmm)
-		fmt.Printf("%s", string(result))
+func TestB32Encode(t *testing.T) {
+	for _, k := range tests {
+		actual := B32Encode(k.decoded)
+		if actual == k.encoded {
+			fmt.Println("THIS IS OK")
+		} else {
+			fmt.Printf(`
+				EXPECTED: %s
+				LEN:      %d
+				ACTUAL:   %s
+				LEN:      %d
+				`, k.encoded, len(k.encoded), actual, len(actual))
+			t.FailNow()
+		}
 	}
-	fmt.Println("\n====")
 }

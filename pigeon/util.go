@@ -6,9 +6,6 @@ import (
 	"encoding/binary"
 	"fmt"
 	"os"
-	"strings"
-
-	"github.com/richardlehane/crock32"
 )
 
 // Version is the current version of Pigeon CLI
@@ -61,74 +58,40 @@ var decodeTable = map[uint16]rune{
 	0b11111: 'Z',
 }
 
-// GetNthBase32Char retrieves the Crockford base 32 character
+// getBase32Size returns the number of characters needed to
+// encode a given byte array to base32.
+func getBase32Size(data []byte) int {
+	bits := len(data) * 8
+	return (bits / 5) + (bits % 5)
+}
+
+// getNthBase32Char retrieves the Crockford base 32 character
 // at a particular index
-func GetNthBase32Char(n uint16, data []byte) rune {
-	// TODO: Validate that `len(data)` is smaller than uint16
-	//       max
-	length := uint16(len(data))
+func getNthBase32Char(n int, data []byte) rune {
 	startingBit := n * 5
 	startingByte := startingBit / 8
 	lShift := startingBit % 8
 	byte1 := data[startingByte]
 	var byte2 byte
-	if (n + 1) > length {
+	if (n + 1) > len(data) {
 		byte2 = 0b00000000
 	} else {
 		byte2 = data[startingByte+1]
 	}
 	chunk := binary.BigEndian.Uint16([]byte{byte1, byte2})
-	return decodeTable[(chunk<<lShift)>>11]
-}
-
-// ExtractNthPentad returns the base32 string for the nth handful
-// of a *[]byte array. A handful represents 5 bits.
-// 0.upto(255){|n| puts "Pentad ##{n} starts at byte #{n / 8}, lShift #{n.remainder(8)}"}
-func ExtractNthPentad(n uint16, data []byte) rune {
-	// start := n / 8
-	// lShift := 8 * 5
-	// byte1 := data[start]
-	// length := uint16(len(data)) - 1
-	// var byte2 byte
-	// if (n + 1) > length {
-	// 	byte2 = 0b00000000
-	// } else {
-	// 	byte2 = data[start+1]
-	// }
-	// twoBytes := binary.BigEndian.Uint16([]byte{byte1, byte2})
-	// shiftedLeft := twoBytes << lShift
-	// pentad := int(shiftedLeft >> (16 - 5))
-	// fmt.Printf(`
-	// start       %d
-	// lShift      %d
-	// byte1       %b
-	// length      %d
-	// byte2       %b
-	// twoBytes    %b
-	// shiftedLeft %b
-	// pentad      %b
-	// `, start, lShift, byte1, length, byte2, twoBytes, shiftedLeft, pentad)
-	// return decodeTable[pentad]
-	return '?'
+	pentad := (chunk << lShift) >> 11
+	return decodeTable[pentad]
 }
 
 // B32Encode converts a byte array into a Crockford Base 32
 // string.
 func B32Encode(data []byte) string {
-	fmt.Println("==========")
 	var b bytes.Buffer
-	length := len(data)
-	passes := length / 8
 
-	for i := 0; i < passes; i++ {
-		start := (i * 8)
-		end := start + 8
-		slice := data[start:end]
-		int64 := binary.BigEndian.Uint64(slice)
-		str := strings.ToUpper(crock32.Encode(int64))
-		fmt.Printf("Chunk %d is %s\n", i, str)
-		b.WriteString(str)
+	for i := 0; i < getBase32Size(data); i++ {
+		b.WriteRune(getNthBase32Char(i, data))
 	}
+
 	return b.String()
 }
 

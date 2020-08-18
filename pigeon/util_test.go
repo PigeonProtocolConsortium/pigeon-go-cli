@@ -54,18 +54,12 @@ var tests = []testCase{
 }
 
 func TestB32Encode(t *testing.T) {
-	for _, k := range tests {
-		actual := B32Encode(k.decoded)
-		if actual == k.encoded {
-			fmt.Println("THIS IS OK")
-		} else {
-			fmt.Printf(`
-				EXPECTED: %s
-				LEN:      %d
-				ACTUAL:   %s
-				LEN:      %d
-				`, k.encoded, len(k.encoded), actual, len(actual))
-			t.FailNow()
+	for _, test := range tests {
+		actual := B32Encode(test.decoded)
+		expected := test.encoded
+		if actual != expected {
+			fmt.Printf("FAIL:\n  Exp: %s\n  Act: %s\n", expected, actual)
+			t.Fail()
 		}
 	}
 }

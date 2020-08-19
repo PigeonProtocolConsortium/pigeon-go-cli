@@ -8,6 +8,7 @@ Don't use the Go version yet. If you want sommething stable, there is a [Ruby ve
 
 # TODO
 
+ - [ ] Add a real testing lib to DRY things up.
  - [ ] Get a good CI system going? Run tests at PR time, prevent coverage slips, etc..
  - [ ] Finish all the things below:
 

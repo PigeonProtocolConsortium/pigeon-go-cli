@@ -63,3 +63,19 @@ func TestB32Encode(t *testing.T) {
 		}
 	}
 }
+
+func TestB32Decode(t *testing.T) {
+	for i, test := range tests {
+		actual := B32Decode(test.encoded)
+		expected := test.decoded
+		if len(actual) != len(expected) {
+			fmt.Printf("\nFAIL:  length mismatch at tests[%d]", i)
+			t.Fail()
+		}
+		for j, x := range expected {
+			if actual[j] != x {
+				fmt.Printf("tests[%d].encoded[%d] did not decode B32 properly (%s)", j, i, test.encoded)
+			}
+		}
+	}
+}

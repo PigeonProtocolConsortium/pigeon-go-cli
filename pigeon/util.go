@@ -2,7 +2,6 @@ package pigeon
 
 import (
 	"crypto/ed25519"
-	"encoding/base32"
 	"fmt"
 	"os"
 )
@@ -12,7 +11,7 @@ const Version = "0.0.0"
 
 // CreateKeypair makes a new ED25519 key pair. Just a thin
 // wrapper around crypto/ed25519.
-func CreateKeypair() (ed25519.PublicKey, ed25519.PrivateKey) {
+func createKeypair() (ed25519.PublicKey, ed25519.PrivateKey) {
 	pub, priv, err := ed25519.GenerateKey(nil)
 	if err != nil {
 		fmt.Println(err)
@@ -22,22 +21,18 @@ func CreateKeypair() (ed25519.PublicKey, ed25519.PrivateKey) {
 	return pub, priv
 }
 
-// Encoder is an Encoder
-var Encoder = base32.NewEncoding("0123456789ABCDEFGHJKMNPQRSTVWXYZ").WithPadding(base32.NoPadding)
-
-// B32Encode does Crockford 32 encoding on a string.
-func B32Encode(data []byte) string {
-	return Encoder.EncodeToString(data)
+// CreateIdentity is used by the CLI to create an ED25519
+// keypair and store it to disk. It returns the private key
+// as a Base32 encoded string
+func CreateIdentity() (ed25519.PublicKey, ed25519.PrivateKey) {
+	pub, priv := createKeypair()
+	PutConfig(ConfigSecret, priv)
+	return pub, priv
 }
 
-// B32Decode takes a Crockford Base32 string and converts it
-// to a byte array.
-func B32Decode(input string) []byte {
-	output, error := Encoder.DecodeString(input)
-	if error != nil {
-		msg := fmt.Sprintf("Error decoding Base32 string %s", input)
-		panic(msg)
-	}
-
-	return output
+// GetIdentity retrieves the user's signing key
+func GetIdentity() []byte {
+	return getConfig(ConfigSecret)
 }
+
+func EncodeUserMhash() {}

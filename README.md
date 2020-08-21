@@ -42,13 +42,13 @@ Don't use the Go version yet. If you want sommething stable, there is a [Ruby ve
 Without coverage:
 
 ```
-go test ./cmd
+go test -run pigeon
 ```
 
 With coverage:
 
 ```
-go test ./cmd -coverprofile cp.out
+go test -run pigeon -coverprofile cp.out
 ```
 
 # Build Project

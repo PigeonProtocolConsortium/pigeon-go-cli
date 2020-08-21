@@ -11,7 +11,7 @@ func createDB() *nutsdb.DB {
 	// Open the database located in the /tmp/nutsdb directory.
 	// It will be created if it doesn't exist.
 	opt := nutsdb.DefaultOptions
-	opt.Dir = "./nutsdb"
+	opt.Dir = "./pigeondb"
 	db, err := nutsdb.Open(opt)
 	if err != nil {
 		log.Fatal(err)
@@ -47,7 +47,8 @@ func PutConfig(k ConfigKey, v []byte) {
 	})
 }
 
-func getConfig(k ConfigKey) []byte {
+// GetConfig retrieves aconfiguration key from NutsDB
+func GetConfig(k ConfigKey) []byte {
 	var output []byte
 	database.View(
 		func(tx *nutsdb.Tx) error {

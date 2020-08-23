@@ -4,7 +4,7 @@ A single executable to manage a Pigeon node.
 
 # Project Status
 
-Don't use the Go version yet. If you want sommething stable, there is a [Ruby version that is feature complete](https://tildegit.org/PigeonProtocolConsortium/Pigeon-Ruby).
+Don't use the Go version yet. If you want something stable, there is a [Ruby version that is feature complete](https://tildegit.org/PigeonProtocolConsortium/Pigeon-Ruby).
 
 # TODO
 
@@ -42,6 +42,7 @@ Don't use the Go version yet. If you want sommething stable, there is a [Ruby ve
 Without coverage:
 
 ```
+cd
 go test -run pigeon
 ```
 

@@ -79,4 +79,8 @@ func TestB32Decode(t *testing.T) {
 			}
 		}
 	}
+
+	defer func() { recover() }()
+	B32Decode("U")
+	t.Errorf("Expected Base32 decode panic. It Did not panic.")
 }

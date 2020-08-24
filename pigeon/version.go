@@ -1,8 +1,7 @@
-package cmd
+package pigeon
 
 import (
 	"fmt"
-	"pigeon/pigeon"
 
 	"github.com/spf13/cobra"
 )
@@ -12,7 +11,7 @@ var versionCmd = &cobra.Command{
 	Short: "Show the version of the Pigeon CLI tool.",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		result := fmt.Sprintf("Pigeon v%s", pigeon.Version)
+		result := fmt.Sprintf("Pigeon v%s", Version)
 		fmt.Println(result)
 	},
 }

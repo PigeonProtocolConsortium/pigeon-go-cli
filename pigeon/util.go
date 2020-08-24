@@ -7,9 +7,6 @@ import (
 	"os"
 )
 
-// Version is the current version of Pigeon CLI
-const Version = "0.0.0"
-
 // CreateKeypair makes a new ED25519 key pair. Just a thin
 // wrapper around crypto/ed25519.
 func createKeypair() (ed25519.PublicKey, ed25519.PrivateKey) {
@@ -27,13 +24,14 @@ func createKeypair() (ed25519.PublicKey, ed25519.PrivateKey) {
 // as a Base32 encoded string
 func CreateIdentity() (ed25519.PublicKey, ed25519.PrivateKey) {
 	pub, priv := createKeypair()
-	PutConfig(ConfigSecret, priv)
+	fmt.Println("Add persistence here")
 	return pub, priv
 }
 
 // GetIdentity retrieves the user's signing key
 func GetIdentity() []byte {
-	return GetConfig(ConfigSecret)
+	fmt.Println("Add database query here")
+	return []byte{}
 }
 
 // EncodeUserMhash Takes a []byte and converts it to a B32

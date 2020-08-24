@@ -1,4 +1,4 @@
-package cmd
+package pigeon
 
 import (
 	"fmt"

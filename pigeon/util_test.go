@@ -74,7 +74,8 @@ func TestB32Decode(t *testing.T) {
 		}
 		for j, x := range expected {
 			if actual[j] != x {
-				fmt.Printf("tests[%d].encoded[%d] did not decode B32 properly (%s)", j, i, test.encoded)
+				msg := "tests[%d].encoded[%d] did not decode B32 properly (%s)"
+				fmt.Printf(msg, j, i, test.encoded)
 			}
 		}
 	}

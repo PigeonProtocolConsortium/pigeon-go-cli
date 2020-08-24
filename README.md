@@ -42,14 +42,14 @@ Don't use the Go version yet. If you want something stable, there is a [Ruby ver
 Without coverage:
 
 ```
-cd
-go test -run pigeon
+go test -v ./...
 ```
 
 With coverage:
 
 ```
-go test -run pigeon -coverprofile cp.out
+go test -v ./... -coverprofile coverage.out
+go tool cover -html=coverage.out
 ```
 
 # Build Project

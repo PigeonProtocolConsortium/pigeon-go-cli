@@ -2,7 +2,37 @@ package pigeon
 
 import (
 	"database/sql"
+	"log"
+
+	"modernc.org/ql"
 )
+
+func openDB() *sql.DB {
+	ql.RegisterDriver()
+
+	db, err0 := sql.Open("ql", "file://pigeon_metadata/secret.db")
+
+	if err0 != nil {
+		log.Fatalf("failed to open db: %s", err0)
+	}
+
+	err1 := db.Ping()
+
+	if err1 != nil {
+		log.Fatalf("failed to ping db: %s", err1)
+	}
+
+	db.Exec(`
+	CREATE TABLE private_keys (
+		id INTEGER PRIMARY KEY,
+		secret TEXT NOT NULL
+	);
+	`)
+	return db
+}
+
+// Database is a database object. Currently using modernc.org/ql
+var Database = openDB()
 
 func setUp(db *sql.DB) error {
 	tx, err := db.Begin()

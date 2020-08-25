@@ -2,3 +2,6 @@ pigeon-cli
 *nutsdb*
 *scratchpad*
 *.dat
+pigeon/pigeon_metadata/*
+*.out
+*.db

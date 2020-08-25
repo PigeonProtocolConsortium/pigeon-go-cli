@@ -8,6 +8,7 @@ Don't use the Go version yet. If you want something stable, there is a [Ruby ver
 
 # TODO
 
+ - [ ] Finish http://go-database-sql.org/retrieving.html
  - [ ] Add a real testing lib to DRY things up.
  - [ ] Get a good CI system going? Run tests at PR time, prevent coverage slips, etc..
  - [ ] Finish all the things below:

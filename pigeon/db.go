@@ -7,6 +7,18 @@ import (
 	"modernc.org/ql"
 )
 
+type migration struct {
+	up   string
+	down string
+}
+
+var migrations = []migration{
+	migration{
+		up:   `CREATE TABLE IF NOT EXISTS private_keys (id INTEGER PRIMARY KEY, secret TEXT NOT NULL);`,
+		down: `DROP TABLE IF EXISTS private_keys`,
+	},
+}
+
 func openDB() *sql.DB {
 	ql.RegisterDriver()
 
@@ -22,54 +34,34 @@ func openDB() *sql.DB {
 		log.Fatalf("failed to ping db: %s", err1)
 	}
 
-	db.Exec(`
-	CREATE TABLE private_keys (
-		id INTEGER PRIMARY KEY,
-		secret TEXT NOT NULL
-	);
-	`)
+	tx, err := db.Begin()
+
+	if err != nil {
+		log.Fatalf("Failed to start transaction: %s", err)
+	}
+
+	for _, migration := range migrations {
+		tx.Exec(migration.up)
+	}
+
+	tx.Commit()
+
 	return db
 }
 
 // Database is a database object. Currently using modernc.org/ql
 var Database = openDB()
 
-func setUp(db *sql.DB) error {
-	tx, err := db.Begin()
-	if err != nil {
-		return err
-	}
-	_, err = tx.Exec(`
-	CREATE TABLE note (
-	  id BIGINT
-	  ,title STRING
-	  ,body STRING
-	  ,created_at STRING
-	  ,updated_at STRING
-	);
-	`)
-	if err != nil {
-		return err
-	}
-	if err = tx.Commit(); err != nil {
-		return err
-	}
-	return nil
-}
+func tearDown() {
+	tx, err := Database.Begin()
 
-func tearDown(db *sql.DB) error {
-	tx, err := db.Begin()
 	if err != nil {
-		return err
+		log.Fatalf("Failed to start transaction: %s", err)
 	}
-	_, err = tx.Exec(`
-	DROP TABLE note;
-	`)
-	if err != nil {
-		return err
+
+	for _, migration := range migrations {
+		tx.Exec(migration.down)
 	}
-	if err = tx.Commit(); err != nil {
-		return err
-	}
-	return nil
+
+	tx.Commit()
 }

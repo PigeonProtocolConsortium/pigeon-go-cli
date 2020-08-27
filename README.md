@@ -8,10 +8,9 @@ Don't use the Go version yet. If you want something stable, there is a [Ruby ver
 
 # TODO
 
- - [ ] Finish http://go-database-sql.org/errors.html
+ - [ ] Finish http://go-database-sql.org/nulls.html
  - [ ] Add a real testing lib to DRY things up.
  - [ ] Get a good CI system going? Run tests at PR time, prevent coverage slips, etc..
- - [ ] Add a [database migration system](https://github.com/golang-migrate/migrate)?
  - [ ] Finish all the things below:
 
  |Done?|Verb        |Noun    | Flag / arg 1  | Flag 2    |

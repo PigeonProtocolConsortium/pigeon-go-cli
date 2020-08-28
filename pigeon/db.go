@@ -15,9 +15,11 @@ type migration struct {
 var migrations = []migration{
 	migration{
 		up: `CREATE TABLE IF NOT EXISTS configs (
-			id    INTEGER PRIMARY KEY,
-			key   TEXT NOT NULL
-			value TEXT NOT NULL);`,
+			key string NOT NULL,
+			value string NOT NULL
+		);
+		CREATE UNIQUE INDEX IF NOT EXISTS unique_configs_key ON configs (key);
+		`,
 		down: `DROP TABLE IF EXISTS configs`,
 	},
 }
@@ -44,10 +46,15 @@ func openDB() *sql.DB {
 	}
 
 	for _, migration := range migrations {
-		tx.Exec(migration.up)
+		_, err := tx.Exec(migration.up)
+		if err != nil {
+			log.Fatalf("Migration failure: %s", err)
+		}
 	}
 
-	tx.Commit()
+	if tx.Commit() != nil {
+		log.Fatal(err)
+	}
 
 	return db
 }
@@ -62,7 +69,7 @@ func SetConfig(key string, value []byte) {
 	if err != nil {
 		log.Fatalf("Failed to SetConfig (1): %s", err)
 	}
-	tx.Exec("INSERT INTO configs (?, ?)", key, value)
+	tx.Exec("INSERT INTO configs (?1, ?2)", key, value)
 	err1 := tx.Commit()
 	if err1 != nil {
 		log.Fatalf("Failed to SetConfig (2): %s", err)
@@ -71,7 +78,7 @@ func SetConfig(key string, value []byte) {
 
 // GetConfig retrieves a key/value pair from the database.
 func GetConfig(key string) []byte {
-	rows, err := Database.Query("SELECT key FROM configs WHERE value = ? LIMIT 1", key)
+	rows, err := Database.Query("SELECT key FROM configs WHERE value = ?1 LIMIT 1", key)
 	if err != nil {
 		log.Fatalf("Unable to retrieve config key(1): %s", err)
 	}

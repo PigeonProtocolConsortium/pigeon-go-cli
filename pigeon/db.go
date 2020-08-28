@@ -67,9 +67,12 @@ var Database = openDB()
 func SetConfig(key string, value []byte) {
 	tx, err := Database.Begin()
 	if err != nil {
-		log.Fatalf("Failed to SetConfig (1): %s", err)
+		log.Fatalf("Failed to SetConfig (0): %s", err)
 	}
-	tx.Exec("INSERT INTO configs (?1, ?2)", key, value)
+	_, err2 := tx.Exec("INSERT INTO configs(key, value) VALUES(?1, ?2)", key, string(value))
+	if err2 != nil {
+		log.Fatalf("Failed to SetConfig (1): %s", err2)
+	}
 	err1 := tx.Commit()
 	if err1 != nil {
 		log.Fatalf("Failed to SetConfig (2): %s", err)
@@ -82,7 +85,7 @@ func GetConfig(key string) []byte {
 	if err != nil {
 		log.Fatalf("Unable to retrieve config key(1): %s", err)
 	}
-	var result []byte
+	var result string
 	for rows.Next() {
 		err := rows.Scan(&result)
 		if err != nil {
@@ -90,5 +93,5 @@ func GetConfig(key string) []byte {
 		}
 	}
 
-	return result
+	return []byte(result)
 }

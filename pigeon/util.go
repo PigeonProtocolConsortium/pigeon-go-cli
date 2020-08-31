@@ -2,7 +2,6 @@ package pigeon
 
 import (
 	"crypto/ed25519"
-	"fmt"
 	"log"
 )
 
@@ -19,22 +18,16 @@ func CreateIdentity() (ed25519.PublicKey, ed25519.PrivateKey) {
 	return pub, priv
 }
 
-// GetIdentity retrieves the user's signing key
-func GetIdentity() []byte {
-	fmt.Println("Add database query here")
-	return []byte{}
-}
-
 // EncodeUserMhash Takes a []byte and converts it to a B32
 // string in the format "USER.DATA.ED25519"
-func EncodeUserMhash(pubKey []byte) string {
-	b32 := B32Encode(pubKey)
-	b32Length := len(b32)
+// func EncodeUserMhash(pubKey []byte) string {
+// 	b32 := B32Encode(pubKey)
+// 	b32Length := len(b32)
 
-	if b32Length != 52 {
-		m := "Expected %s to be 52 bytes long. Got %d"
-		log.Fatal(m, b32, b32Length)
-	}
+// 	if b32Length != 52 {
+// 		m := "Expected %s to be 52 bytes long. Got %d"
+// 		log.Fatal(m, b32, b32Length)
+// 	}
 
-	return fmt.Sprintf("%s%s", UserSigil, b32)
-}
+// 	return fmt.Sprintf("%s%s", UserSigil, b32)
+// }

@@ -85,12 +85,18 @@ func GetConfig(key string) []byte {
 	if err != nil {
 		log.Fatalf("Unable to retrieve config key(1): %s", err)
 	}
+
 	var result string
-	for rows.Next() {
+
+	if rows.Next() {
 		err := rows.Scan(&result)
 		if err != nil {
 			log.Fatalf("Unable to retrieve config key(2): %s", err)
 		}
+	}
+
+	if len(result) < 1 {
+		log.Fatalf("Attempted to retrieve non-existent key: %s", key)
 	}
 
 	return []byte(result)

@@ -7,6 +7,7 @@ import (
 )
 
 func TestCreateIdentity(t *testing.T) {
+	resetDB()
 	pub, priv := CreateIdentity()
 	dbPubKey := GetConfig("public_key")
 	dbPrivKey := GetConfig("private_key")

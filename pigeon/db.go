@@ -2,6 +2,7 @@ package pigeon
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
 	"modernc.org/ql"
@@ -81,23 +82,15 @@ func SetConfig(key string, value []byte) {
 
 // GetConfig retrieves a key/value pair from the database.
 func GetConfig(key string) []byte {
-	rows, err := Database.Query("SELECT key FROM configs WHERE value = ?1 LIMIT 1", key)
-	if err != nil {
-		log.Fatalf("Unable to retrieve config key(1): %s", err)
-	}
-
 	var result string
-
-	if rows.Next() {
-		err := rows.Scan(&result)
-		if err != nil {
-			log.Fatalf("Unable to retrieve config key(2): %s", err)
+	row := Database.QueryRow("SELECT value FROM configs WHERE key=$1", key)
+	err := row.Scan(&result)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			fmt.Println("Zero rows found")
+		} else {
+			panic(err)
 		}
 	}
-
-	if len(result) < 1 {
-		log.Fatalf("Attempted to retrieve non-existent key: %s", key)
-	}
-
 	return []byte(result)
 }

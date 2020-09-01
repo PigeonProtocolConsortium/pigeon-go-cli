@@ -2,7 +2,6 @@ package pigeon
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 
 	"modernc.org/ql"
@@ -87,7 +86,7 @@ func GetConfig(key string) []byte {
 	err := row.Scan(&result)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			fmt.Println("Zero rows found")
+			log.Fatalf("CONFIG MISSING: %s", key)
 		} else {
 			panic(err)
 		}

@@ -13,7 +13,7 @@ func CreateIdentity() (ed25519.PublicKey, ed25519.PrivateKey) {
 	if err != nil {
 		log.Fatalf("Keypair creation error %s", err)
 	}
-	SetConfig("pubic_key", pub)
+	SetConfig("public_key", pub)
 	SetConfig("private_key", priv)
 	return pub, priv
 }

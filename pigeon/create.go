@@ -11,7 +11,6 @@ var createCmd = &cobra.Command{
 	Short:   "Create various resources (identity, drafts, blob)",
 	Aliases: []string{"make", "new"},
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("create called")
 	},
 }
 
@@ -20,7 +19,8 @@ var identityCmd = &cobra.Command{
 	Short:   "Create a new pigeon identity",
 	Aliases: []string{"id"},
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("create `identity` called")
+		pub, _ := CreateIdentity()
+		fmt.Println(B32Encode(pub))
 	},
 }
 

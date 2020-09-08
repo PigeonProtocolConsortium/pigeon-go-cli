@@ -50,7 +50,7 @@ go test -v ./...
 With coverage:
 
 ```
-go test -v ./... -coverprofile coverage.out
+go test -coverprofile coverage.out
 go tool cover -html=coverage.out
 ```
 

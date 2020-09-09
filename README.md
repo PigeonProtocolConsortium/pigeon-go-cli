@@ -16,7 +16,6 @@ Don't use the Go version yet. If you want something stable, there is a [Ruby ver
 
  |Done?|Verb        |Noun    | Flag / arg 1  | Flag 2    |
  |-----|------------|--------|---------------|-----------|
- |     |create      |identity|               |           |
  |     |show        |identity|               |           |
  |     |create      |draft   |               |           |
  |     |show        |blob    |               |           |
@@ -36,6 +35,7 @@ Don't use the Go version yet. If you want something stable, there is a [Ruby ver
  |     |show        |peers   |               |           |
  |     |show        |peers   | --blocked     |           |
  |     |unfollow    |peer    |               |           |
+ |  X  |create      |identity|               |           |
  |  X  |help        |        |               |           |
  |  X  |version     |        |               |           |
 

@@ -6,3 +6,4 @@ pigeon/testdata/*
 testdata/*
 *.out
 *.db
+coverage.out

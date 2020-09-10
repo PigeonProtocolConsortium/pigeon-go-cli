@@ -16,25 +16,25 @@ Don't use the Go version yet. If you want something stable, there is a [Ruby ver
 
  |Done?|Verb        |Noun    | Flag / arg 1  | Flag 2    |
  |-----|------------|--------|---------------|-----------|
- |     |show        |identity|               |           |
- |     |create      |draft   |               |           |
- |     |show        |blob    |               |           |
- |     |show        |draft   |               |           |
- |     |create      |blob    | file path     |           |
- |     |create      |blob    | pipe          |           |
- |     |update      |draft   | --key=?       | --value=? |
- |     |publish     |draft   |               |           |
+ |     |show        |peers   |               |           |
+ |     |show        |peers   | --blocked     |           |
+ |     |unfollow    |peer    |               |           |
  |     |follow      |peer    | user mhash    |           |
  |     |unblock     |peer    | user mhash    |           |
  |     |block       |peer    | user mhash    |           |
+ |     |show        |blob    |               |           |
+ |     |create      |blob    | file path     |           |
+ |     |create      |blob    | pipe          |           |
+ |     |create      |draft   |               |           |
+ |     |update      |draft   | --key=?       | --value=? |
+ |     |show        |draft   |               |           |
+ |     |publish     |draft   |               |           |
  |     |create      |bundle  |               |           |
  |     |find        |message | --all         |           |
  |     |find        |message | --last        |           |
  |     |ingest      |bundle  |               |           |
  |     |show        |message | message mhash |           |
- |     |show        |peers   |               |           |
- |     |show        |peers   | --blocked     |           |
- |     |unfollow    |peer    |               |           |
+ |  X  |show        |identity|               |           |
  |  X  |create      |identity|               |           |
  |  X  |help        |        |               |           |
  |  X  |version     |        |               |           |
@@ -44,14 +44,13 @@ Don't use the Go version yet. If you want something stable, there is a [Ruby ver
 Without coverage:
 
 ```
-go test -v ./...
+./tests.sh
 ```
 
 With coverage:
 
 ```
-go test -coverprofile coverage.out
-go tool cover -html=coverage.out
+./coverage.sh
 ```
 
 # Build Project

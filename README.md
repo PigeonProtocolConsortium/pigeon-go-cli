@@ -56,5 +56,5 @@ With coverage:
 # Build Project
 
 ```
-go build --o=pigeon-cli
+./build.sh
 ```

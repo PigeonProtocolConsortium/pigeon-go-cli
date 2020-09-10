@@ -1,9 +1,8 @@
-pigeon-cli
-*nutsdb*
-*scratchpad*
 *.dat
-pigeon/testdata/*
-testdata/*
-*.out
 *.db
+*.out
+*scratchpad*
 coverage.out
+pigeon-cli
+project/testdata/*
+!/**/.gitkeep

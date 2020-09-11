@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"log"
+	"path"
 
 	"modernc.org/ql"
 )
@@ -26,8 +27,9 @@ var migrations = []migration{
 
 func openDB() *sql.DB {
 	ql.RegisterDriver()
-
-	db, err0 := sql.Open("ql", "file://testdata/secret.db")
+	pigeonPath := maybeSetupPigeonDir()
+	dbPath := path.Join(pigeonPath, "db")
+	db, err0 := sql.Open("ql", dbPath)
 
 	if err0 != nil {
 		log.Fatalf("failed to open db: %s", err0)

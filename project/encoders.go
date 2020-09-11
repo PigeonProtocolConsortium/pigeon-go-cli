@@ -11,3 +11,7 @@ var encoder = base32.NewEncoding(alphabet).WithPadding(base32.NoPadding)
 func B32Encode(data []byte) string {
 	return encoder.EncodeToString(data)
 }
+
+func encodeUserMhash(pubKey []byte) string {
+	return UserSigil + B32Encode(pubKey)
+}

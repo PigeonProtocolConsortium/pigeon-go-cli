@@ -37,8 +37,3 @@ func CreateIdentity() (ed25519.PublicKey, ed25519.PrivateKey) {
 	SetConfig("private_key", priv)
 	return pub, priv
 }
-
-func encodeUserMhash(pubKey []byte) string {
-	sigil := "USER."
-	return sigil + B32Encode(pubKey)
-}

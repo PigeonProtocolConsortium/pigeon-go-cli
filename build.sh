@@ -3,3 +3,6 @@
 cd project
 go build --o=../pigeon-cli
 cd -
+PIGEON_PATH="."
+./pigeon-cli version
+./pigeon-cli show identity

@@ -6,7 +6,7 @@ import (
 )
 
 func showIdentity() string {
-	existingKey := GetConfig("private_key")
+	existingKey := GetConfig("public_key")
 	if len(existingKey) == 0 {
 		return "NONE"
 	}

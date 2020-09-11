@@ -8,23 +8,6 @@ import (
 	"modernc.org/ql"
 )
 
-type migration struct {
-	up   string
-	down string
-}
-
-var migrations = []migration{
-	migration{
-		up: `CREATE TABLE IF NOT EXISTS configs (
-			key string NOT NULL,
-			value string NOT NULL
-		);
-		CREATE UNIQUE INDEX IF NOT EXISTS unique_configs_key ON configs (key);
-		`,
-		down: `DROP TABLE IF EXISTS configs`,
-	},
-}
-
 func openDB() *sql.DB {
 	ql.RegisterDriver()
 	pigeonPath := maybeSetupPigeonDir()
@@ -41,22 +24,7 @@ func openDB() *sql.DB {
 		log.Fatalf("failed to ping db: %s", err1)
 	}
 
-	tx, err := db.Begin()
-
-	if err != nil {
-		log.Fatalf("Failed to start transaction: %s", err)
-	}
-
-	for _, migration := range migrations {
-		_, err := tx.Exec(migration.up)
-		if err != nil {
-			log.Fatalf("Migration failure: %s", err)
-		}
-	}
-
-	if tx.Commit() != nil {
-		log.Fatal(err)
-	}
+	migrateUp(db)
 
 	return db
 }

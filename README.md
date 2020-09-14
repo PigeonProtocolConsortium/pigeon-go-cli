@@ -20,7 +20,12 @@ You can override this value by specifying a `PIGEON_PATH` ENV var.
 
  |Done?|Verb        |Noun    | Flag / arg 1  | Flag 2    |
  |-----|------------|--------|---------------|-----------|
+ |     |follow      |peer    | user mhash    |           |
+ |     |show        |peers   |               |           |
+ |     |show        |peers   | --blocked     |           |
  |     |block       |peer    | user mhash    |           |
+ |     |unblock     |peer    | user mhash    |           |
+ |     |unfollow    |peer    |               |           |
  |     |create      |blob    | file path     |           |
  |     |create      |blob    | pipe          |           |
  |     |create      |bundle  |               |           |
@@ -28,15 +33,10 @@ You can override this value by specifying a `PIGEON_PATH` ENV var.
  |     |find        |blob    |               |           |
  |     |find        |message | --all         |           |
  |     |find        |message | --last        |           |
- |     |follow      |peer    | user mhash    |           |
  |     |ingest      |bundle  |               |           |
  |     |publish     |draft   |               |           |
  |     |show        |draft   |               |           |
  |     |show        |message | message mhash |           |
- |     |show        |peers   |               |           |
- |     |show        |peers   | --blocked     |           |
- |     |unblock     |peer    | user mhash    |           |
- |     |unfollow    |peer    |               |           |
  |     |update      |draft   | --key=?       | --value=? |
  |  X  |show        |identity|               |           |
  |  X  |create      |identity|               |           |

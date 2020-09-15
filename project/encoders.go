@@ -12,6 +12,6 @@ func B32Encode(data []byte) string {
 	return encoder.EncodeToString(data)
 }
 
-func encodeUserMhash(pubKey []byte) string {
-	return UserSigil + B32Encode(pubKey)
+func encodePeerMhash(pubKey []byte) string {
+	return PeerSigil + B32Encode(pubKey)
 }

@@ -9,8 +9,16 @@ import (
 func TestGetPeerStatus(t *testing.T) {
 	resetDB()
 	mHash := "USER.RJFSFK8YZ8XGTGKQDMSQCQPQXKH8GPRCDY86YZCFQ1QRKYEF48MG"
+
 	status := getPeerStatus(mHash)
-	if status != peerStatus("unknown") {
+	if status != "unknown" {
 		t.Fatalf("Expected `unknown`, got %s", status)
+	}
+
+	addPeer(mHash, following)
+
+	status2 := getPeerStatus(mHash)
+	if status2 != "following" {
+		t.Fatalf("Expected `following`, got %s", status)
 	}
 }

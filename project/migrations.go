@@ -21,13 +21,13 @@ var migrations = []migration{
 		down: `DROP TABLE IF EXISTS configs`,
 	},
 	migration{
-		up: `CREATE TABLE IF NOT EXISTS users (
+		up: `CREATE TABLE IF NOT EXISTS peers (
 			mhash string NOT NULL,
 			status string NOT NULL
 		);
-		CREATE UNIQUE INDEX IF NOT EXISTS unique_users_mhash ON users (mhash);
+		CREATE UNIQUE INDEX IF NOT EXISTS unique_peers_mhash ON peers (mhash);
 		`,
-		down: `DROP TABLE IF EXISTS users`,
+		down: `DROP TABLE IF EXISTS peers`,
 	},
 }
 

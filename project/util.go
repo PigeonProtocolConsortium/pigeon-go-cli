@@ -10,7 +10,7 @@ func showIdentity() string {
 	if len(existingKey) == 0 {
 		return "NONE"
 	}
-	return encodeUserMhash(existingKey)
+	return encodePeerMhash(existingKey)
 }
 
 func createOrShowIdentity() string {
@@ -22,7 +22,7 @@ func createOrShowIdentity() string {
 	} else {
 		pubKey = oldKey
 	}
-	return encodeUserMhash(pubKey)
+	return encodePeerMhash(pubKey)
 }
 
 // CreateIdentity is used by the CLI to create an ED25519

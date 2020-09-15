@@ -34,6 +34,13 @@ var showCmd = &cobra.Command{
 	Long:  `Shows resources such as blobs, drafts, identities, messages, peers, etc..`,
 }
 
+// CLI: `pigeon follow [resource]`
+var followCmd = &cobra.Command{
+	Use:   "follow [resource]",
+	Short: "follow various resources",
+	Long:  `Follows resources such as blobs, drafts, identities, messages, peers, etc..`,
+}
+
 // CLI: `pigeon create [resource]`
 var createCmd = &cobra.Command{
 	Use:   "create [resource]",
@@ -64,11 +71,13 @@ var showIdentityCmd = &cobra.Command{
 
 // BootstrapCLI wires up all the relevant commands.
 func BootstrapCLI() {
-	showCmd.AddCommand(showIdentityCmd)
 	createCmd.AddCommand(createIdentityCmd)
-	rootCmd.AddCommand(versionCmd)
+	showCmd.AddCommand(showIdentityCmd)
+	followCmd.AddCommand()
 	rootCmd.AddCommand(createCmd)
+	rootCmd.AddCommand(followCmd)
 	rootCmd.AddCommand(showCmd)
+	rootCmd.AddCommand(versionCmd)
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)

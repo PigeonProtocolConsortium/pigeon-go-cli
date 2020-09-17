@@ -18,7 +18,7 @@ You can override this value by specifying a `PIGEON_PATH` ENV var.
  - [ ] Get a good CI system going? Run tests at PR time, provide prebuilt binaries, prevent coverage slips, etc..
  - [ ] Finish all the things below:
 
- |Done?|Verb        |Noun       | Flag / arg 1  | Flag 2    |
+ |Done?|Noun        |Verb       | Flag / arg 1  | Flag 2    |
  |-----|------------|-----------|---------------|-----------|
  |     |peer        |block      | peer mhash    |           |
  |     |peer        |follow     | peer mhash    |           |

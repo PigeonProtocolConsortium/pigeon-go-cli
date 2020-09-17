@@ -27,30 +27,17 @@ var versionCmd = &cobra.Command{
 	},
 }
 
-// CLI: `pigeon show [resource]`
-var showCmd = &cobra.Command{
-	Use:   "show [resource]",
-	Short: "Show various resources",
-	Long:  `Shows resources such as blobs, drafts, identities, messages, peers, etc..`,
-}
-
-// CLI: `pigeon follow [resource]`
-var followCmd = &cobra.Command{
-	Use:   "follow [resource]",
-	Short: "follow various resources",
-	Long:  `Follows resources such as blobs, drafts, identities, messages, peers, etc..`,
-}
-
-// CLI: `pigeon create [resource]`
-var createCmd = &cobra.Command{
-	Use:   "create [resource]",
-	Short: "Create various resources",
-	Long:  `Creates resources, such as identities, drafts, messages, blobs, etc..`,
-}
-
-// CLI: `pigeon create identity`
-var createIdentityCmd = &cobra.Command{
+// CLI: `pigeon identity`
+var identityRootCmd = &cobra.Command{
 	Use:   "identity",
+	Short: "Identity related commands",
+	Run: func(cmd *cobra.Command, args []string) {
+	},
+}
+
+// CLI: `pigeon identity create`
+var identityCreateCmd = &cobra.Command{
+	Use:   "create",
 	Short: "Create a new identity.",
 	Long:  `Creates a new identity.`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -58,8 +45,8 @@ var createIdentityCmd = &cobra.Command{
 	},
 }
 
-// CLI: `pigeon show identity`
-var showIdentityCmd = &cobra.Command{
+// CLI: `pigeon identity show`
+var identityShowCmd = &cobra.Command{
 	Use:   "identity",
 	Short: "Show current user identity.",
 	Long: `Prints the current Pigeon identity to screen. Prints 'NONE' if
@@ -69,15 +56,35 @@ var showIdentityCmd = &cobra.Command{
 	},
 }
 
+// CLI: `pigeon peer`
+var peerRootCmd = &cobra.Command{
+	Use:     "peer(s)",
+	Short:   "Peer related commands",
+	Aliases: []string{"peer", "peers"},
+	Run: func(cmd *cobra.Command, args []string) {
+	},
+}
+
+var peerBlockCmd = &cobra.Command{
+	Use:   "block",
+	Short: "Block a peer from your local node.",
+	Run: func(cmd *cobra.Command, args []string) {
+		mhash := args[0]
+		fmt.Printf("TODO: Validate this input string %s\n", mhash)
+	},
+}
+
 // BootstrapCLI wires up all the relevant commands.
 func BootstrapCLI() {
-	createCmd.AddCommand(createIdentityCmd)
-	showCmd.AddCommand(showIdentityCmd)
-	followCmd.AddCommand()
-	rootCmd.AddCommand(createCmd)
-	rootCmd.AddCommand(followCmd)
-	rootCmd.AddCommand(showCmd)
 	rootCmd.AddCommand(versionCmd)
+
+	rootCmd.AddCommand(identityRootCmd)
+	identityRootCmd.AddCommand(identityShowCmd)
+	identityRootCmd.AddCommand(identityCreateCmd)
+
+	rootCmd.AddCommand(peerRootCmd)
+	peerRootCmd.AddCommand(peerBlockCmd)
+
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)

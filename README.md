@@ -20,24 +20,22 @@ You can override this value by specifying a `PIGEON_PATH` ENV var.
 
  |Done?|Noun        |Verb       | Flag / arg 1  | Flag 2    |
  |-----|------------|-----------|---------------|-----------|
- |     |peer        |block      | peer mhash    |           |
- |     |peer        |follow     | peer mhash    |           |
- |     |peer        |show       |               |           |
- |     |peer        |show       | --blocked     |           |
- |     |peer        |unblock    | peer mhash    |           |
- |     |peer        |unfollow   |               |           |
+ |     |peers       |list       |               |           |
+ |     |peer        |untrack    | peer mhash    |           |
  |     |blob        |create     | file path     |           |
  |     |blob        |create     | pipe          |           |
- |     |bundle      |create     |               |           |
- |     |draft       |create     |               |           |
  |     |blob        |find       |               |           |
- |     |message     |find       | --all         |           |
- |     |message     |find       | --last        |           |
- |     |bundle      |ingest     |               |           |
+ |     |draft       |create     |               |           |
  |     |draft       |publish    |               |           |
  |     |draft       |show       |               |           |
- |     |message     |show       | message mhash |           |
  |     |draft       |update     | --key=?       | --value=? |
+ |     |message     |find       | --all         |           |
+ |     |message     |find       | --last        |           |
+ |     |message     |show       | message mhash |           |
+ |     |bundle      |create     |               |           |
+ |     |bundle      |ingest     |               |           |
+ |  X  |peer        |block      | peer mhash    |           |
+ |  X  |peer        |follow     | peer mhash    |           |
  |  X  |identity    |show       |               |           |
  |  X  |identity    |create     |               |           |
  |  X  |help        |           |               |           |

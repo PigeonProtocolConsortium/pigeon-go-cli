@@ -75,6 +75,16 @@ var peerBlockCmd = &cobra.Command{
 	},
 }
 
+var peerFollowCmd = &cobra.Command{
+	Use:   "follow",
+	Short: "Follow a peer and replicate their feed when possible.",
+	Run: func(cmd *cobra.Command, args []string) {
+		mHash := validateMhash(args[0])
+		addPeer(mHash, following)
+		fmt.Printf("Following %s\n", mHash)
+	},
+}
+
 // BootstrapCLI wires up all the relevant commands.
 func BootstrapCLI() {
 	rootCmd.AddCommand(versionCmd)

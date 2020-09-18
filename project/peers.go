@@ -39,7 +39,7 @@ func addPeer(mHash string, status PeerStatus) {
 	}
 	_, err2 := tx.Exec(createPeer, mHash, status)
 	if err2 != nil {
-		log.Fatalf("Failed to addPeer (1): %s", err2)
+		log.Fatalf("Failure. Possible duplicate peer?: %s", err2)
 	}
 	err1 := tx.Commit()
 	if err1 != nil {

@@ -69,8 +69,9 @@ var peerBlockCmd = &cobra.Command{
 	Use:   "block",
 	Short: "Block a peer from your local node.",
 	Run: func(cmd *cobra.Command, args []string) {
-		mhash := args[0]
-		fmt.Printf("TODO: Validate this input string %s\n", mhash)
+		mHash := validateMhash(args[0])
+		addPeer(mHash, blocked)
+		fmt.Printf("Blocked %s\n", mHash)
 	},
 }
 

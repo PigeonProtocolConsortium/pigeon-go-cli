@@ -22,3 +22,17 @@ func TestGetPeerStatus(t *testing.T) {
 		t.Fatalf("Expected `following`, got %s", status)
 	}
 }
+
+func TestAddPeer(t *testing.T) {
+	defer func() {
+		r := recover()
+		if r != nil {
+			err := "Should not be able to block and follow at the same time"
+			t.Errorf(err)
+		}
+	}()
+	resetDB()
+	mHash := "USER.GM84FEYKRQ1QFCZY68YDCRPG8HKXQPQCQSMDQKGTGX8ZY8KFSFJR"
+	addPeer(mHash, following)
+	addPeer(mHash, blocked)
+}

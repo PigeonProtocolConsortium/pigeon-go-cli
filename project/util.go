@@ -2,7 +2,7 @@ package main
 
 import (
 	"crypto/ed25519"
-	"log"
+	"fmt"
 )
 
 func showIdentity() string {
@@ -31,9 +31,13 @@ func createOrShowIdentity() string {
 func CreateIdentity() (ed25519.PublicKey, ed25519.PrivateKey) {
 	pub, priv, err := ed25519.GenerateKey(nil)
 	if err != nil {
-		log.Fatalf("Keypair creation error %s", err)
+		panicf("Keypair creation error %s", err)
 	}
 	SetConfig("public_key", pub)
 	SetConfig("private_key", priv)
 	return pub, priv
+}
+
+func panicf(tpl string, args ...interface{}) {
+	panic(fmt.Sprintf(tpl, args...))
 }

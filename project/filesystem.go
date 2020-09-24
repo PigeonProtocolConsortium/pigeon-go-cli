@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"os"
 	"path"
 
@@ -16,7 +15,7 @@ func maybeSetupPigeonDir() string {
 	} else {
 		home, err := homedir.Dir()
 		if err != nil {
-			log.Fatalf("Home directory resolution error %s", err)
+			panicf("Home directory resolution error %s", err)
 		}
 		pigeonDataDir = path.Join(home, ".pigeon")
 	}

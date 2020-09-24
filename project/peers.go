@@ -2,7 +2,7 @@ package main
 
 import (
 	"database/sql"
-	"log"
+	"fmt"
 )
 
 // PeerStatus represents a known state of a peer, such as
@@ -20,30 +20,30 @@ const findPeerByStatus = "SELECT status FROM peers WHERE mhash=$1;"
 
 func getPeerStatus(mHash string) PeerStatus {
 	var status PeerStatus
-	row := Database.QueryRow(findPeerByStatus, mHash)
+	row := getDB().QueryRow(findPeerByStatus, mHash)
 	switch err := row.Scan(&status); err {
 	case sql.ErrNoRows:
 		return "unknown"
 	case nil:
 		return status
 	default:
-		log.Fatalf("getPeerStatus failure: %s", err)
+		panicf("getPeerStatus failure: %s", err)
 		panic(err)
 	}
 }
 
 func addPeer(mHash string, status PeerStatus) {
-	tx, err := Database.Begin()
+	tx, err := getDB().Begin()
 	if err != nil {
-		log.Fatalf("Failed to begin addPeer trx (0): %s", err)
+		panicf("Failed to begin addPeer trx (0): %s", err)
 	}
 	_, err2 := tx.Exec(createPeer, mHash, status)
 	if err2 != nil {
-		log.Fatalf("Failure. Possible duplicate peer?: %s", err2)
+		panic(fmt.Sprintf("Failure. Possible duplicate peer?: %s", err2))
 	}
 	err1 := tx.Commit()
 	if err1 != nil {
-		log.Fatalf("Failed to commit peer (2): %s", err)
+		panicf("Failed to commit peer (2): %s", err)
 	}
 }
 

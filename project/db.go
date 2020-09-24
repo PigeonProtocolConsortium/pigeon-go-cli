@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"log"
 	"path"
 
 	"modernc.org/ql"
@@ -15,13 +14,13 @@ func openDB() *sql.DB {
 	db, err0 := sql.Open("ql", dbPath)
 
 	if err0 != nil {
-		log.Fatalf("failed to open db: %s", err0)
+		panicf("failed to open db: %s", err0)
 	}
 
 	err1 := db.Ping()
 
 	if err1 != nil {
-		log.Fatalf("failed to ping db: %s", err1)
+		panicf("failed to ping db: %s", err1)
 	}
 
 	migrateUp(db)
@@ -30,33 +29,42 @@ func openDB() *sql.DB {
 }
 
 // Database is a database object. Currently using modernc.org/ql
-var Database = openDB()
+var database *sql.DB
+
+func getDB() *sql.DB {
+	if database != nil {
+		return database
+	}
+
+	database = openDB()
+	return database
+}
 
 // SetConfig will write a key/value pair to the `configs`
 // table
 func SetConfig(key string, value []byte) {
-	tx, err := Database.Begin()
+	tx, err := getDB().Begin()
 	if err != nil {
-		log.Fatalf("Failed to SetConfig (0): %s", err)
+		panicf("Failed to SetConfig (0): %s", err)
 	}
 	_, err2 := tx.Exec("INSERT INTO configs(key, value) VALUES(?1, ?2)", key, string(value))
 	if err2 != nil {
-		log.Fatalf("Failed to SetConfig (1): %s", err2)
+		panicf("Failed to SetConfig (1): %s", err2)
 	}
 	err1 := tx.Commit()
 	if err1 != nil {
-		log.Fatalf("Failed to SetConfig (2): %s", err)
+		panicf("Failed to SetConfig (2): %s", err)
 	}
 }
 
 // GetConfig retrieves a key/value pair from the database.
 func GetConfig(key string) []byte {
 	var result string
-	row := Database.QueryRow("SELECT value FROM configs WHERE key=$1", key)
+	row := getDB().QueryRow("SELECT value FROM configs WHERE key=$1", key)
 	err := row.Scan(&result)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			log.Fatalf("CONFIG MISSING: %s", key)
+			panicf("CONFIG MISSING: %s", key)
 		} else {
 			panic(err)
 		}

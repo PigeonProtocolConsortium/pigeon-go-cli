@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"log"
 )
 
 type migration struct {
@@ -35,17 +34,17 @@ func migrateUp(db *sql.DB) {
 	tx, err := db.Begin()
 
 	if err != nil {
-		log.Fatalf("Failed to start transaction: %s", err)
+		panicf("Failed to start transaction: %s", err)
 	}
 
 	for i, migration := range migrations {
 		_, err := tx.Exec(migration.up)
 		if err != nil {
-			log.Fatalf("Migration failure(%d): %s", i, err)
+			panicf("Migration failure(%d): %s", i, err)
 		}
 	}
 
 	if tx.Commit() != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 }

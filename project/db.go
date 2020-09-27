@@ -4,14 +4,13 @@ import (
 	"database/sql"
 	"path"
 
-	"modernc.org/ql"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func openDB() *sql.DB {
-	ql.RegisterDriver()
 	pigeonPath := maybeSetupPigeonDir()
-	dbPath := path.Join(pigeonPath, "db")
-	db, err0 := sql.Open("ql", dbPath)
+	dbPath := path.Join(pigeonPath, "db.sqlite")
+	db, err0 := sql.Open("sqlite3", dbPath)
 
 	if err0 != nil {
 		panicf("failed to open db: %s", err0)

@@ -26,9 +26,9 @@ func TestGetPeerStatus(t *testing.T) {
 func TestAddPeer(t *testing.T) {
 	defer func() {
 		r := recover()
-		if r != nil {
-			err := "Should not be able to block and follow at the same time"
-			t.Errorf(err)
+		if r == nil {
+			err := "Should not be able to block and follow at the same time %s"
+			t.Errorf(err, r)
 		}
 	}()
 	resetDB()

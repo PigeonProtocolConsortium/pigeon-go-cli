@@ -39,6 +39,11 @@ func addPeer(mHash string, status PeerStatus) {
 	}
 	_, err2 := tx.Exec(createPeer, mHash, status)
 	if err2 != nil {
+		// This .Commit() call never gets hit:
+		err1 := tx.Rollback()
+		if err1 != nil {
+			panicf("Failed to rollback peer (1): %s", err)
+		}
 		panic(fmt.Sprintf("Failure. Possible duplicate peer?: %s", err2))
 	}
 	err1 := tx.Commit()

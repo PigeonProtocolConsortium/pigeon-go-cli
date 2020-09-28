@@ -4,5 +4,6 @@
 *scratchpad*
 coverage.out
 pigeon-cli
+pigeon.exe
 project/testdata/*
 !/**/.gitkeep

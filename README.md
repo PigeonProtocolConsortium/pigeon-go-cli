@@ -22,8 +22,6 @@ You can override this value by specifying a `PIGEON_PATH` ENV var.
 
  |Done?|Noun        |Verb       | Flag / arg 1  | Flag 2    |
  |-----|------------|-----------|---------------|-----------|
- |     |peers       |list       |               |           |
- |     |peer        |untrack    | peer mhash    |           |
  |     |blob        |create     | file path     |           |
  |     |blob        |create     | pipe          |           |
  |     |blob        |find       |               |           |
@@ -36,6 +34,8 @@ You can override this value by specifying a `PIGEON_PATH` ENV var.
  |     |message     |show       | message mhash |           |
  |     |bundle      |create     |               |           |
  |     |bundle      |ingest     |               |           |
+ |  X  |peer        |untrack    | peer mhash    |           |
+ |  X  |peers       |list       |               |           |
  |  X  |peer        |block      | peer mhash    |           |
  |  X  |peer        |follow     | peer mhash    |           |
  |  X  |identity    |show       |               |           |

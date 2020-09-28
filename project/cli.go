@@ -95,6 +95,17 @@ var peerFollowCmd = &cobra.Command{
 	},
 }
 
+var peerUntrackedCmd = &cobra.Command{
+	Use:     "untrack",
+	Short:   "Stop following/blocking a peer",
+	Aliases: []string{"unblock", "unfollow"},
+	Run: func(cmd *cobra.Command, args []string) {
+		mHash := validateMhash(args[0])
+		removePeer(mHash)
+		fmt.Printf("Untracked %s\n", mHash)
+	},
+}
+
 // BootstrapCLI wires up all the relevant commands.
 func BootstrapCLI() {
 	rootCmd.AddCommand(versionCmd)
@@ -106,8 +117,8 @@ func BootstrapCLI() {
 	rootCmd.AddCommand(peerRootCmd)
 	peerRootCmd.AddCommand(peerBlockCmd)
 	peerRootCmd.AddCommand(peerFollowCmd)
+	peerRootCmd.AddCommand(peerUntrackedCmd)
 	peerRootCmd.AddCommand(peerListCmd)
-
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)

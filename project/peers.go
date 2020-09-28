@@ -15,8 +15,14 @@ const (
 	unknown              = "unknown"
 )
 
+type peer struct {
+	mhash  string
+	status PeerStatus
+}
+
 const createPeer = "INSERT INTO peers(mhash, status) VALUES(?1, ?2)"
 const findPeerByStatus = "SELECT status FROM peers WHERE mhash=$1;"
+const getAllPeers = "SELECT mhash, status FROM peers ORDER BY status DESC, mhash ASC;"
 
 func getPeerStatus(mHash string) PeerStatus {
 	var status PeerStatus
@@ -52,7 +58,31 @@ func addPeer(mHash string, status PeerStatus) {
 	}
 }
 
-// func showPeers()        {}
+func listPeers() []peer {
+	var (
+		status PeerStatus
+		mhash  string
+	)
+	rows, err := getDB().Query(getAllPeers)
+	if err != nil {
+		panicf("showPeers query failure: %s", err)
+	}
+	defer rows.Close()
+	output := []peer{}
+	for rows.Next() {
+		err := rows.Scan(&mhash, &status)
+		if err != nil {
+			panicf("Show peers row scan failure: %s", err)
+		}
+		output = append(output, peer{mhash: mhash, status: status})
+	}
+	err = rows.Err()
+	if err != nil {
+		panicf("showPeers row error: %s", err)
+	}
+	return output
+}
+
 // func showBlockedPeers() {}
 // func blockPeer()        {}
 // func unblockPeer()      {}

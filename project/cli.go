@@ -75,6 +75,16 @@ var peerBlockCmd = &cobra.Command{
 	},
 }
 
+var peerListCmd = &cobra.Command{
+	Use:   "list",
+	Short: "show a list of peers by their status (blocked, following, etc..)",
+	Run: func(cmd *cobra.Command, args []string) {
+		for _, peer := range listPeers() {
+			fmt.Printf("%s %s\n", peer.mhash, peer.status)
+		}
+	},
+}
+
 var peerFollowCmd = &cobra.Command{
 	Use:   "follow",
 	Short: "Follow a peer and replicate their feed when possible.",
@@ -95,6 +105,8 @@ func BootstrapCLI() {
 
 	rootCmd.AddCommand(peerRootCmd)
 	peerRootCmd.AddCommand(peerBlockCmd)
+	peerRootCmd.AddCommand(peerFollowCmd)
+	peerRootCmd.AddCommand(peerListCmd)
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)

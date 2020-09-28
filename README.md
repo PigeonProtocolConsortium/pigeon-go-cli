@@ -17,6 +17,7 @@ You can override this value by specifying a `PIGEON_PATH` ENV var.
  - [ ] Figure out a system for where to place the default data storage directory
  - [ ] Get a good CI system going? Run tests at PR time, provide prebuilt binaries, prevent coverage slips, etc..
  - [ ] Add a `transact()` helper to ensure all transactions are closed out.
+ - [ ] Switch to [SQLX](https://github.com/jmoiron/sqlx) for extra sanity.
  - [ ] Finish all the things below:
 
  |Done?|Noun        |Verb       | Flag / arg 1  | Flag 2    |

@@ -106,6 +106,15 @@ var peerUntrackedCmd = &cobra.Command{
 	},
 }
 
+// CLI: `pigeon identity`
+var blobRootCmd = &cobra.Command{
+	Use:     "file(s)",
+	Short:   "File related commands",
+	Aliases: []string{"file", "blob", "files", "blobs"},
+	Run: func(cmd *cobra.Command, args []string) {
+	},
+}
+
 // BootstrapCLI wires up all the relevant commands.
 func BootstrapCLI() {
 	rootCmd.AddCommand(versionCmd)
@@ -119,6 +128,9 @@ func BootstrapCLI() {
 	peerRootCmd.AddCommand(peerFollowCmd)
 	peerRootCmd.AddCommand(peerUntrackedCmd)
 	peerRootCmd.AddCommand(peerListCmd)
+
+	rootCmd.AddCommand(blobRootCmd)
+
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)

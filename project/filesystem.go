@@ -7,18 +7,22 @@ import (
 	"github.com/mitchellh/go-homedir"
 )
 
-func maybeSetupPigeonDir() string {
-	var pigeonDataDir string
+func pigeonHomeDir() string {
 	customPath, hasCustomPath := os.LookupEnv("PIGEON_PATH")
 	if hasCustomPath {
-		pigeonDataDir = customPath
-	} else {
-		home, err := homedir.Dir()
-		if err != nil {
-			panicf("Home directory resolution error %s", err)
-		}
-		pigeonDataDir = path.Join(home, ".pigeon")
+		return customPath
 	}
-	os.MkdirAll(pigeonDataDir, 0700)
-	return pigeonDataDir
+	home, err := homedir.Dir()
+	if err != nil {
+		panicf("Home directory resolution error %s", err)
+	}
+	return path.Join(home, ".pigeon")
+}
+
+func maybeSetupPigeonDir() string {
+	err := os.MkdirAll(pigeonHomeDir(), 0700)
+	if err != nil {
+		panicf("maybeSetupPigeonDir: %s", err)
+	}
+	return pigeonHomeDir()
 }

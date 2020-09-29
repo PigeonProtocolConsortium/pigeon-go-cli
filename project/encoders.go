@@ -15,3 +15,7 @@ func B32Encode(data []byte) string {
 func encodePeerMhash(pubKey []byte) string {
 	return PeerSigil + B32Encode(pubKey)
 }
+
+func encodeBlobMhash(sha256 [32]byte) string {
+	return BlobSigil + B32Encode(sha256[:])
+}

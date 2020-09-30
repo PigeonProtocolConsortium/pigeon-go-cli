@@ -115,6 +115,15 @@ var blobRootCmd = &cobra.Command{
 	},
 }
 
+var blobAddCommand = &cobra.Command{
+	Use:     "add",
+	Short:   "Begin tracking a file in the database",
+	Aliases: []string{"create"},
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Printf("%s\n", addBlobFromPath(args[0]))
+	},
+}
+
 // BootstrapCLI wires up all the relevant commands.
 func BootstrapCLI() {
 	rootCmd.AddCommand(versionCmd)
@@ -130,6 +139,7 @@ func BootstrapCLI() {
 	peerRootCmd.AddCommand(peerListCmd)
 
 	rootCmd.AddCommand(blobRootCmd)
+	blobRootCmd.AddCommand(blobAddCommand)
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)

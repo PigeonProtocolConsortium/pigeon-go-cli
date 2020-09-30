@@ -19,6 +19,10 @@ func pigeonHomeDir() string {
 	return path.Join(home, ".pigeon")
 }
 
+func pigeonBlobDir() string {
+	return path.Join(pigeonHomeDir(), "blobs")
+}
+
 func maybeSetupPigeonDir() string {
 	err := os.MkdirAll(pigeonHomeDir(), 0700)
 	if err != nil {

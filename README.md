@@ -18,11 +18,11 @@ You can override this value by specifying a `PIGEON_PATH` ENV var.
  - [ ] Get a good CI system going? Run tests at PR time, provide prebuilt binaries, prevent coverage slips, etc..
  - [ ] Add a `transact()` helper to ensure all transactions are closed out.
  - [ ] Switch to [SQLX](https://github.com/jmoiron/sqlx) for extra sanity.
+ - [ ] Write docs for all CLI commands / args AFTER completion.
  - [ ] Finish all the things below:
 
  |Done?|Noun        |Verb       | Flag / arg 1  | Flag 2    |
  |-----|------------|-----------|---------------|-----------|
- |     |blob        |find       |               |           |
  |     |draft       |create     |               |           |
  |     |draft       |publish    |               |           |
  |     |draft       |show       |               |           |
@@ -32,8 +32,9 @@ You can override this value by specifying a `PIGEON_PATH` ENV var.
  |     |message     |show       | message mhash |           |
  |     |bundle      |create     |               |           |
  |     |bundle      |ingest     |               |           |
- |     |blob        |add        | pipe (later)  |           |
+ |  X  |blob        |find       |               |           |
  |  X  |blob        |add        | file path     |           |
+ |  X  |blob        |add        | STDIO pipe    |           |
  |  X  |peer        |untrack    | peer mhash    |           |
  |  X  |peers       |list       |               |           |
  |  X  |peer        |block      | peer mhash    |           |

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"path"
 
 	"github.com/spf13/cobra"
 )
@@ -117,10 +118,30 @@ var blobRootCmd = &cobra.Command{
 
 var blobAddCommand = &cobra.Command{
 	Use:     "add",
-	Short:   "Begin tracking a file in the database",
+	Short:   "Begin tracking a file in the database. Provide a pipe or file path.",
 	Aliases: []string{"create"},
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("%s\n", addBlobFromPath(args[0]))
+		tpl := "%s\n"
+		var output string
+		if len(args) == 0 {
+			output = addBlobFromPipe()
+		} else {
+			output = addBlobFromPath(args[0])
+		}
+		fmt.Printf(tpl, output)
+	},
+}
+
+var blobFindCommand = &cobra.Command{
+	Use:     "find",
+	Short:   "Print the file path of a blob (if any) to STDOUT",
+	Aliases: []string{"show"},
+	Run: func(cmd *cobra.Command, args []string) {
+		p, f := pathAndFilename(args[0])
+		fullPath := path.Join(p, f)
+		if _, err := os.Stat(fullPath); !os.IsNotExist(err) {
+			fmt.Printf("%s\n", fullPath)
+		}
 	},
 }
 
@@ -140,6 +161,7 @@ func BootstrapCLI() {
 
 	rootCmd.AddCommand(blobRootCmd)
 	blobRootCmd.AddCommand(blobAddCommand)
+	blobRootCmd.AddCommand(blobFindCommand)
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)

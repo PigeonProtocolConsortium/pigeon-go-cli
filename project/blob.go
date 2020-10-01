@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"crypto/sha256"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"os"
@@ -48,7 +50,22 @@ func addBlob(data []byte) string {
 	mhash := encodeBlobMhash(sha256.Sum256(data))
 	blobPath := createBlobDirectory(mhash)
 	write(blobPath, data)
-	return blobPath
+	return mhash
+}
+
+func addBlobFromPipe() string {
+	reader := bufio.NewReader(os.Stdin)
+	var output []byte
+
+	for {
+		input, err := reader.ReadByte()
+		if err != nil && err == io.EOF {
+			break
+		}
+		output = append(output, input)
+	}
+
+	return addBlob(output)
 }
 
 func addBlobFromPath(path string) string {

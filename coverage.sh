@@ -1,5 +1,5 @@
 #!/bin/sh
 cd project
-go test -coverprofile coverage.out
-go tool cover -html=coverage.out
+PIGEON_PATH="./testdata" go test -coverprofile coverage.out
+PIGEON_PATH="./testdata" go tool cover -html=coverage.out
 cd -

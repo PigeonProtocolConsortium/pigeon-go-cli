@@ -1,4 +1,4 @@
 #!/bin/sh
 cd project
-go test -v
+PIGEON_PATH="./testdata" go test -v
 cd -

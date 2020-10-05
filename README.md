@@ -11,10 +11,23 @@ Don't use the Go version yet. If you want something stable, there is a [Ruby ver
 By default, data is stored in `~/.pigeon`.
 You can override this value by specifying a `PIGEON_PATH` ENV var.
 
+# Help Wanted
+
+Want to get involved? Below are a few things I need help with.
+
+Email `contact@vaporsfot.xyz` if you have any questions.
+
+ * Writing a BNF grammar for message parsing
+ * Test coverage increases
+ * Manual QA of features and edge cases
+ * Cross-compiling windows binaries
+ * General Golang help (I am a Golang novice- project structure could be improved)
+
 # TODO
 
+**CURRENT TASK:** Write a message parser.
+
  - [ ] Add a real testing lib to DRY things up.
- - [ ] Figure out a system for where to place the default data storage directory
  - [ ] Get a good CI system going? Run tests at PR time, provide prebuilt binaries, prevent coverage slips, etc..
  - [ ] Add a `transact()` helper to ensure all transactions are closed out.
  - [ ] Switch to [SQLX](https://github.com/jmoiron/sqlx) for extra sanity.
@@ -23,6 +36,7 @@ You can override this value by specifying a `PIGEON_PATH` ENV var.
 
  |Done?|Noun        |Verb       | Flag / arg 1  | Flag 2    |
  |-----|------------|-----------|---------------|-----------|
+ |     |blob        |remove     | mhash         |           |
  |     |bundle      |ingest     |               |           |
  |     |message     |show       | message mhash |           |
  |     |message     |find       | --all         |           |

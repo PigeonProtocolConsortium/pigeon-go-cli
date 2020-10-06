@@ -18,7 +18,7 @@ type pigeonMessage struct {
 	kind      string
 	lipmaa    string
 	prev      string
-	body      [256]pigeonBodyItem
+	body      []pigeonBodyItem
 	signature string
 }
 
@@ -95,9 +95,17 @@ func parseHeader(state *parserState) {
 }
 
 func parseBody(state *parserState) {
-	panic("Not done yet")
+	t := state.scanner.Text()
+	chunks := strings.Split(t, ":")
+	if chunks[0] == "" {
+		state.mode = parsingFooter
+		return
+	}
+	pair := pigeonBodyItem{key: chunks[0], value: chunks[1]}
+	state.buffer.body = append(state.buffer.body, pair)
+	return
 }
 
 func parseFooter(state *parserState) {
-	panic("Not done yet")
+	panic("=== STOPPED HERE")
 }

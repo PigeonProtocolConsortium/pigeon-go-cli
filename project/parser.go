@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"errors"
-	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -14,7 +14,7 @@ type pigeonBodyItem struct {
 
 type pigeonMessage struct {
 	author    string
-	depth     int
+	depth     int64
 	kind      string
 	lipmaa    string
 	prev      string
@@ -34,6 +34,8 @@ const (
 type parserState struct {
 	mode    parserMode
 	scanner *bufio.Scanner
+	buffer  pigeonMessage
+	results []pigeonMessage
 }
 
 func newState(message string) parserState {
@@ -49,31 +51,53 @@ func parseMessage(message string) ([]pigeonMessage, error) {
 	for state.scanner.Scan() {
 		switch state.mode {
 		case parsingHeader:
-			parseHeader(state)
+			parseHeader(&state)
 		case parsingBody:
-			parseBody(state)
+			parseBody(&state)
 		case parsingFooter:
-			parseFooter(state)
+			parseFooter(&state)
 		}
 	}
 	return []pigeonMessage{}, errors.New("whatever")
 }
 
-func parseHeader(state parserState) {
+func parseHeader(state *parserState) {
 	t := state.scanner.Text()
 	chunks := strings.Split(t, " ")
-	switch len(chunks) {
-	case 2:
-		fmt.Printf("=== KEY: %s | VALUE: %s\n", chunks[0], chunks[1])
+
+	switch chunks[0] {
+	case "":
+		state.mode = parsingBody
+		return
+	case "author":
+		state.buffer.author = chunks[1]
+		return
+	case "kind":
+		state.buffer.kind = chunks[1]
+		return
+	case "lipmaa":
+		state.buffer.lipmaa = chunks[1]
+		return
+	case "prev":
+		state.buffer.prev = chunks[1]
+		return
+	case "depth":
+		depth, err := strconv.ParseInt(chunks[1], 10, 32)
+		if err != nil {
+			tpl := "Parsing bad depth in message %d: %q"
+			panicf(tpl, len(state.results), chunks[1])
+		}
+		state.buffer.depth = depth
+		return
 	default:
-		fmt.Printf("WHATS THIS?? %s\n", chunks[0])
+		panicf("BAD HEADER: %q", t)
 	}
 }
 
-func parseBody(state parserState) {
+func parseBody(state *parserState) {
 	panic("Not done yet")
 }
 
-func parseFooter(state parserState) {
+func parseFooter(state *parserState) {
 	panic("Not done yet")
 }

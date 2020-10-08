@@ -2,7 +2,7 @@ package main
 
 import (
 	"bufio"
-	"errors"
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -29,6 +29,7 @@ const (
 	parsingBody   parserMode = iota
 	parsingFooter parserMode = iota
 	parsingDone   parserMode = iota
+	parsingError  parserMode = iota
 )
 
 type parserState struct {
@@ -36,6 +37,7 @@ type parserState struct {
 	scanner *bufio.Scanner
 	buffer  pigeonMessage
 	results []pigeonMessage
+	error   error
 }
 
 func newState(message string) parserState {
@@ -47,18 +49,24 @@ func newState(message string) parserState {
 
 func parseMessage(message string) ([]pigeonMessage, error) {
 	state := newState(message)
-
 	for state.scanner.Scan() {
 		switch state.mode {
+		case parsingDone:
+			maybeContinue(&state)
 		case parsingHeader:
 			parseHeader(&state)
 		case parsingBody:
 			parseBody(&state)
 		case parsingFooter:
 			parseFooter(&state)
+		case parsingError:
+			break
 		}
 	}
-	return []pigeonMessage{}, errors.New("whatever")
+	if state.mode == parsingError {
+		return []pigeonMessage{}, state.error
+	}
+	return state.results, nil
 }
 
 func parseHeader(state *parserState) {
@@ -107,5 +115,15 @@ func parseBody(state *parserState) {
 }
 
 func parseFooter(state *parserState) {
-	panic("=== STOPPED HERE")
+	t1 := state.scanner.Text()
+	state.mode = parsingDone
+
+	fmt.Printf("TODO Real message validation: %s\n", t1)
+}
+
+func maybeContinue(state *parserState) {
+	t1 := state.scanner.Text()
+	if t1 == "" {
+		state.mode = parsingHeader
+	}
 }

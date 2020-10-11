@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"strconv"
 	"strings"
 )
@@ -50,6 +49,11 @@ func newState(message string) parserState {
 func parseMessage(message string) ([]pigeonMessage, error) {
 	state := newState(message)
 	for state.scanner.Scan() {
+		// Exit early if any step produces an error.
+		if state.error != nil {
+			return []pigeonMessage{}, state.error
+		}
+
 		switch state.mode {
 		case parsingDone:
 			maybeContinue(&state)
@@ -115,10 +119,13 @@ func parseBody(state *parserState) {
 }
 
 func parseFooter(state *parserState) {
-	t1 := state.scanner.Text()
 	state.mode = parsingDone
-
-	fmt.Printf("TODO Real message validation: %s\n", t1)
+	err := verifyShallow(&state.buffer)
+	if err != nil {
+		state.results = append(state.results, state.buffer)
+		state.buffer = pigeonMessage{}
+		panicf("Message verification failed for %s. %s", state.buffer.signature, err)
+	}
 }
 
 func maybeContinue(state *parserState) {

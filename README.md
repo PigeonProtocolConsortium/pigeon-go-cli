@@ -22,6 +22,7 @@ Email `contact@vaporsfot.xyz` if you have any questions.
  * Manual QA of features and edge cases
  * Cross-compiling windows binaries
  * General Golang help (I am a Golang novice- project structure could be improved)
+ * Security auditing and vulnerability discovery. Please send security concerns to `contact@vaporsoft.xyz`.
 
 # TODO
 
@@ -33,6 +34,7 @@ Email `contact@vaporsfot.xyz` if you have any questions.
  - [ ] Switch to [SQLX](https://github.com/jmoiron/sqlx) for extra sanity.
  - [ ] Write docs for all CLI commands / args AFTER completion.
  - [ ] Finish all the things below:
+ - [ ] Rename `lipmaa` to `backlink` as Bamboo protocol has done?
 
  |Done?|Noun        |Verb       | Flag / arg 1  | Flag 2    |
  |-----|------------|-----------|---------------|-----------|

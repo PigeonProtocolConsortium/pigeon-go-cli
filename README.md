@@ -20,13 +20,12 @@ Email `contact@vaporsfot.xyz` if you have any questions.
  * Writing a BNF grammar for message parsing
  * Test coverage increases
  * Manual QA of features and edge cases
+ * Providing constructive feedback on documentation
  * Cross-compiling windows binaries
  * General Golang help (I am a Golang novice- project structure could be improved)
- * Security auditing and vulnerability discovery. Please send security concerns to `contact@vaporsoft.xyz`.
+ * Security auditing and vulnerability discovery. Please send security concerns to `contact@vaporsoft.xyz` privately.
 
 # TODO
-
-**CURRENT TASK:** Write a message parser.
 
  - [ ] Add a real testing lib to DRY things up.
  - [ ] Get a good CI system going? Run tests at PR time, provide prebuilt binaries, prevent coverage slips, etc..
@@ -38,8 +37,8 @@ Email `contact@vaporsfot.xyz` if you have any questions.
 
  |Done?|Noun        |Verb       | Flag / arg 1  | Flag 2    |
  |-----|------------|-----------|---------------|-----------|
- |     |blob        |remove     | mhash         |           |
  |     |bundle      |ingest     |               |           |
+ |     |blob        |remove     | mhash         |           |
  |     |message     |show       | message mhash |           |
  |     |message     |find       | --all         |           |
  |     |message     |find       | --last        |           |

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/ed25519"
 	"errors"
 	"fmt"
 	"regexp"
@@ -69,8 +70,18 @@ func validateBodyValue(value *string) error {
 	return nil
 }
 
-func validateSignature(_topHalf string, _b32signature string) error {
-	return errors.New("WIP")
+func validateSignature(message *pigeonMessage, topHalf string) error {
+	asciiSignature := message.signature
+	signature := []byte(B32Decode(asciiSignature))
+	publicKey := decodeMhash(message.author)
+	ok := ed25519.Verify(publicKey, []byte(topHalf), signature)
+
+	if ok {
+		return nil
+	}
+
+	error := fmt.Sprintf("Can't verify message %s", message.signature)
+	return errors.New(error)
 }
 
 func verifyBodyItem(bodyItem *pigeonBodyItem) error {
@@ -113,6 +124,6 @@ func verifyShallow(message *pigeonMessage) error {
 	}
 
 	buffer.Write([]byte("\n"))
-	validateSignature(buffer.String(), message.signature)
+	validateSignature(message, buffer.String())
 	return nil
 }

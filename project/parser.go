@@ -119,13 +119,17 @@ func parseBody(state *parserState) {
 }
 
 func parseFooter(state *parserState) {
+	t := state.scanner.Text()
+	chunks := strings.Split(t, " ")
+	state.buffer.signature = chunks[1]
 	state.mode = parsingDone
 	err := verifyShallow(&state.buffer)
 	if err != nil {
-		state.results = append(state.results, state.buffer)
-		state.buffer = pigeonMessage{}
 		panicf("Message verification failed for %s. %s", state.buffer.signature, err)
 	}
+	state.results = append(state.results, state.buffer)
+	state.buffer.body = []pigeonBodyItem{}
+	state.buffer = pigeonMessage{}
 }
 
 func maybeContinue(state *parserState) {

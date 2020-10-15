@@ -21,6 +21,10 @@ func B32Decode(input string) []byte {
 	return output
 }
 
+func decodeMhash(input string) []byte {
+	return []byte(B32Decode(input[5:]))
+}
+
 func validateMhash(input string) string {
 	arry := strings.Split(input, ".")
 	if len(arry) != 2 {

@@ -153,18 +153,28 @@ module Pigeon
       bundle = File.read(File.join(file_path, MESSAGE_FILE))
       tokens = Pigeon::Lexer.tokenize(bundle)
       messages = Pigeon::Parser.parse(self, tokens)
-
+      wanted = Set.new
       messages
         .map(&:collect_blobs)
         .flatten
         .uniq
         .map do |mhash|
-        rel_path = Helpers.hash2file_path(mhash)
-        from = File.join([file_path] + rel_path)
-        to = File.join([DEFAULT_BLOB_DIR] + rel_path)
-        if (File.file?(from) && !File.file?(to))
-          data = File.read(from)
-          Helpers.write_to_disk(DEFAULT_BLOB_DIR, mhash, data)
+        binary = Pigeon::Helpers.b32_decode(mhash.gsub(BLOB_SIGIL, ""))
+        puts "Add #{mhash}"
+        wanted.add(binary)
+      end
+      all_files = Dir[File.join(file_path, "*.blb"), File.join(file_path, "*.BLB")]
+      all_files.map do |path|
+        data = File.read(path)
+        raw_digest = Digest::SHA256.digest(data)
+        if wanted.member?(raw_digest)
+          mhash = BLOB_SIGIL + Helpers.b32_encode(raw_digest)
+          rel_path = Helpers.hash2file_path(mhash)
+          from = File.join([file_path] + rel_path)
+          to = File.join([DEFAULT_BLOB_DIR] + rel_path)
+          if !File.file?(to)
+            Helpers.write_to_disk(DEFAULT_BLOB_DIR, mhash, data)
+          end
         end
       end
       messages

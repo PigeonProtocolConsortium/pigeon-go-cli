@@ -252,16 +252,7 @@ module Pigeon
 
     def self.hash2file_path(mhash)
       mhash = mhash.sub(BLOB_SIGIL, "")
-
-      [
-        mhash[0...7],
-        mhash[7...14],
-        mhash[14...21],
-        mhash[21...28],
-        mhash[28...35],
-        mhash[35...42],
-        [mhash[42...49], ".", mhash[49...52]].join(""),
-      ]
+      ["#{mhash[0..3]}#{mhash[-4..-1]}.blb"]
     end
 
     def self.decode_multihash(string)

@@ -44,9 +44,9 @@ See `kitchen_sink.sh` examples.
 
 [Docs available here](ruby_tutorial.md)
 
-# Current Status
+# TODO Items
 
- - [ ] Update spec document CLI usage examples to reflect API changes in 2020.
+ - [ ] Stop using old nested blob bundles. Start using "flat" blobs.
  - [ ] Ability to unblock someone.
  - [ ] Ability to delete a key from a draft.
  - [ ] Update Dev docs in protocol spec to reflect changes to `lipmaa` header.

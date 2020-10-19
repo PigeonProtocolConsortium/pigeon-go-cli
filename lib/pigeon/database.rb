@@ -159,8 +159,8 @@ module Pigeon
         .flatten
         .uniq
         .map do |mhash|
-        binary = Pigeon::Helpers.b32_decode(mhash.gsub(BLOB_SIGIL, ""))
-        puts "Add #{mhash}"
+        b32 = mhash.gsub(BLOB_SIGIL, "")
+        binary = Pigeon::Helpers.b32_decode(b32)
         wanted.add(binary)
       end
       all_files = Dir[File.join(file_path, "*.blb"), File.join(file_path, "*.BLB")]

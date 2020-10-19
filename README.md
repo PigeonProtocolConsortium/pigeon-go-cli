@@ -33,14 +33,19 @@ Email `contact@vaporsfot.xyz` if you have any questions.
  - [ ] Switch to [SQLX](https://github.com/jmoiron/sqlx) for extra sanity.
  - [ ] Write docs for all CLI commands / args AFTER completion.
  - [ ] Finish all the things below:
+
+# Protocol Changes?
+
  - [ ] Rename `lipmaa` to `backlink` as Bamboo protocol has done?
+ - [ ] Don't enforce a structure on how blobs are packed into bundles- the client is forced to determine the SHA checksum regardless. Forced structure just complicates protocol design.
+ - [ ] Mandate usage of ZIP files so that bundles are always a single file?
 
  |Done?|Noun        |Verb       | Flag / arg 1  | Flag 2    |
  |-----|------------|-----------|---------------|-----------|
  |     |bundle      |ingest     |               |           |
- |     |blob        |remove     | mhash         |           |
  |     |message     |show       | message mhash |           |
  |     |message     |find       | --all         |           |
+ |     |blob        |remove     | mhash         |           |
  |     |message     |find       | --last        |           |
  |     |draft       |create     |               |           |
  |     |draft       |publish    |               |           |

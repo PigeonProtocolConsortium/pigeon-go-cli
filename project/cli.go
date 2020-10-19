@@ -145,6 +145,21 @@ var blobFindCommand = &cobra.Command{
 	},
 }
 
+var bundleCommand = &cobra.Command{
+	Use:   "bundle",
+	Short: "Operations relating to 'bundles'- a package of information provided by peers",
+	Run: func(cmd *cobra.Command, args []string) {
+	},
+}
+
+var bundleIngestCommand = &cobra.Command{
+	Use:   "ingest",
+	Short: "consume a bundle into the local database",
+	Run: func(cmd *cobra.Command, args []string) {
+		panic("Work in progress.")
+	},
+}
+
 // BootstrapCLI wires up all the relevant commands.
 func BootstrapCLI() {
 	rootCmd.AddCommand(versionCmd)
@@ -162,6 +177,9 @@ func BootstrapCLI() {
 	rootCmd.AddCommand(blobRootCmd)
 	blobRootCmd.AddCommand(blobAddCommand)
 	blobRootCmd.AddCommand(blobFindCommand)
+
+	rootCmd.AddCommand(bundleCommand)
+	bundleCommand.AddCommand(bundleIngestCommand)
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)

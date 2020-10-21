@@ -41,3 +41,9 @@ func CreateIdentity() (ed25519.PublicKey, ed25519.PrivateKey) {
 func panicf(tpl string, args ...interface{}) {
 	panic(fmt.Sprintf(tpl, args...))
 }
+
+func check(e error, tpl string, args ...interface{}) {
+	if e != nil {
+		panicf(tpl, args...)
+	}
+}

@@ -18,7 +18,6 @@ FLAGS?=
 dependencies:
 	cd $(SRC) && go mod download -x
 
-
 $(BUILD_TARGET)/$(NAME):
 	cd $(SRC) && \
 	GOOS=$(GOOS) GOARCH=$(GOARCH) go build -o $(BUILD_TARGET)/$(NAME)

@@ -71,4 +71,4 @@ clean-cover:
 	rm -rf $(TEST_TARGET)/*
 clean-test:
 	rm -rf $(TESTDATA)
-clean: clean-build clean-test clean-cover
+clean: clean-artifacts clean-build clean-cover clean-test

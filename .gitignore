@@ -5,6 +5,7 @@
 coverage.out
 pigeon-cli
 pigeon.exe
+targets/artifacts/*
 targets/builds/*
 targets/tests/*
 project/testdata/*

@@ -7,6 +7,8 @@ NAME?=$(APP)-$(GOOS)-$(GOARCH)$(EXT)
 PREFIX?=$(CURDIR)
 SRC?=$(PREFIX)/project
 TARGET?=$(PREFIX)/targets
+
+ARTIFACT_TARGET?=$(TARGET)/artifacts
 BUILD_TARGET?=$(TARGET)/builds
 TEST_TARGET?=$(TARGET)/tests
 
@@ -15,6 +17,7 @@ FLAGS?=
 
 dependencies:
 	cd $(SRC) && go mod download -x
+
 
 $(BUILD_TARGET)/$(NAME):
 	cd $(SRC) && \
@@ -52,10 +55,20 @@ cover: clean-cover test
 	cd $(SRC) && \
 	go cover -html $(TEST_TARGET)/coverage.out -o $(TEST_TARGET)/coverage.html
 
+vet:
+	cd $(SRC) && \
+	go vet -c=3 ./...
+
+fmt:
+	cd $(SRC) && \
+	go fmt -x ./...
+
+clean-artifacts:
+	rm -rf $(ARTIFACT_TARGET)/*
 clean-build:
 	rm -rf $(BUILD_TARGET)/*
-clean-test:
-	rm -rf $(TESTDATA)
 clean-cover:
 	rm -rf $(TEST_TARGET)/*
+clean-test:
+	rm -rf $(TESTDATA)
 clean: clean-build clean-test clean-cover

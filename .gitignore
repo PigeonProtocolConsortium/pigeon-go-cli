@@ -5,5 +5,7 @@
 coverage.out
 pigeon-cli
 pigeon.exe
+targets/builds/*
+targets/tests/*
 project/testdata/*
 !/**/.gitkeep

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -14,10 +13,7 @@ type testCase struct {
 // to a byte array.
 func B32Decode(input string) []byte {
 	output, error := encoder.DecodeString(input)
-	if error != nil {
-		panic(fmt.Sprintf("Error decoding Base32 string %s", input))
-	}
-
+	check(error, "Error decoding Base32 string %s", input)
 	return output
 }
 

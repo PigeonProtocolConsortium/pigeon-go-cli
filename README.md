@@ -15,24 +15,28 @@ You can override this value by specifying a `PIGEON_PATH` ENV var.
 
 Want to get involved? Below are a few things I need help with.
 
-Email `contact@vaporsfot.xyz` if you have any questions.
+Email `contact@vaporsoft.xyz` if you have any questions.
 
  * Writing a BNF grammar for message parsing
  * Test coverage increases
  * Manual QA of features and edge cases
  * Providing constructive feedback on documentation
  * Cross-compiling windows binaries
- * General Golang help (I am a Golang novice- project structure could be improved)
  * Security auditing and vulnerability discovery. Please send security concerns to `contact@vaporsoft.xyz` privately.
 
 # TODO
 
  - [ ] Add a real testing lib to DRY things up.
+ - [ ] Validate and scrutinize `depth`, `lipmaa`, `prev` fields when ingesting message bundles to account for poorly written peer clients.
  - [ ] Get a good CI system going? Run tests at PR time, provide prebuilt binaries, prevent coverage slips, etc..
  - [ ] Add a `transact()` helper to ensure all transactions are closed out.
  - [ ] Switch to [SQLX](https://github.com/jmoiron/sqlx) for extra sanity.
  - [ ] Write docs for all CLI commands / args AFTER completion.
- - [ ] Finish all the things below:
+ - [ ] Start using the `check` helper instead of `error != nil`.
+ - [ ] Update spec to only allow UPPERCASE MULTIHASHES
+ - [ ] Implement `query.pgn` protocol, as outlined [here](%CSBzyskUxqbFSgOBh8OkVLn18NqX3zu3CF58mm2JHok=.sha256) and [here](%KWETmo1cmlfYK4N6FVL9BHYfFcKMy49E94XGuZSPGCw=.sha256).
+ - [ ] Add a note about "shallow" vs. "deep" verification.
+ - [ ] Finish all the things below
 
 # Protocol Changes?
 

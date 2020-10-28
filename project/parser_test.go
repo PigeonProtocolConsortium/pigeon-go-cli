@@ -18,7 +18,7 @@ func TestParser(t *testing.T) {
 	}
 
 	fixtureSize := 13
-	length := len(output)
+	length := len(output.messages)
 	if length != fixtureSize {
 		t.Fatalf("Expected %d items, got %d", fixtureSize, length)
 	}
@@ -29,8 +29,8 @@ func TestParser2(t *testing.T) {
 	if err1 != nil {
 		log.Fatal(err1)
 	}
-	output, err2 := parseMessage(string(content))
-
+	parserOutput, err2 := parseMessage(string(content))
+	output := parserOutput.messages
 	if err2 != nil {
 		log.Fatal(err2)
 	}

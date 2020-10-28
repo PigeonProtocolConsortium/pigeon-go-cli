@@ -39,6 +39,17 @@ type parserState struct {
 	error   error
 }
 
+type parserOutput struct {
+	/** `messages` is an array of messages. The messages are SHALLOW
+	verified. That means the message has a valid signature and syntax,
+	but `depth`, `lipmaa` and `prev` have not been scrutinized for validity. */
+	messages []pigeonMessage
+	/** `blobIndex` is a hash where keys represent each unique blob
+	foud in a bundle. This is required to avoid ingesting unwanted
+	blobs to disk. */
+	blobIndex map[string]bool
+}
+
 func newState(message string) parserState {
 	return parserState{
 		mode:    parsingHeader,
@@ -46,12 +57,16 @@ func newState(message string) parserState {
 	}
 }
 
-func parseMessage(message string) ([]pigeonMessage, error) {
+func parseMessage(message string) (parserOutput, error) {
+	empty := parserOutput{
+		messages:  []pigeonMessage{},
+		blobIndex: map[string]bool{},
+	}
 	state := newState(message)
 	for state.scanner.Scan() {
 		// Exit early if any step produces an error.
 		if state.error != nil {
-			return []pigeonMessage{}, state.error
+			return empty, state.error
 		}
 
 		switch state.mode {
@@ -68,9 +83,16 @@ func parseMessage(message string) ([]pigeonMessage, error) {
 		}
 	}
 	if state.mode == parsingError {
-		return []pigeonMessage{}, state.error
+		return empty, state.error
 	}
-	return state.results, nil
+	blobIndex := map[string]bool{}
+	for _, msg := range state.results {
+		for _, pair := range msg.body {
+			panicf("YOU NEED TO FINISH CREATING A BLOB INDEX FOR IMPORTED BUNDLES: %s", pair.key)
+		}
+	}
+	output := parserOutput{messages: state.results, blobIndex: blobIndex}
+	return output, nil
 }
 
 func parseHeader(state *parserState) {

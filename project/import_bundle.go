@@ -6,23 +6,28 @@ import (
 	"io/ioutil"
 )
 
-/** ingestRelevantMessages takes an array of Pigeon messages
+func ingestOneMessage(msg pigeonMessage, blobIndex map[string]bool) {
+	if getPeerStatus(msg.author) == following {
+		fmt.Println("TODO: Ingest this message")
+	}
+}
+
+/** ingestManyMessages takes an array of Pigeon messages
 and adds them to the local database, assuming that they are
 messages of interest. */
-func ingestRelevantMessages(msgs []pigeonMessage) {
-	for _, message := range msgs {
-		fmt.Printf("Peer %s has %s status\n", message.author[0:13], getPeerStatus(message.author))
+func ingestManyMessages(outp parserOutput) {
+	for _, message := range outp.messages {
+		ingestOneMessage(message, outp.blobIndex)
 	}
-	panic("This is where I stopped")
 }
 
 func importBundle(path string) error {
 	// Get messages.pgn file
 	dat, err1 := ioutil.ReadFile(path)
-	check(err1, "Problem opening %s. Error: %s", path, err1)
-	msgs, err2 := parseMessage(string(dat))
+	check(err1, "Problem opening bundle %s. Error: %s", path, err1)
+	outp, err2 := parseMessage(string(dat))
 	check(err2, "Failed to parse %s. Error: %s", path, err2)
-	ingestRelevantMessages(msgs)
+	ingestManyMessages(outp)
 	// Parse messages
 	// Map over messages
 	return errors.New("Not done yet")

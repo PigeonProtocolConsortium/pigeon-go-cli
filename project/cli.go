@@ -96,7 +96,7 @@ var peerFollowCmd = &cobra.Command{
 	},
 }
 
-var peerUntrackedCmd = &cobra.Command{
+var peerUntrackCmd = &cobra.Command{
 	Use:     "untrack",
 	Short:   "Stop following/blocking a peer",
 	Aliases: []string{"unblock", "unfollow"},
@@ -171,7 +171,7 @@ func BootstrapCLI() {
 	rootCmd.AddCommand(peerRootCmd)
 	peerRootCmd.AddCommand(peerBlockCmd)
 	peerRootCmd.AddCommand(peerFollowCmd)
-	peerRootCmd.AddCommand(peerUntrackedCmd)
+	peerRootCmd.AddCommand(peerUntrackCmd)
 	peerRootCmd.AddCommand(peerListCmd)
 
 	rootCmd.AddCommand(blobRootCmd)

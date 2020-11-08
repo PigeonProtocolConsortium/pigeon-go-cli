@@ -53,13 +53,7 @@ func fileExists(filename string) bool {
 func blobExists(mhash string) bool {
 	p1, fname := pathAndFilename(mhash)
 	p2 := path.Join(p1, fname)
-	result := fileExists(p2)
-	if result {
-		fmt.Printf("$$$$$ GOT IT %s\n", p2)
-	} else {
-		fmt.Printf("$$$$$ NOPE %s\n", p2)
-	}
-	return result
+	return fileExists(p2)
 }
 
 func addBlob(mhash string, data []byte) string {

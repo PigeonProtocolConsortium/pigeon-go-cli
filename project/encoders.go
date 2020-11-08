@@ -19,3 +19,9 @@ func encodePeerMhash(pubKey []byte) string {
 func encodeBlobMhash(sha256 []byte) string {
 	return BlobSigil + B32Encode(sha256[:])
 }
+
+func encodeMessageMhash(b32signature string) string {
+	sigData := B32Decode(b32signature)
+	shaData := getSha256(sigData)
+	return MessageSigil + B32Encode(shaData)
+}

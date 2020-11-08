@@ -7,15 +7,23 @@ import (
 	"path/filepath"
 )
 
-const insertMessageQuery = "INSERT INTO messages(author, depth, kind, lipmaa, prev, signature) VALUES(?1, ?2, ?3, ?4, ?5, ?6)"
+const insertMessageQuery = "INSERT INTO messages(author, depth, kind, lipmaa, prev, signature, mhash) VALUES(?1, ?2, ?3, ?4, ?5, ?6, $7)"
 const insertBodyItemQuery = "INSERT INTO body_items(parent, key, value, rank) VALUES(?1, ?2, ?3, ?4)"
 
 func ingestOneMessage(msg pigeonMessage, blobIndex map[string]bool) {
 	if getPeerStatus(msg.author) == following {
 		tx, err1 := getDB().Begin()
 		check(err1, "ingestOneMessage: Can't open DB: %s", err1)
-		results, err2 := tx.Exec(insertMessageQuery, msg.author, msg.depth, msg.kind, msg.lipmaa, msg.prev, msg.signature)
-		rollbackCheck(tx, err2, "Failed to save message %s", msg.signature)
+		mhash := encodeMessageMhash(msg.signature)
+		results, err2 := tx.Exec(insertMessageQuery,
+			msg.author,
+			msg.depth,
+			msg.kind,
+			msg.lipmaa,
+			msg.prev,
+			msg.signature,
+			mhash)
+		rollbackCheck(tx, err2, "Failed to save message %s. %s", msg.signature, err2)
 		parent, err3 := results.LastInsertId()
 		rollbackCheck(tx, err3, "Failed to get last ID for message %s", msg.signature)
 
@@ -50,7 +58,6 @@ func ingestBlobs(p string, blobIndex map[string]bool) {
 		mhash, data := getMhashForFile(blobPath)
 
 		if blobIndex[mhash] {
-			fmt.Printf("Ingesting %s\n", mhash)
 			addBlob(mhash, data)
 			blobIndex[mhash] = false
 		} else {

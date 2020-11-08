@@ -25,15 +25,14 @@ func TestImportBundle(t *testing.T) {
 		}
 	}
 
-	t.Fatal("Next step: uncomment code below")
-	// messages := []string{
-	// 	"TEXT.RGKRHC0APNN9FCJTVBN1NR1ZYQ9ZY34PYYASSMJ6016S30ZTWHR0",
-	// 	"TEXT.V52B1GH1XS8K1QKJG3AK127XYA23E82J0A2ZQTJ08TF8NZN2A1Y0",
-	// 	"TEXT.Z3QS1HPX756E22XWKXAXH7NTSTJGY0AHEM9KQNATTC6HHCACZGN0",
-	// }
-	// for _, mhash := range messages {
-	// 	if !messageExists(mhash) {
-	// 		t.Fatalf("Can't find message: %s", mhash)
-	// 	}
-	// }
+	messages := []string{
+		"TEXT.RGKRHC0APNN9FCJTVBN1NR1ZYQ9ZY34PYYASSMJ6016S30ZTWHR0",
+		"TEXT.V52B1GH1XS8K1QKJG3AK127XYA23E82J0A2ZQTJ08TF8NZN2A1Y0",
+		"TEXT.Z3QS1HPX756E22XWKXAXH7NTSTJGY0AHEM9KQNATTC6HHCACZGN0",
+	}
+	for _, mhash := range messages {
+		if !messageExists(mhash) {
+			t.Fatalf("Can't find message: %s", mhash)
+		}
+	}
 }

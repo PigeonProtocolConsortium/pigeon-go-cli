@@ -36,7 +36,8 @@ var migrations = []migration{
 			kind      string NOT NULL,
 			lipmaa    string NOT NULL,
 			prev      string NOT NULL,
-			signature string NOT NULL
+			signature string NOT NULL,
+			mhash     string NOT NULL
 		);
 		`,
 		down: `DROP TABLE IF EXISTS messages`,

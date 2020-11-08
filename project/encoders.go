@@ -32,7 +32,6 @@ func formatMessage(message pigeonMessage) rawMessage {
 	str.WriteString(fmt.Sprintf("author %s\n", message.author))
 	str.WriteString(fmt.Sprintf("depth %d\n", message.depth))
 	str.WriteString(fmt.Sprintf("kind %s\n", message.kind))
-	str.WriteString(fmt.Sprintf("lipmaa %s\n", message.lipmaa))
 	str.WriteString(fmt.Sprintf("prev %s\n\n", message.prev))
 	for _, item := range message.body {
 		str.WriteString(fmt.Sprintf("%s:%s\n", item.key, item.value))

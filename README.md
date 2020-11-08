@@ -26,8 +26,9 @@ Email `contact@vaporsoft.xyz` if you have any questions.
 
 # TODO
 
+ - [ ] Add forgery protection tests
  - [ ] Add a real testing lib to DRY things up.
- - [ ] Validate and scrutinize `depth`, `lipmaa`, `prev` fields when ingesting message bundles to account for poorly written peer clients.
+ - [ ] Validate and scrutinize `depth`, `prev` fields when ingesting message bundles to account for poorly written peer clients.
  - [ ] Get a good CI system going? Run tests at PR time, provide prebuilt binaries, prevent coverage slips, etc..
  - [ ] Add a `transact()` helper to ensure all transactions are closed out.
  - [ ] Switch to [SQLX](https://github.com/jmoiron/sqlx) for extra sanity.
@@ -40,7 +41,7 @@ Email `contact@vaporsoft.xyz` if you have any questions.
 
 # Protocol Changes?
 
- - [ ] Rename `lipmaa` to `backlink` as Bamboo protocol has done?
+ - [X] Just ditch `lipmaa` altogether in the name of time?
  - [ ] Don't enforce a structure on how blobs are packed into bundles- the client is forced to determine the SHA checksum regardless. Forced structure just complicates protocol design.
  - [ ] Mandate usage of ZIP files so that bundles are always a single file?
 

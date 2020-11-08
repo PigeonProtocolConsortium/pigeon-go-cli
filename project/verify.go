@@ -108,7 +108,6 @@ func verifyShallow(message *pigeonMessage) error {
 		return err
 	}
 	buffer.Write([]byte(fmt.Sprintf("kind %s\n", message.kind)))
-	buffer.Write([]byte(fmt.Sprintf("lipmaa %s\n", message.lipmaa)))
 	buffer.Write([]byte(fmt.Sprintf("prev %s\n", message.prev)))
 	buffer.Write([]byte("\n"))
 	for count, bodyItem := range message.body {

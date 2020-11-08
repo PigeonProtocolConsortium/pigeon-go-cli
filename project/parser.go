@@ -15,7 +15,6 @@ type pigeonMessage struct {
 	author    string
 	depth     int64
 	kind      string
-	lipmaa    string
 	prev      string
 	body      []pigeonBodyItem
 	signature string
@@ -42,7 +41,7 @@ type parserState struct {
 type parserOutput struct {
 	/** `messages` is an array of messages. The messages are SHALLOW
 	verified. That means the message has a valid signature and syntax,
-	but `depth`, `lipmaa` and `prev` have not been scrutinized for validity. */
+	but `depth` and `prev` have not been scrutinized for validity. */
 	messages []pigeonMessage
 	/** `blobIndex` is a hash where keys represent each unique blob
 	foud in a bundle. This is required to avoid ingesting unwanted
@@ -117,9 +116,6 @@ func parseHeader(state *parserState) {
 		return
 	case "kind":
 		state.buffer.kind = chunks[1]
-		return
-	case "lipmaa":
-		state.buffer.lipmaa = chunks[1]
 		return
 	case "prev":
 		state.buffer.prev = chunks[1]

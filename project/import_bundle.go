@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-const insertMessageQuery = "INSERT INTO messages(author, depth, kind, lipmaa, prev, signature, mhash) VALUES(?1, ?2, ?3, ?4, ?5, ?6, $7)"
+const insertMessageQuery = "INSERT INTO messages(author, depth, kind, prev, signature, mhash) VALUES(?1, ?2, ?3, ?4, ?5, ?6)"
 const insertBodyItemQuery = "INSERT INTO body_items(parent, key, value, rank) VALUES(?1, ?2, ?3, ?4)"
 
 func ingestOneMessage(msg pigeonMessage, blobIndex map[string]bool) {
@@ -19,7 +19,6 @@ func ingestOneMessage(msg pigeonMessage, blobIndex map[string]bool) {
 			msg.author,
 			msg.depth,
 			msg.kind,
-			msg.lipmaa,
 			msg.prev,
 			msg.signature,
 			mhash)
@@ -60,8 +59,6 @@ func ingestBlobs(p string, blobIndex map[string]bool) {
 		if blobIndex[mhash] {
 			addBlob(mhash, data)
 			blobIndex[mhash] = false
-		} else {
-			fmt.Printf("Don't need %s\n", mhash)
 		}
 	}
 }

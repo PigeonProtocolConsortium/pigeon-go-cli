@@ -34,7 +34,6 @@ var migrations = []migration{
 			author    string NOT NULL,
 			depth     int    NOT NULL,
 			kind      string NOT NULL,
-			lipmaa    string NOT NULL,
 			prev      string NOT NULL,
 			signature string NOT NULL,
 			mhash     string NOT NULL

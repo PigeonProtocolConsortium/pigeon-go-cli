@@ -126,7 +126,8 @@ var blobAddCommand = &cobra.Command{
 		if len(args) == 0 {
 			output = addBlobFromPipe()
 		} else {
-			output = addBlobFromPath(args[0])
+			mhash, data := getMhashForFile(args[0])
+			output = addBlob(mhash, data)
 		}
 		fmt.Printf(tpl, output)
 	},

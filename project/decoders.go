@@ -21,6 +21,14 @@ func decodeMhash(input string) []byte {
 	return []byte(B32Decode(input[5:]))
 }
 
+func isBlob(input string) bool {
+	if len(input) < 5 {
+		return false
+	} else {
+		return input[0:5] == BlobSigil
+	}
+}
+
 func validateMhash(input string) string {
 	arry := strings.Split(input, ".")
 	if len(arry) != 2 {

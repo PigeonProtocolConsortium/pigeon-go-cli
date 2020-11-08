@@ -2,6 +2,7 @@ package main
 
 import (
 	"crypto/ed25519"
+	"database/sql"
 	"fmt"
 )
 
@@ -40,6 +41,13 @@ func CreateIdentity() (ed25519.PublicKey, ed25519.PrivateKey) {
 
 func panicf(tpl string, args ...interface{}) {
 	panic(fmt.Sprintf(tpl, args...))
+}
+
+func rollbackCheck(tx *sql.Tx, e error, tpl string, args ...interface{}) {
+	if e != nil {
+		tx.Rollback()
+		panicf(tpl, args...)
+	}
 }
 
 func check(e error, tpl string, args ...interface{}) {

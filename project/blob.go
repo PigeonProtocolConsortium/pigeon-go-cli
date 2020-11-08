@@ -42,12 +42,23 @@ func createBlobDirectory(mhash string) string {
 	return path.Join(dirPath, fileName)
 }
 
-func addBlob(data []byte) string {
+// func fileExists(filename string) bool {
+// 	info, err := os.Stat(filename)
+// 	if os.IsNotExist(err) {
+// 		return false
+// 	}
+// 	return !info.IsDir()
+// }
+
+// func blobExists(mhash string) bool {
+// 	return fileExists(createBlobDirectory(mhash))
+// }
+
+func addBlob(mhash string, data []byte) string {
 	size := len(data)
 	if size > blobByteLimit {
 		panicf("Expected blob smaller than %d. Got: %d", blobByteLimit, size)
 	}
-	mhash := encodeBlobMhash(sha256.Sum256(data))
 	blobPath := createBlobDirectory(mhash)
 	write(blobPath, data)
 	return mhash
@@ -65,15 +76,7 @@ func addBlobFromPipe() string {
 		output = append(output, input)
 	}
 
-	return addBlob(output)
-}
-
-func addBlobFromPath(path string) string {
-	dat, err := ioutil.ReadFile(path)
-	if err != nil {
-		panicf("Unable to read %s: %s", path, err)
-	}
-	return addBlob(dat)
+	return addBlob(getMhashForBytes(output), output)
 }
 
 func write(path string, data []byte) {
@@ -94,8 +97,19 @@ func write(path string, data []byte) {
 	}
 }
 
-// def get_blob(mhash)
-// path1 = File.join(createBlobDirectory(mhash)
-// path2 = File.join(DEFAULT_BLOB_DIR, path1)
-// File.read(path2) if File.file?(path2)
-// end
+func getSha256(data []byte) []byte {
+	h := sha256.New()
+	h.Write(data)
+	return h.Sum(nil)
+}
+
+func getMhashForBytes(data []byte) string {
+	return encodeBlobMhash(getSha256(data))
+}
+
+/* getMhashForFile Returns the mHash and data for a path. */
+func getMhashForFile(path string) (string, []byte) {
+	data, err := ioutil.ReadFile(path)
+	check(err, "Can't open %s", path)
+	return getMhashForBytes(data), data
+}

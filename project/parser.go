@@ -57,6 +57,12 @@ func newState(message string) parserState {
 	}
 }
 
+func maybeIndexBlob(index map[string]bool, input string) {
+	if isBlob(input) {
+		index[input] = true
+	}
+}
+
 func parseMessage(message string) (parserOutput, error) {
 	empty := parserOutput{
 		messages:  []pigeonMessage{},
@@ -87,8 +93,11 @@ func parseMessage(message string) (parserOutput, error) {
 	}
 	blobIndex := map[string]bool{}
 	for _, msg := range state.results {
-		for _, pair := range msg.body {
-			panicf("YOU NEED TO FINISH CREATING A BLOB INDEX FOR IMPORTED BUNDLES: %s", pair.key)
+		if getPeerStatus(msg.author) == following {
+			for _, pair := range msg.body {
+				maybeIndexBlob(blobIndex, pair.key)
+				maybeIndexBlob(blobIndex, pair.value)
+			}
 		}
 	}
 	output := parserOutput{messages: state.results, blobIndex: blobIndex}

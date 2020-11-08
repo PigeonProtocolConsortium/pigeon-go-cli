@@ -28,6 +28,30 @@ var migrations = []migration{
 		`,
 		down: `DROP TABLE IF EXISTS peers`,
 	},
+	migration{
+		up: `CREATE TABLE IF NOT EXISTS messages (
+			id        INTEGER PRIMARY KEY AUTOINCREMENT,
+			author    string NOT NULL,
+			depth     int    NOT NULL,
+			kind      string NOT NULL,
+			lipmaa    string NOT NULL,
+			prev      string NOT NULL,
+			signature string NOT NULL
+		);
+		`,
+		down: `DROP TABLE IF EXISTS messages`,
+	},
+	migration{
+		up: `CREATE TABLE IF NOT EXISTS body_items (
+			parent  int    NOT NULL,
+			key     string NOT NULL,
+			value   string NOT NULL,
+			rank    int    NOT NULL,
+			FOREIGN KEY(parent) REFERENCES messages(id)
+		);
+		`,
+		down: `DROP TABLE IF EXISTS body_items`,
+	},
 }
 
 func migrateUp(db *sql.DB) {

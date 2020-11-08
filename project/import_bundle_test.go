@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -16,8 +15,6 @@ func TestImportBundle(t *testing.T) {
 	addPeer(author, following)
 	error := importBundle("../fixtures/has_blobs/messages.pgn")
 	check(error, "Error while importing: %s", error)
-
-	fmt.Println("NEXT STEP: Assert that we have the following assets:")
 
 	for _, mhash := range files {
 		if !blobExists(mhash) {

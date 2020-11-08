@@ -14,7 +14,7 @@ func ingestOneMessage(msg pigeonMessage, blobIndex map[string]bool) {
 	if getPeerStatus(msg.author) == following {
 		tx, err1 := getDB().Begin()
 		check(err1, "ingestOneMessage: Can't open DB: %s", err1)
-		mhash := encodeMessageMhash(msg.signature)
+		mhash := formatMessage(msg).mhash
 		results, err2 := tx.Exec(insertMessageQuery,
 			msg.author,
 			msg.depth,

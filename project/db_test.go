@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os/exec"
 	"testing"
 )
 
@@ -28,6 +29,8 @@ func resetDB() {
 	if tx.Commit() != nil {
 		panic(err)
 	}
+
+	exec.Command("rm", "-rf", pigeonBlobDir())
 }
 
 func TestSetUpTeardown(t *testing.T) {

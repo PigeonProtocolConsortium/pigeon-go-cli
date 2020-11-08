@@ -20,7 +20,6 @@ RSpec.describe Pigeon::Draft do
     "author DRAFT",
     "depth DRAFT",
     "kind unit_test",
-    "lipmaa DRAFT",
     "prev DRAFT",
     "\na:\"bar\"",
     "b:FILE.CHHABX8Q9D9Q0BY2BBZ6FA7SMAFNE9GGMSDTZVZZC9TK2N9F15QG",

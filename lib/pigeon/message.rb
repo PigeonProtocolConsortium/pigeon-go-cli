@@ -2,7 +2,7 @@ require "digest"
 
 module Pigeon
   class Message
-    attr_reader :author, :kind, :body, :signature, :depth, :lipmaa, :prev
+    attr_reader :author, :kind, :body, :signature, :depth, :prev
 
     def render
       template.render.chomp
@@ -20,7 +20,6 @@ module Pigeon
                    body:,
                    depth:,
                    prev:,
-                   lipmaa:,
                    signature:)
       raise MISSING_BODY if body.empty?
 
@@ -29,7 +28,6 @@ module Pigeon
       @depth = depth
       @kind = kind
       @prev = prev || Pigeon::NOTHING
-      @lipmaa = lipmaa
       @signature = signature
     end
 

@@ -76,7 +76,6 @@ module Pigeon
     SEPERATOR = /\n/
     AUTHOR = /author #{FEED_VALUE}\n/
     DEPTH = /depth #{NUMERIC}\n/
-    LIPMAA = /lipmaa (#{MESG_VALUE}|#{NULL_VALUE})\n/
     PREV = /prev (#{MESG_VALUE}|#{NULL_VALUE})\n/
     KIND = /kind #{ALPHANUMERICISH}\n/
     BODY_ENTRY = /#{ALPHANUMERICISH}:#{ANY_VALUE}\n/
@@ -106,8 +105,7 @@ module Pigeon
       AUTHOR: [:FOOTER_SEPERATOR, :START],
       DEPTH: [:AUTHOR],
       KIND: [:DEPTH],
-      LIPMAA: [:KIND],
-      PREV: [:LIPMAA],
+      PREV: [:KIND],
       HEADER_SEPERATOR: [:PREV],
     }
 
@@ -133,13 +131,6 @@ module Pigeon
         depth = scanner.matched.chomp.gsub("depth ", "").to_i
         @tokens << [:DEPTH, depth, scanner.pos]
         check_header_order(:DEPTH)
-        return
-      end
-
-      if scanner.scan(LIPMAA)
-        depth = scanner.matched.chomp.gsub("lipmaa ", "")
-        @tokens << [:LIPMAA, depth, scanner.pos]
-        check_header_order(:LIPMAA)
         return
       end
 

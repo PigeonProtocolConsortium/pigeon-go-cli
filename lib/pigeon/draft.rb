@@ -2,7 +2,7 @@ require "digest"
 
 module Pigeon
   class Draft
-    attr_accessor :signature, :prev, :lipmaa, :kind, :depth,
+    attr_accessor :signature, :prev, :kind, :depth,
                   :body, :author
 
     def initialize(kind:, body: {})
@@ -12,7 +12,6 @@ module Pigeon
       @depth = -1
       @body = {}
       @author = Pigeon::NOTHING
-      @lipmaa = Pigeon::NOTHING
       body.to_a.map { |(k, v)| self[k] = v }
     end
 

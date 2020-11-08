@@ -22,7 +22,6 @@ module Pigeon
         when :KIND then set(:kind, token[1])
         when :DEPTH then set(:depth, token[1])
         when :PREV then set(:prev, token[1])
-        when :LIPMAA then set(:lipmaa, token[1])
         when :HEADER_END then set(:body, {})
         when :BODY_ENTRY then set(token[1], token[2], @scratchpad[:body])
         when :BODY_END then nil

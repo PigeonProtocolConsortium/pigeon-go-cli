@@ -1,13 +1,12 @@
 require "spec_helper"
 
 RSpec.describe Pigeon::MessageSerializer do
-  SHIM_ATTRS = %i[author body kind depth prev signature lipmaa].freeze
+  SHIM_ATTRS = %i[author body kind depth prev signature].freeze
   MessageShim = Struct.new(*SHIM_ATTRS)
   TOP_HALF = [
     "author FAKE_AUTHOR",
     "\ndepth 23",
     "\nkind FAKE_KIND",
-    "\nlipmaa 22",
     "\nprev NONE",
     "\n\nfoo:\"bar\"\n\n",
   ].join("")
@@ -28,7 +27,6 @@ RSpec.describe Pigeon::MessageSerializer do
       depth: 23,
       prev: nil,
       signature: "XYZ",
-      lipmaa: 22,
     }.values
     message = MessageShim.new(*params)
     template = Pigeon::MessageSerializer.new(message)

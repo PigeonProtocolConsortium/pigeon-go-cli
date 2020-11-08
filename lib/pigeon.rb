@@ -17,7 +17,6 @@ module Pigeon
     "author <%= author %>",
     "depth <%= depth %>",
     "kind <%= kind %>",
-    "lipmaa <%= lipmaa %>",
     "prev <%= prev %>",
     "\n",
   ].join("\n")
@@ -91,40 +90,6 @@ module Pigeon
       "X" => 0b11101, "Y" => 0b11110, "Z" => 0b11111,
     }.freeze
 
-    def self.lipmaa(n)
-      # The original lipmaa function returns -1 for 0
-      # but that does not mesh well with our serialization
-      # scheme. Comments welcome on this one.
-      if n < 1 # Prevent -1, division by zero etc..
-        return nil
-      end
-
-      m, po3, x = 1, 3, n
-      # find k such that (3^k - 1)/2 >= n
-      while (m < n)
-        po3 *= 3
-        m = (po3 - 1) / 2
-      end
-      po3 /= 3
-      # find longest possible backjump
-      if (m != n)
-        while x != 0
-          m = (po3 - 1) / 2
-          po3 /= 3
-          x %= m
-        end
-        if (m != po3)
-          po3 = m
-        end
-      end
-      result = n - po3
-      if result == n - 1
-        return nil
-      else
-        return result
-      end
-    end
-
     # http://www.crockford.com/wrmg/base32.html
     def self.b32_encode(string)
       string
@@ -176,12 +141,6 @@ module Pigeon
       draft.author = author
       draft.depth = depth
       draft.prev = db.get_message_by_depth(mhash, depth - 1)
-      lpma = Helpers.lipmaa(depth)
-      if lpma && draft.prev
-        draft.lipmaa = db.get_message_by_depth(mhash, lpma)
-      else
-        draft.lipmaa = NOTHING
-      end
 
       unsigned = template.render_without_signature
       draft.signature = author.sign(unsigned)
@@ -214,13 +173,6 @@ module Pigeon
       count = db.get_message_count_for(author.multihash)
       expected_prev = db.get_message_by_depth(author.multihash, count - 1) || Pigeon::NOTHING
       assert("depth", count, msg.depth)
-      expected_lpma = Helpers.lipmaa(msg.depth)
-      if expected_lpma
-        real = db.get_message_by_depth(author.multihash, expected_lpma)
-        assert("lipmaa", msg.lipmaa, real)
-      else
-        assert("lipmaa", msg.lipmaa, NOTHING)
-      end
       assert("prev", msg.prev, expected_prev)
       tpl = msg.template.render_without_signature
       Helpers.verify_string(author, signature, tpl)

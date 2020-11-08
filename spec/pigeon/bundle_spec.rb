@@ -40,7 +40,8 @@ RSpec.describe Pigeon::Message do
 
   it "does not ingest messages from blocked peers" do
     db.reset_database
-    antagonist = "USER.FFQE19PEB55S1JMT5CVWZXK6V9D6E54GG8SK31QRXBDGF2AGHW50"
+    expect(db.all_messages.count).to eq(0)
+    antagonist = "USER.YJTH2BBAAAXK2RYKWRXYE0E0ANME1YPZPD8TV5VCS40X3D75AJ3G"
     db.block_peer(antagonist)
     db.import_bundle(BLOCKED_PEER_FIXTURE_PATH)
     expect(db.all_messages.count).to eq(0)

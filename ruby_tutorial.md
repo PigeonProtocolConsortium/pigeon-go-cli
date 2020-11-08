@@ -88,7 +88,7 @@ We do not have a draft yet. We need to create one:
 db.new_draft(kind: "garden_diary", body: {"message_text"=>"Tomato plant looking healthy."})
 => #<Pigeon::Draft:0x00005603ed399b48 @author="NONE",
 #    @body={"greeting"=>"\"Hello, world!\""}, @depth=-1, @kind="example123",
-#    @lipmaa="NONE", @prev="NONE", @signature="NONE">
+#    @prev="NONE", @signature="NONE">
 ```
 
 The command above creates a new draft entry of kind `garden_entry` with one key/value pair in the body. We can view the draft at any time via `#get_draft`:
@@ -97,7 +97,7 @@ The command above creates a new draft entry of kind `garden_entry` with one key/
 db.get_draft
 # => #<Pigeon::Draft:0x00005603ed81e830 @author="NONE",
 #      @body={"greeting"=>"\"Hello, world!\""}, @depth=-1,
-#      @kind="example123", @lipmaa="NONE", @prev="NONE",
+#      @kind="example123", @prev="NONE",
 #      @signature="NONE">
 ```
 
@@ -123,7 +123,6 @@ puts human_readable_string
 # => author DRAFT
 #    depth DRAFT
 #    kind garden_diary
-#    lipmaa DRAFT
 #    prev DRAFT
 #
 #    greeting:"Hello, world!"
@@ -133,7 +132,7 @@ puts human_readable_string
 Some interesting things about the draft we just rendered:
 
  * Unlike a message, a draft has no signature (yet).
- * The `author`, `kind`, `prev`, `depth`, `lipmaa` properties are all set to `"DRAFT"`. Real values will be populated when we finally publish the draft.
+ * The `author`, `kind`, `prev`, `depth` properties are all set to `"DRAFT"`. Real values will be populated when we finally publish the draft.
 
 If we want to start over, we can delete a draft via `delete_current_draft`:
 
@@ -156,7 +155,6 @@ my_message = db.publish_draft
  @body={"greeting"=>"\"Hello, world!\"", "current_mood"=>"\"Feeling great\""},
  @depth=0,
  @kind="garden_diary",
- @lipmaa="NONE",
  @prev="NONE",
  @signature="QNY...208">
 ```
@@ -168,7 +166,6 @@ puts my_message.render
 # author USER.6DQ4RRNBKJ2T4EY5E1GZYYX6X6SZXV1W0GNH1HA4KGKA5KZ2Y2DG
 # depth 0
 # kind garden_diary
-# lipmaa NONE
 # prev NONE
 #
 # greeting:"Hello, world!"
@@ -195,7 +192,6 @@ message = db.add_message("garden_entry", {"message_text" => "The basil is just O
 #  @body={"message_text"=>"\"The basil is just OK\"", "current_mood"=>"\"content\""},
 #  @depth=1,
 #  @kind="garden_entry",
-#  @lipmaa="NONE",
 #  @prev="TEXT.NPNQZAP9CB79GP8J0SN52F38EBJ9WV370HX6MVZD3XB804TVQQB0",
 #  @signature="95E...J3G">
 
@@ -203,7 +199,6 @@ puts message.render
 # author USER.6DQ4RRNBKJ2T4EY5E1GZYYX6X6SZXV1W0GNH1HA4KGKA5KZ2Y2DG
 # depth 1
 # kind garden_entry
-# lipmaa NONE
 # prev TEXT.NPNQZAP9CB79GP8J0SN52F38EBJ9WV370HX6MVZD3XB804TVQQB0
 #
 # message_text:"The basil is just OK"
@@ -231,7 +226,6 @@ old_message = db.read_message("TEXT.444CC4NFHGQDQEZ6B6HSEPNZAZ80RSQF8TCAX8QR9NBR
 #  @body={"message_text"=>"\"The basil is just OK\"", "current_mood"=>"\"content\""},
 #  @depth=1,
 #  @kind="garden_entry",
-#  @lipmaa="NONE",
 #  @prev="TEXT.NPNQZAP9CB79GP8J0SN52F38EBJ9WV370HX6MVZD3XB804TVQQB0",
 #  @signature="95E...J3G">
 
@@ -239,7 +233,6 @@ puts old_message.render
 # author USER.6DQ4RRNBKJ2T4EY5E1GZYYX6X6SZXV1W0GNH1HA4KGKA5KZ2Y2DG
 # depth 1
 # kind garden_entry
-# lipmaa NONE
 # prev TEXT.NPNQZAP9CB79GP8J0SN52F38EBJ9WV370HX6MVZD3XB804TVQQB0
 
 # message_text:"The basil is just OK"
@@ -367,7 +360,6 @@ puts msg.render
 # author USER.6DQ4RRNBKJ2T4EY5E1GZYYX6X6SZXV1W0GNH1HA4KGKA5KZ2Y2DG
 # depth 2
 # kind photo
-# lipmaa NONE
 # prev TEXT.444CC4NFHGQDQEZ6B6HSEPNZAZ80RSQF8TCAX8QR9NBR5T0XX92G
 #
 # my_cat_picture:FILE.FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG

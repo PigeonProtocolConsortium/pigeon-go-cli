@@ -49,7 +49,6 @@ See `kitchen_sink.sh` examples.
  - [ ] Stop using old nested blob bundles. Start using "flat" blobs.
  - [ ] Ability to unblock someone.
  - [ ] Ability to delete a key from a draft.
- - [ ] Update Dev docs in protocol spec to reflect changes to `lipmaa` header.
  - [ ] 100% class / module documentation
  - [ ] Run a [terminology extraction tool](https://www.visualthesaurus.com/vocabgrabber/#) on the documentation and write a glossary of terms.
  - [ ] Ability to list all blocked users.
@@ -57,7 +56,6 @@ See `kitchen_sink.sh` examples.
 
 # "Nice to Have"
 
- - [ ] Support partial verification via `lipmaa` property.
  - [ ] Add `--since=`/`--until=` args to `bundle create` for sending partial / "slice" bundles.
  - [ ] Interest and Disinterest Signalling for document routing: Create a `$blob_status` message to express `have`, `want` signalling. This can steer bundle creation and an eventual `--for` flag at bundle creation time to customize a bundle to a particular user.
  - [ ] Add a schema for `$peer_status`. Eg: `block`, `unblock`, `follow`, `unfollow`.

@@ -67,14 +67,12 @@ module Pigeon
                         body:,
                         depth:,
                         kind:,
-                        lipmaa:,
                         prev:,
                         signature:)
       msg = Message.new(author: RemoteIdentity.new(author),
                         kind: kind,
                         body: body,
                         prev: prev,
-                        lipmaa: lipmaa,
                         signature: signature,
                         depth: depth)
       _save_message(msg)

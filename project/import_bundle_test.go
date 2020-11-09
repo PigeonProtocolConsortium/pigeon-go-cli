@@ -11,7 +11,7 @@ func TestImportBundle(t *testing.T) {
 		"FILE.FV0FJ0YZADY7C5JTTFYPKDBHTZJ5JVVP5TCKP0605WWXYJG4VMRG",
 		"FILE.YPF11E5N9JFVB6KB1N1WDVVT9DXMCHE0XJWBZHT2CQ29S5SEPCSG",
 	}
-	author := "USER.09XBQDDGZPEKFBFBY67XNR5QA0TRWAKYKYNEDNQTZJV0F1JB0DGG"
+	author := "USER.59X51RSZQZR15BX86VDWG37AAMVP43PTBWD1WS66FQFCDPHAQDZ0"
 	addPeer(author, following)
 	error := importBundle("../fixtures/has_blobs/messages.pgn")
 	check(error, "Error while importing: %s", error)

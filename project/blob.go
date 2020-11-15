@@ -35,10 +35,7 @@ func pathAndFilename(mhash string) (dirPath string, fileName string) {
 func createBlobDirectory(mhash string) string {
 	dirPath, fileName := pathAndFilename(mhash)
 	err := os.MkdirAll(dirPath, 0700)
-	if err != nil {
-		panicf("createBlobDirectory: %s", err)
-	}
-
+	check(err, "createBlobDirectory: %s", err)
 	return path.Join(dirPath, fileName)
 }
 

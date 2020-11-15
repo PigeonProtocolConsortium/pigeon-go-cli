@@ -57,18 +57,12 @@ var migrations = []migration{
 func migrateUp(db *sql.DB) {
 	tx, err := db.Begin()
 
-	if err != nil {
-		panicf("Failed to start transaction: %s", err)
-	}
+	check(err, "Failed to start transaction: %s", err)
 
 	for i, migration := range migrations {
 		_, err := tx.Exec(migration.up)
-		if err != nil {
-			panicf("Migration failure(%d): %s", i, err)
-		}
+		check(err, "Migration failure(%d): %s", i, err)
 	}
-
-	if tx.Commit() != nil {
-		panic(err)
-	}
+	err3 := tx.Commit()
+	check(err3, "Transaction commit failure: %s", err3)
 }

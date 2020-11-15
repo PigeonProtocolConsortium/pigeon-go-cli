@@ -181,9 +181,6 @@ func BootstrapCLI() {
 
 	rootCmd.AddCommand(bundleCommand)
 	bundleCommand.AddCommand(bundleIngestCommand)
-
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+	err := rootCmd.Execute()
+	check(err, "Failed to load CLI: %s", err)
 }

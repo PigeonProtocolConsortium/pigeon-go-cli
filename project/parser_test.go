@@ -2,20 +2,16 @@ package main
 
 import (
 	"io/ioutil"
-	"log"
 	"testing"
 )
 
 func TestParser(t *testing.T) {
 	content, err1 := ioutil.ReadFile("../fixtures/fixture.pgn")
-	if err1 != nil {
-		log.Fatal(err1)
-	}
+
+	check(err1, "TEST PARSER ERROR 1: %s", err1)
 	output, err2 := parseMessage(string(content))
 
-	if err2 != nil {
-		log.Fatal(err2)
-	}
+	check(err2, "TEST PARSER ERROR 2: %s", err2)
 
 	fixtureSize := 13
 	length := len(output.messages)
@@ -26,14 +22,11 @@ func TestParser(t *testing.T) {
 
 func TestParser2(t *testing.T) {
 	content, err1 := ioutil.ReadFile("../fixtures/has_blobs/messages.pgn")
-	if err1 != nil {
-		log.Fatal(err1)
-	}
+	check(err1, "TestParser2 error (1) %s", err1)
+
 	parserOutput, err2 := parseMessage(string(content))
 	output := parserOutput.messages
-	if err2 != nil {
-		log.Fatal(err2)
-	}
+	check(err2, "TestParser2 error (2) %s", err2)
 
 	fixtureSize := 3
 	length := len(output)

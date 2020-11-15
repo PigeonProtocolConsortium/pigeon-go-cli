@@ -31,9 +31,7 @@ func createOrShowIdentity() string {
 // as a Base32 encoded string
 func CreateIdentity() (ed25519.PublicKey, ed25519.PrivateKey) {
 	pub, priv, err := ed25519.GenerateKey(nil)
-	if err != nil {
-		panicf("Keypair creation error %s", err)
-	}
+	check(err, "Keypair creation error %s", err)
 	SetConfig("public_key", pub)
 	SetConfig("private_key", priv)
 	return pub, priv
@@ -52,6 +50,7 @@ func rollbackCheck(tx *sql.Tx, e error, tpl string, args ...interface{}) {
 
 func check(e error, tpl string, args ...interface{}) {
 	if e != nil {
+		fmt.Printf("=== NEW ERROR PLEASE REPORT: %s\n", e)
 		panicf(tpl, args...)
 	}
 }

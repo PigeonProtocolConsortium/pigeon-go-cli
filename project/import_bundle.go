@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"path"
 	"path/filepath"
@@ -28,9 +27,7 @@ func ingestOneMessage(msg pigeonMessage, blobIndex map[string]bool) {
 
 		for rank, pair := range msg.body {
 			_, err4 := tx.Exec(insertBodyItemQuery, parent, pair.key, pair.value, rank)
-			if err4 != nil {
-				fmt.Printf("%s", err4)
-			}
+			check(err4, "%s", err4)
 			rollbackCheck(tx, err4, "Failed to insert body item %d of %s", rank, msg.signature)
 		}
 		err5 := tx.Commit()

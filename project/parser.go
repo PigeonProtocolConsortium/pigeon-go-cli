@@ -122,10 +122,7 @@ func parseHeader(state *parserState) {
 		return
 	case "depth":
 		depth, err := strconv.ParseInt(chunks[1], 10, 32)
-		if err != nil {
-			tpl := "Parsing bad depth in message %d: %q"
-			panicf(tpl, len(state.results), chunks[1])
-		}
+		check(err, "Parsing bad depth in message %d: %q", len(state.results), chunks[1])
 		state.buffer.depth = depth
 		return
 	default:
@@ -151,9 +148,7 @@ func parseFooter(state *parserState) {
 	state.buffer.signature = chunks[1]
 	state.mode = parsingDone
 	err := verifyShallow(&state.buffer)
-	if err != nil {
-		panicf("Message verification failed for %s. %s", state.buffer.signature, err)
-	}
+	check(err, "Message verification failed for %s. %s", state.buffer.signature, err)
 	state.results = append(state.results, state.buffer)
 	state.buffer.body = []pigeonBodyItem{}
 	state.buffer = pigeonMessage{}

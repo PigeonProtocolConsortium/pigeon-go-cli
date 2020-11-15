@@ -8,27 +8,20 @@ import (
 func resetDB() {
 	tx, err := getDB().Begin()
 
-	if err != nil {
-		panicf("Failed to start transaction: %s", err)
-	}
+	check(err, "Failed to start transaction: %s", err)
 
 	for i := len(migrations) - 1; i >= 0; i-- {
 		_, err := tx.Exec(migrations[i].down)
-		if err != nil {
-			panicf("Migration failure: %s", err)
-		}
+		check(err, "Migration #%d failure: %s", i, err)
 	}
 
 	for _, migration := range migrations {
 		_, err := tx.Exec(migration.up)
-		if err != nil {
-			panicf("Migration failure: %s", err)
-		}
+		check(err, "Migration failure: %s", err)
 	}
 
-	if tx.Commit() != nil {
-		panic(err)
-	}
+	err7 := tx.Commit()
+	check(err7, "TEST FAILURE db_test.go: %s", err7)
 
 	exec.Command("rm", "-rf", pigeonBlobDir())
 }
@@ -36,7 +29,5 @@ func resetDB() {
 func TestSetUpTeardown(t *testing.T) {
 	resetDB()
 	err := getDB().Ping()
-	if err != nil {
-		t.Fatalf("Test setup failed: %s", err)
-	}
+	check(err, "Test setup failed: %s", err)
 }

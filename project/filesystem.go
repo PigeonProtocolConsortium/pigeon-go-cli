@@ -13,9 +13,7 @@ func pigeonHomeDir() string {
 		return customPath
 	}
 	home, err := homedir.Dir()
-	if err != nil {
-		panicf("Home directory resolution error %s", err)
-	}
+	check(err, "Home directory resolution error %s", err)
 	return path.Join(home, ".pigeon")
 }
 
@@ -25,8 +23,6 @@ func pigeonBlobDir() string {
 
 func maybeSetupPigeonDir() string {
 	err := os.MkdirAll(pigeonHomeDir(), 0700)
-	if err != nil {
-		panicf("maybeSetupPigeonDir: %s", err)
-	}
+	check(err, "maybeSetupPigeonDir: %s", err)
 	return pigeonHomeDir()
 }

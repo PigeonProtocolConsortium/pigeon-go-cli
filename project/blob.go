@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"os"
 	"path"
 )
@@ -69,9 +68,10 @@ func addBlobFromPipe() string {
 
 	for {
 		input, err := reader.ReadByte()
-		if err != nil && err == io.EOF {
+		if err == io.EOF {
 			break
 		}
+		check(err, "addBlobFromPipe err: %s", err)
 		output = append(output, input)
 	}
 
@@ -85,15 +85,11 @@ func write(path string, data []byte) {
 		os.O_WRONLY|os.O_TRUNC|os.O_CREATE,
 		0600,
 	)
-	if err != nil {
-		log.Fatal(err)
-	}
+	check(err, "Error writing to %s: %s", path, err)
 	defer file.Close()
 
 	_, err2 := file.Write(data)
-	if err2 != nil {
-		log.Fatal(err)
-	}
+	check(err2, "Write error (II): %s", err2)
 }
 
 func getSha256(data []byte) []byte {

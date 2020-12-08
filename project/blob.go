@@ -62,8 +62,8 @@ func addBlob(mhash string, data []byte) string {
 	return mhash
 }
 
-func addBlobFromPipe() string {
-	reader := bufio.NewReader(os.Stdin)
+func addBlobFromPipe(stdio io.Reader) string {
+	reader := bufio.NewReader(stdio) // os.Stdin
 	var output []byte
 
 	for {

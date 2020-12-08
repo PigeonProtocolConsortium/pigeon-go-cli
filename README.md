@@ -39,12 +39,6 @@ Email `contact@vaporsoft.xyz` if you have any questions.
  - [ ] Add a note about "shallow" vs. "deep" verification.
  - [ ] Finish all the things below
 
-# Protocol Changes?
-
- - [X] Just ditch `lipmaa` altogether in the name of time?
- - [ ] Don't enforce a structure on how blobs are packed into bundles- the client is forced to determine the SHA checksum regardless. Forced structure just complicates protocol design.
- - [ ] Mandate usage of ZIP files so that bundles are always a single file?
-
  |Done?|Noun        |Verb       | Flag / arg 1  | Flag 2    |
  |-----|------------|-----------|---------------|-----------|
  |     |bundle      |ingest     |               |           |

@@ -36,9 +36,9 @@ func getPeerStatus(mHash string) PeerStatus {
 	return status
 }
 
-func addPeer(mHash string, status PeerStatus) {
+func setPeerStatus(mHash string, status PeerStatus) {
 	tx, err := getDB().Begin()
-	check(err, "Failed to begin addPeer trx (0): %s", err)
+	check(err, "Failed to begin setPeerStatus trx (0): %s", err)
 	_, err2 := tx.Exec(sqlCreatePeer, mHash, status)
 	if err2 != nil {
 		err1 := tx.Rollback()
@@ -80,8 +80,3 @@ func listPeers() []peer {
 	check(err, "showPeers row error: %s", err)
 	return output
 }
-
-// func showBlockedPeers() {}
-// func blockPeer()        {}
-// func unblockPeer()      {}
-// func unfollowPeer()     {}

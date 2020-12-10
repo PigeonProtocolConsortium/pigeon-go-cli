@@ -24,21 +24,20 @@ func decodeMhash(input string) []byte {
 func isBlob(input string) bool {
 	if len(input) < 5 {
 		return false
-	} else {
-		return input[0:5] == BlobSigil
 	}
+	return input[0:5] == BlobSigil
 }
 
 func validateMhash(input string) string {
-	arry := strings.Split(input, ".")
-	if len(arry) != 2 {
+	array := strings.Split(input, ".")
+	if len(array) != 2 {
 		panicf("Expected '%s' to be an mHash", input)
 	}
-	switch arry[0] + "." {
+	switch array[0] + "." {
 	case BlobSigil, MessageSigil, PeerSigil:
 		return input
 	}
 	msg := "Expected left side of Mhash dot to be one of %s, %s, %s. Got: %s"
-	panicf(msg, BlobSigil, MessageSigil, PeerSigil, arry[0])
+	panicf(msg, BlobSigil, MessageSigil, PeerSigil, array[0])
 	return input
 }

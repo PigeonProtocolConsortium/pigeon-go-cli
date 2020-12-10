@@ -15,15 +15,25 @@ func TestGetPeerStatus(t *testing.T) {
 		t.Fatalf("Expected `unknown`, got %s", status)
 	}
 
-	addPeer(mHash, following)
+	setPeerStatus(mHash, following)
 
 	status2 := getPeerStatus(mHash)
 	if status2 != "following" {
 		t.Fatalf("Expected `following`, got %s", status)
 	}
+
+	peer := listPeers()[0]
+
+	if peer.mhash != mHash {
+		t.Fail()
+	}
+
+	if peer.status != following {
+		t.Fail()
+	}
 }
 
-func TestAddPeer(t *testing.T) {
+func TestSetPeerStatus(t *testing.T) {
 	defer func() {
 		r := recover()
 		if r == nil {
@@ -33,6 +43,6 @@ func TestAddPeer(t *testing.T) {
 	}()
 	resetDB()
 	mHash := "USER.GM84FEYKRQ1QFCZY68YDCRPG8HKXQPQCQSMDQKGTGX8ZY8KFSFJR"
-	addPeer(mHash, following)
-	addPeer(mHash, blocked)
+	setPeerStatus(mHash, following)
+	setPeerStatus(mHash, blocked)
 }

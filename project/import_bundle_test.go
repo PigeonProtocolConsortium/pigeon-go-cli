@@ -17,7 +17,7 @@ func TestImportBundle(t *testing.T) {
 		}
 	}
 	author := "USER.59X51RSZQZR15BX86VDWG37AAMVP43PTBWD1WS66FQFCDPHAQDZ0"
-	addPeer(author, following)
+	setPeerStatus(author, following)
 	error := importBundle("../fixtures/has_blobs/messages.pgn")
 	check(error, "Error while importing: %s", error)
 

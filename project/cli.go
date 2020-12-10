@@ -71,7 +71,7 @@ var peerBlockCmd = &cobra.Command{
 	Short: "Block a peer from your local node.",
 	Run: func(cmd *cobra.Command, args []string) {
 		mHash := validateMhash(args[0])
-		addPeer(mHash, blocked)
+		setPeerStatus(mHash, blocked)
 		fmt.Printf("Blocked %s\n", mHash)
 	},
 }
@@ -91,7 +91,7 @@ var peerFollowCmd = &cobra.Command{
 	Short: "Follow a peer and replicate their feed when possible.",
 	Run: func(cmd *cobra.Command, args []string) {
 		mHash := validateMhash(args[0])
-		addPeer(mHash, following)
+		setPeerStatus(mHash, following)
 		fmt.Printf("Following %s\n", mHash)
 	},
 }

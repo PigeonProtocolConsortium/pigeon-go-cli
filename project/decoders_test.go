@@ -25,3 +25,15 @@ func TestB32Decode(t *testing.T) {
 	B32Decode("U")
 	t.Errorf("Expected Base32 decode panic. It Did not panic.")
 }
+
+func TestIsBlob(t *testing.T) {
+	if isBlob("FLIE.NOPE!") {
+		t.Fail()
+	}
+	if isBlob("NOPE") {
+		t.Fail()
+	}
+	if !isBlob("FILE.7Z2CSZKMB1RE5G6SKXRZ63ZGCNP8VVEM3K0XFMYKETRDQSM5WBSG") {
+		t.Fail()
+	}
+}

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/ed25519"
 	"fmt"
 	"testing"
 )
@@ -56,5 +57,47 @@ func TestB32Encode(t *testing.T) {
 			fmt.Printf("FAIL:\n  Exp: %s\n  Act: %s\n", expected, actual)
 			t.Fail()
 		}
+	}
+}
+
+func TestEncodePeerMhash(t *testing.T) {
+	pub := ed25519.PublicKey{
+		0x1c,
+		0xff,
+		0xcf,
+		0x5d,
+		0xd4,
+		0xa2,
+		0x1d,
+		0x26,
+		0xef,
+		0xab,
+		0x55,
+		0xdd,
+		0x86,
+		0x46,
+		0xcd,
+		0x1d,
+		0x93,
+		0x46,
+		0x27,
+		0x18,
+		0xfd,
+		0x85,
+		0xb4,
+		0xe8,
+		0xb7,
+		0x21,
+		0x71,
+		0x5c,
+		0xfe,
+		0x36,
+		0xdb,
+		0xa8,
+	}
+	results := encodePeerMhash(pub)
+	expected := "USER.3KZWYQEMM8EJDVXBAQERCHPD3P9MC9RRZP2V9T5Q45RNSZHPVEM0"
+	if results != expected {
+		t.Fail()
 	}
 }

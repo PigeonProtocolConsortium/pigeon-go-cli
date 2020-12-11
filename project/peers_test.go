@@ -46,3 +46,13 @@ func TestSetPeerStatus(t *testing.T) {
 	setPeerStatus(mHash, following)
 	setPeerStatus(mHash, blocked)
 }
+
+func TestRemovePeer(t *testing.T) {
+	resetDB()
+	mHash := "USER.GM84FEYKRQ1QFCZY68YDCRPG8HKXQPQCQSMDQKGTGX8ZY8KFSFJR"
+	setPeerStatus(mHash, following)
+	removePeer(mHash)
+	if getPeerStatus(mHash) != unknown {
+		t.Fail()
+	}
+}

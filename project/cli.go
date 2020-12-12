@@ -53,7 +53,7 @@ var identityShowCmd = &cobra.Command{
 	Long: `Prints the current Pigeon identity to screen. Prints 'NONE' if
 	not found.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(showIdentity())
+		fmt.Println(showPubKeyOrNone())
 	},
 }
 

@@ -6,24 +6,23 @@ import (
 	"fmt"
 )
 
-func showIdentity() string {
-	existingKey := GetConfig("public_key")
-	if len(existingKey) == 0 {
+// Returns the current user's identity of the `NONE` value.
+func showPubKeyOrNone() string {
+	existingKey, err := GetConfig("public_key")
+	if (err == sql.ErrNoRows) || (len(existingKey) == 0) {
 		return "NONE"
 	}
 	return encodePeerMhash(existingKey)
 }
 
 func createOrShowIdentity() string {
-	var pubKey []byte
-	oldKey := GetConfig("private_key")
-	if len(oldKey) == 0 {
-		newKey, _ := CreateIdentity()
-		pubKey = newKey
-	} else {
-		pubKey = oldKey
+	oldKey := showPubKeyOrNone()
+	if oldKey == "NONE" {
+		newPubKey, _ := CreateIdentity()
+		return encodePeerMhash(newPubKey)
 	}
-	return encodePeerMhash(pubKey)
+
+	return oldKey
 }
 
 // CreateIdentity is used by the CLI to create an ED25519

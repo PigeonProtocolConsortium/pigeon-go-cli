@@ -8,10 +8,6 @@ import (
 	"strings"
 )
 
-func reconstructMessage(message pigeonMessage) (string, string) {
-	return "top_half", "bottom_half"
-}
-
 // Every body entry is a key value pair. Keys and values are separated by a : character (no spaces).
 // A key must be 1-90 characters in length.
 // A key cannot contain whitespace or control characters

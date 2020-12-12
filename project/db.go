@@ -46,14 +46,21 @@ func SetConfig(key string, value []byte) {
 	check(err1, "Failed to SetConfig (2): %s", err1)
 }
 
-// GetConfig retrieves a key/value pair from the database.
-func GetConfig(key string) []byte {
+// GetConfig retrieves a key/value pair (or error) from the database.
+func GetConfig(key string) ([]byte, error) {
 	var result string
 	row := getDB().QueryRow("SELECT value FROM configs WHERE key=$1", key)
 	err := row.Scan(&result)
-	if err == sql.ErrNoRows {
-		panicf("CONFIG MISSING: %s", key)
+	if err != nil {
+		return []byte{}, nil
 	}
-	check(err, "SOmething else went wrong: %s", err)
+	return []byte(result), nil
+}
+
+// FetchConfig retrieves a key/value pair from the database.
+// Fetching an unset key will result in a panic.
+func FetchConfig(key string) []byte {
+	result, err := GetConfig(key)
+	check(err, "Something else went wrong: %s", err)
 	return []byte(result)
 }

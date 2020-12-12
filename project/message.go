@@ -2,8 +2,6 @@ package main
 
 const messageExistsQuery = "SELECT count(*) FROM messages WHERE mhash = $1"
 
-// const messageExistsQuery = "SELECT count(*) FROM messages"
-
 func messageExists(mhash string) bool {
 	var count int
 	db := getDB()

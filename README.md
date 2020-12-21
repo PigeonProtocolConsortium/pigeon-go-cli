@@ -12,6 +12,12 @@ Email `contact` at `vaporsoft.xyz` to ask questions or get involved. Your feedba
  * Minimal dependencies - only outside deps are `thor` (for CLI) and `ed25519` (for signatures).
  * Thoroughly unit tested.
 
+# Project Status
+
+FEATURE COMPLETE, BUT IN HIBERNATION. Pigeon was an exploration of ideas that I embarked on in 2020. Now (2021) I am changing my focus. If more people are interested in the project I might start work on it again. Please let me know by raising an issue. For now, I am shifting my focus to other areas.
+
+Please see the "TODO" section for a list of incomplete tasks. As of early 2021, the next big TODO item is to finish bundle imports.
+
 # Caveats
 
  * Implementation is assumed to be stable, but does not have much production use.

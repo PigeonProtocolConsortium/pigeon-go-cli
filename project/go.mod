@@ -1,4 +1,4 @@
-module tildegit.org/PigeonProtocolConsortium/experimental-cli
+module github.com/PigeonProtocolConsortium/pigeon-go-cli
 
 go 1.15
 

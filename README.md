@@ -15,16 +15,14 @@ You can override this value by specifying a `PIGEON_PATH` ENV var.
 
 # Help Wanted
 
-Want to get involved? Below are a few things I need help with.
-
-Email `contact@vaporsoft.xyz` if you have any questions.
+Raise an issue to get involved.
 
  * Writing a BNF grammar for message parsing
  * Test coverage increases
  * Manual QA of features and edge cases
  * Providing constructive feedback on documentation
  * Cross-compiling windows binaries
- * Security auditing and vulnerability discovery. Please send security concerns to `contact@vaporsoft.xyz` privately.
+ * Security auditing and vulnerability discovery. Please send security concerns to [Rick Carlino](https://github.com/RickCarlino) privately.
 
 # TODO
 
